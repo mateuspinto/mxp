@@ -31,16 +31,16 @@ To get started immediately:
   [Simulator Only](https://github.com/VectorBlox/mxp/archive/simulator_only.zip)).
 
 - Follow the VectorBlox MXP Hardware & Software Quickstart for
-  [Quartus](mxp_quickstart_altera.html) /
-  [ISE](./mxp_quickstart_ise.html) /
-  [Vivado](mxp_quickstart_vivado.html) /
-  [Simulator](mxp_quickstart_simulator.html)
+  [Quartus](http://vectorblox.github.io/mxp/mxp_quickstart_altera.html) /
+  [ISE](http://vectorblox.github.io/mxp/mxp_quickstart_ise.html) /
+  [Vivado](http://vectorblox.github.io/mxp/mxp_quickstart_vivado.html) /
+  [Simulator](http://vectorblox.github.io/mxp/mxp_quickstart_simulator.html)
 
 For further VectorBlox MXP documentation, refer to the following:
 
-- VectorBlox MXP Programming Guide for [Altera](mxp_guide_altera.html) /[Xilinx](mxp_guide_xilinx.html)
+- VectorBlox MXP Programming Guide for [Altera](http://vectorblox.github.io/mxp/mxp_guide_altera.html) /[Xilinx](http://vectorblox.github.io/mxp/mxp_guide_xilinx.html)
 
-- [VectorBlox MXP Programming  Reference](mxp_reference.html)
+- [VectorBlox MXP Programming  Reference](http://vectorblox.github.io/mxp/mxp_reference.html)
 
 For further information please email us at
 [info@vectorblox.com](mailto:info@vectorblox.com) or visit
