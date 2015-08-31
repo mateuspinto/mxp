@@ -24,4 +24,4 @@ DST_LIB = libvbxsim.a
 $(DST_LIB):$(SRC_LIB)
 	cp $^ $@
 clean:
-	rm $(LIB)
+	rm -f $(DST_LIB)
