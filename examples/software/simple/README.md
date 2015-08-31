@@ -7,7 +7,7 @@ This Readme gives instructions on how to build under various environments
 
 To build the c++ example, use g++ instead of gcc, and use main.cpp instead of main.c
 in the commands below
-.
+
 ## Simulator
 
 To use these instructions you need to know the directory that the package is
