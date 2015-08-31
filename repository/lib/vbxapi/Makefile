@@ -38,7 +38,7 @@ include sources.mk
 all: $(LIB)
 
 
-COMMON_FLAGS := -MP -MMD -c -g -O3 -Wall $(TARGET_OPTS)
+COMMON_FLAGS := -MD -c -g -O3 -Wall $(TARGET_OPTS)
 C_FLAGS := $(COMMON_FLAGS)
 CXX_FLAGS := $(COMMON_FLAGS) -fno-rtti -fno-exceptions
 

@@ -89,7 +89,7 @@ typedef void vbx_void_t;      ///< void, used for generic pointers
  *
  */
 
-	typedef struct{} vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
+	typedef struct{char none;} vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
 /**@}*/
 
 
