@@ -13,7 +13,7 @@ test-cpp.elf: test-cpp.cpp $(VBXAPI)/libvbxapi.a $(VBXSIM)/libvbxsim.a
 	g++ -Wall -g -DVBX_SIMULATOR -I$(VBXAPI) -o $@ $^
 
 test-c.elf: test-c.c $(VBXAPI)/libvbxapi.a $(VBXSIM)/libvbxsim.a
-	gcc -Wall -g -DVBX_SIMULATOR -I$(VBXAPI) -o $@ $^
+	gcc -Wall -g -std=c99 -DVBX_SIMULATOR -I$(VBXAPI) -o $@ $^
 
 
 $(VBXAPI)/libvbxapi.a  $(VBXSIM)/libvbxsim.a:
