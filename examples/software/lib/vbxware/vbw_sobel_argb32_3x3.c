@@ -267,5 +267,5 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 	                   0);/*sp incr*/
 	vbx_sp_pop();
 	vbx_sync();
-
+	return 0;
 }

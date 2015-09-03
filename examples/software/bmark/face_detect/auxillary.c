@@ -73,15 +73,15 @@ void print_python_pixel(pixel *dst, char* str, int width, int height)
 
 }
 
-int match_array_pixel(pixel *a, pixel *b, char *str, int width, int height, int max_print_errors, int joffset)
+int match_array_pixel(pixel *a, pixel *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset)
 {
     int i, j;
     int errors = 0;
     for (j = 0; j < height; j++) {
         for (i = 0; i < width; i++) {
-            if(a[j*width+i].r != b[j*width+i].r ||
-               a[j*width+i].g != b[j*width+i].g ||
-               a[j*width+i].b != b[j*width+i].b){
+            if(abs(a[j*width+i].r - b[j*width+i].r) > max_difference ||
+               abs(a[j*width+i].g - b[j*width+i].g) > max_difference ||
+               abs(a[j*width+i].b - b[j*width+i].b) > max_difference){
                 if (errors < max_print_errors) {
                     printf("Error in %s at %d, %d: Expected = %d,%d,%d, got = %d,%d,%d\n",
                             str, j+joffset, i,
@@ -99,13 +99,13 @@ int match_array_pixel(pixel *a, pixel *b, char *str, int width, int height, int 
     return errors;
 }
 
-int match_array_word(unsigned int *a, unsigned int *b, char *str, int width, int height, int max_print_errors, int joffset)
+int match_array_word(unsigned int *a, unsigned int *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset)
 {
     int i, j;
     int errors = 0;
     for (j = 0; j < height; j++) {
         for (i = 0; i < width; i++) {
-            if(a[j*width+i] != b[j*width+i]){
+            if(abs(a[j*width+i] - b[j*width+i]) > max_difference){
                 if (errors < max_print_errors) {
                     printf("Error in %s at %d, %d: Expected = %d, got = %d\n",
                             str, j+joffset, i, a[j*width+i], b[j*width+i]);
@@ -117,13 +117,13 @@ int match_array_word(unsigned int *a, unsigned int *b, char *str, int width, int
     return errors;
 }
 
-int match_array_half(unsigned short *a, unsigned short *b, char *str, int width, int height, int max_print_errors, int joffset)
+int match_array_half(unsigned short *a, unsigned short *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset)
 {
     int i, j;
     int errors = 0;
     for (j = 0; j < height; j++) {
         for (i = 0; i < width; i++) {
-            if(a[j*width+i] != b[j*width+i]){
+            if(abs(a[j*width+i] - b[j*width+i]) > max_difference){
                 if (errors < max_print_errors) {
                     printf("Error in %s at %d, %d: Expected = %d, got = %d\n",
                             str, j+joffset, i, a[j*width+i], b[j*width+i]);
@@ -135,13 +135,31 @@ int match_array_half(unsigned short *a, unsigned short *b, char *str, int width,
     return errors;
 }
 
-int match_array_byte(unsigned char *a, unsigned char *b, char *str, int width, int height, int max_print_errors, int bits, int joffset)
+int match_array_half_byte(unsigned short *a, unsigned char *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset)
+{
+    int i, j;
+    int errors = 0;
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            if(abs(a[j*width+i] - b[j*width+i]) > max_difference){
+                if (errors < max_print_errors) {
+                    printf("Error in %s at %d, %d: Expected = %d, got = %d\n",
+                            str, j+joffset, i, a[j*width+i], b[j*width+i]);
+                }
+                errors++;
+            }
+        }
+    }
+    return errors;
+}
+
+int match_array_byte(unsigned char *a, unsigned char *b, char *str, int width, int height, int max_difference, int max_print_errors, int bits, int joffset)
 {
     int i, j, y;
     int errors = 0;
     for (j = 0; j < height; j++) {
         for (i = 0; i < width; i++) {
-            if(a[j*width+i] != b[j*width+i]){
+            if(abs(a[j*width+i] - b[j*width+i]) > max_difference){
                 if (errors < max_print_errors) {
                     if(bits){
                         printf("Error in %s at %d, %d: Expected = ", str, j+joffset, i);

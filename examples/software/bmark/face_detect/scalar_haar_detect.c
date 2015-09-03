@@ -43,6 +43,14 @@ VBXCOPYRIGHT( scalar_haar_detect )
 #include "haar_detect.h"
 #include "lbp_detect.h"
 
+int floord(float x) {
+    int xi = (int)x;
+    if (1.0*xi > x) {
+        xi--;
+    } 
+    return xi;
+}
+
 unsigned short* get_img(unsigned short *input, int width, int height, int pitch)
 {
     int i, j;
@@ -195,6 +203,7 @@ feat* pop_biggest(feat* feature)
 /* check if two features overlap, indicating they may point to the same object */
 int overlapped_features( int ax, int ay, int aw , int bx, int by, int bw )
 {
+#if 0
     float fraction = 0.33;
 	int dist = (int)(fraction * aw); 
 
@@ -209,6 +218,27 @@ int overlapped_features( int ax, int ay, int aw , int bx, int by, int bw )
 			return 2;
 
 	return 0;
+#else
+    int fraction = NEIGHBOR_OVERLAP;
+	int dist = fraction * aw; 
+
+	// are A and B similar in size? 
+	if(aw*100 <= ((100 + fraction) * bw) && bw*100 <= ((100 + fraction) * aw)) {
+	    // do they overlap closely?
+	    if ( abs(ax-bx)*100 <= dist && abs(ay-by)*100 <= dist ) {
+		return 1;
+	    }
+
+	    // is A fully contained in B?
+	    if (ax >= bx && ay >= by) {
+		if (ax+aw <= bx+bw && ay+aw <= by+bw) {
+		    return 2;
+		}
+	    }
+	}
+
+	return 0;
+#endif
 }	
 
 /* merge overlapping features, producing a reduced feature list where overlapped features are averaged together */
@@ -249,8 +279,8 @@ feat* merge_features(feat* raw, feat* merged, const int min_neighbors)
 			}
 		}
 		if (!found){
-				feature[i] = solo;
-				solo = solo + 1;
+		    feature[i] = solo;
+		    solo = solo + 1;
 		}
 
 	}
@@ -267,20 +297,40 @@ feat* merge_features(feat* raw, feat* merged, const int min_neighbors)
 	// we add the current feature to the merged feature total
 	for(i=0; i<num;i++){
 		int index = feature[i];
+#if 1
+		neighbors[index]++;
+        if (neighbors[index] == 1) {
+            temp[index].x = original[i].x;
+            temp[index].y = original[i].y;
+            temp[index].w = original[i].w;
+        }
+#elif 0
 		neighbors[index] = neighbors[index] + 1;
 		temp[index].x = temp[index].x + original[i].x;
 		temp[index].y = temp[index].y + original[i].y;
 		temp[index].w = temp[index].w + original[i].w;
+#else
+		neighbors[index]++;
+		temp[index].x = original[i].x;
+		temp[index].y = original[i].y;
+		temp[index].w = original[i].w;
+#endif
 	}
 	// take our summed merged features, and get the average values of coordinates for all features
 	int mfaces = 0;
 	for(i=0; i<solo;i++){
 		int n = neighbors[i];
 		if (n >= min_neighbors){
+#if 0
 			// mutliply by 2 and add n for better rounding
 			int x = (temp[i].x*2 + n) / (2*n);
 			int y = (temp[i].y*2 + n) / (2*n);
 			int win = (temp[i].w*2 + n) / (2*n);
+#else
+			int x = temp[i].x;
+			int y = temp[i].y;
+			int win = temp[i].w;
+#endif
 			
 			mfaces = mfaces+1;
 			merged = append_feature(merged, x, y, win);
@@ -296,33 +346,108 @@ feat* merge_features(feat* raw, feat* merged, const int min_neighbors)
 		
 }
 
-/* scales image using bilinear interpolation, to the given percentage */
-void scalar_BLIP(unsigned short *img, short height, short width, unsigned short *scaled_img, short scaled_height, short scaled_width, float percent)
+void merge_features_array(feat_array* merged, feat_array* raw, int total, int *num_merged, int min_neighbors)
 {
-	//    printf("percent %3.2f\n", percent);
+	int i, j, count, index, found, solo = 0;
+
+	if (total == 0)return NULL;
+
+#if 0
+	int* feature = (int*) malloc(total*sizeof(int));
+	int* neighbors = (int*) malloc(total*sizeof(int));
+	feat_array* temp = (feat_array*) malloc(total*sizeof(feat_array));
+#else
+	int feature[total];
+	int neighbors[total];
+	feat_array temp[total];
+#endif
+
+	for(i=0; i<total; i++){
+		found = 0;
+		// go through all previous features
+		for(j=0; j<i; j++){
+		    if (overlapped_features(raw[j].x, raw[j].y, raw[j].w, raw[i].x, raw[i].y, raw[i].w)){
+			feature[i] = feature[j];
+			found++;
+			break;
+		    }
+		}
+		if (!found){
+		    feature[i] = solo++;
+		}
+
+	}
+	// Get the fields used to merged the features ready
+	for(i=0; i<solo;i++){
+		neighbors[i]=0;
+	}	
+
+	// index is the base feature the current feature matches
+	// we increase the total of matching features in this base features neighborhood
+	// we add the current feature to the merged feature total
+	for(i=0; i<total;i++){
+	    index = feature[i];
+	    neighbors[index]++;
+
+	    if (neighbors[index] == 1) {
+		temp[index].x = raw[i].x;
+		temp[index].y = raw[i].y;
+		temp[index].w = raw[i].w;
+	    } else {
+		temp[index].x += raw[i].x;
+		temp[index].y += raw[i].y;
+		temp[index].w += raw[i].w;
+	    }
+	}
+
+	count = 0;
+	// take our summed merged features, and get the average values of coordinates for all features
+	/* feat_array* merged = (feat_array*)malloc(solo*sizeof(feat_array)); */
+	for(i=0; i<solo; i++){
+	    if (neighbors[i] >= min_neighbors){
+		temp[i].x = temp[i].x / neighbors[i];
+		temp[i].y = temp[i].y / neighbors[i];
+		temp[i].w = temp[i].w / neighbors[i];
+		merged[count] = temp[i];
+		count++;
+	    }
+	}
+
+#if 0
+	free(feature);
+	free(neighbors);
+	free(temp);
+#endif
+    
+    *num_merged = count;
+	/* return merged; */
+}
+
+/* scales image using bilinear interpolation, to the given percentage */
+void scalar_BLIP(unsigned short *img, short height, short width, unsigned short *scaled_img, short scaled_height, short scaled_width, float *percent)
+{
 	short row,pixel;
-	unsigned int x,y,x0,y0,dx,dy,d1x,d1y;
-	short point_a, point_b, point_c, point_d; 
-	unsigned int weight_a, weight_b, weight_c, weight_d;
-	int out;
-	int scale = (int)(4096.0/percent);
+    int x0, y0;
+	float x, y, dx, dy, d1x, d1y;
+	float point_a, point_b, point_c, point_d; 
+	float weight_a, weight_b, weight_c, weight_d;
+	float out;
 
-	for(row=0; row < scaled_height-1; row++){
+	for(row=0; row < scaled_height; row++){
 
-		y = row * scale; 
-		y0 =  (0xFFFFF000 &  y )>>12; //get the floor of y
-		dy =   0x00000FFF &  y; //get the frac of y
-		d1y =  0x00001000 - dy; //get 1-frac of y
+		y = *percent * row; 
+		y0 =  floord(y); //get the floor of y
+		dy =   y - y0;
+		d1y =  1.0 - dy;
 
-		for(pixel=0; pixel < scaled_width-1; pixel++){
+		for(pixel=0; pixel < scaled_width; pixel++){
 			//convert from int to Fixed12 and get source pixels for this reduced image
-			x = pixel * scale; //(int)(1.20/1.0 *4096) -- scaled by 120% + switched to Fixed12
-			y = row   * scale; 
+			x = *percent * pixel; //(int)(1.20/1.0 *4096) -- scaled by 120% + switched to Fixed12
 
 			//get floor and fractional components of point
-			x0 =  (0xFFFFF000 &  x )>>12;  //get the floor of x
-			dx =   0x00000FFF &  x; //get the frac of x
-			d1x =  0x00001000 - dx;  //get 1-frac of x
+			x0 =  floord(x);
+			dx =   x - x0; //get the frac of x
+			d1x =  1.0 - dx;  //get 1-frac of x
 
 			//get pixels 'boxing in' point
 			point_a = img[    x0+    y0*width]; 
@@ -331,29 +456,22 @@ void scalar_BLIP(unsigned short *img, short height, short width, unsigned short 
 			point_d = img[(x0+1)+(y0+1)*width];
 			
 			//determine pixel weights
-			weight_a = (d1x * d1y) >> 6; //BLIP weighting of pixel a = (1-dx*1-dy) , divided by 64
-			weight_b = (dx  * d1y) >> 6; //BLIP weighting of pixel b = (  dx*1-dy)
-			weight_c = (d1x * dy ) >> 6; //BLIP weighting of pixel c = (1-dx*  dy)
-			weight_d = (dx  * dy ) >> 6; //BLIP weighting of pixel d = (  dx*  dy)
+			weight_a = (d1x * d1y); //BLIP weighting of pixel a = (1-dx*1-dy)
+			weight_b = (dx  * d1y); //BLIP weighting of pixel b = (  dx*1-dy)
+			weight_c = (d1x * dy ); //BLIP weighting of pixel c = (1-dx*  dy)
+			weight_d = (dx  * dy ); //BLIP weighting of pixel d = (  dx*  dy)
 
-			//get BLIP value of point from weighted pixel values, convert back from Fixed12 to int
-			out = (point_a*weight_a + point_b*weight_b + point_c*weight_c + point_d*weight_d) >> 12; //sum of weighted pixel values, divided by 4096 
-			scaled_img[pixel+row*scaled_width] = out >> 6; //divided by a final 64
+			out = (point_a*weight_a + point_b*weight_b + point_c*weight_c + point_d*weight_d); //sum of weighted pixel values
+			scaled_img[pixel+row*scaled_width] = (int)out;
 		}
 	}
-	//clean up edge cases
-	for(pixel=0; pixel < scaled_width-1; pixel++){
-		scaled_img[pixel+(scaled_height*(scaled_width-1))] = 255; 
-	}
-	for(row=0; row < scaled_height; row++){
-		scaled_img[scaled_width-1+(row*scaled_width)] = 255; 
-	}
-
 }
 
 void scalar_BLIP2(unsigned short *img, short height, short width, unsigned short *scaled_img, short scaled_height, short scaled_width, int value)
 {
-    int scale = 128;
+    int log_scale = 8;
+    int scale = 1<<log_scale;
+
     unsigned short coeff_a[value];
     unsigned short coeff_b[value];
     int y, i, k;
@@ -361,6 +479,9 @@ void scalar_BLIP2(unsigned short *img, short height, short width, unsigned short
     unsigned int a, b, c, d, out;
     unsigned short *x0, *x1;
     int y_scaled = 0;
+
+    int waves = width/(value+1);
+    int extra = scaled_width - waves*value;
 
     for(i=0; i<value; i++){
         coeff_a[i] = scale-i*scale/value;
@@ -380,7 +501,19 @@ void scalar_BLIP2(unsigned short *img, short height, short width, unsigned short
                     c = x1[offset] * coeff_a[k];
                     d = x1[offset+1] * coeff_b[k];
                     out = (a+b)*(scale-y_mod_valp1*scale/value) + (c+d)*(y_mod_valp1*scale/value);
-                    scaled_img[scaled_width*y_scaled+scaled_offset] = (short)(out >> 14);
+                    scaled_img[scaled_width*y_scaled+scaled_offset] = (short)(out >> (2*log_scale));
+                }
+            }
+            if (extra) {
+                for(k=0; k < extra; k++){
+                    offset = k+waves*(value+1);
+                    scaled_offset = k+waves*(value);
+                    a = x0[offset] * coeff_a[k];
+                    b = x0[offset+1] * coeff_b[k];
+                    c = x1[offset] * coeff_a[k];
+                    d = x1[offset+1] * coeff_b[k];
+                    out = (a+b)*(scale-y_mod_valp1*scale/value) + (c+d)*(y_mod_valp1*scale/value);
+                    scaled_img[scaled_width*y_scaled+scaled_offset] = (short)(out >> (2*log_scale));
                 }
             }
             y_scaled++;
@@ -407,6 +540,7 @@ int haar_check(unsigned int *iImg, unsigned int *iiImg, int x, int y, short wind
 /* get a list of features that pass the stages of the haar filter */
 feat* scalar_get_haar_features_image_scale(stage *cascade, lbp_stage_t *lbp_cascade, unsigned short* img, int min_scale, int scale_inc, feat* features, short width, short height, short window, short max_stage, short lbp_max_stage)
 {
+    float percent = 1.0 * (SCALE_FACTOR+1) / SCALE_FACTOR;
 	unsigned int *iImg = (unsigned int*)malloc( width * height * sizeof(unsigned int) );
 	unsigned int *iiImg = (unsigned int*)malloc( width * height * sizeof(unsigned int) );
 	unsigned short *rimg = (unsigned short*)malloc( width * height * sizeof(unsigned short) );
@@ -431,7 +565,7 @@ feat* scalar_get_haar_features_image_scale(stage *cascade, lbp_stage_t *lbp_casc
 		x_max = width - (window + 1);
 		y_max = height - (window + 1);
 
-		if (scaled*1000 >= min_scale){
+		if (scaled*1000 >= min_scale*1000){
 			gen_integrals(img, iImg, iiImg, width, height);
 			for (y = 0; y < y_max; y = y + ystep) {
 				for (x=0; x < x_max; x++) {
@@ -557,26 +691,25 @@ void print_ascii(feat* feature, int const width, const int height)
 }
 
 /* find and display the features found in an image using a haar cascade */
-feat* scalar_face_detect_luma(unsigned short *input, pixel *output, const int image_width, const int image_height, const int image_pitch, char *str, const int return_features)
+feat* scalar_face_detect_luma(unsigned short *input, pixel *output, const int image_width, const int image_height, const int image_pitch, short neighbors, char *str, const int return_features)
 {
 	pixel *color =(pixel*)malloc(sizeof(pixel));
 
 	feat* features = NULL; 
 	feat* merged = NULL; 
-    
 
     if(image_width != image_pitch){
         unsigned short *updated_input = get_img(input, image_width, image_height, image_pitch);
-        features = scalar_get_haar_features_image_scale(face_alt, face_lbp, updated_input, INITIAL_ZOOM, SCALE_FACTOR, features, image_width, image_height, 20, 22, 13);
+        features = scalar_get_haar_features_image_scale(face_alt, face_lbp, updated_input, INITIAL_ZOOM, SCALE_PERCENT, features, image_width, image_height, 20, 22, face_lbp_max_stage);
         vbx_shared_free(updated_input);
     } else {
-        features = scalar_get_haar_features_image_scale(face_alt, face_lbp, input, INITIAL_ZOOM, SCALE_FACTOR, features, image_width, image_height, 20, 22, 13);
+        features = scalar_get_haar_features_image_scale(face_alt, face_lbp, input, INITIAL_ZOOM, SCALE_PERCENT, features, image_width, image_height, 20, 22, face_lbp_max_stage);
     }
 
 #if !USE_LBP
-	merged = merge_features(features, merged, MIN_NEIGHBORS);
+	merged = merge_features(features, merged, neighbors);
 #else
-	merged = merge_features(features, merged, LBP_NEIGHBORS);
+	merged = merge_features(features, merged, neighbors);
 #endif
 
 	if(!return_features && merged != NULL){

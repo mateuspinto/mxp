@@ -115,13 +115,13 @@ namespace vbw{
 	{
 		size_t free_sp=vbx_sp_getfree();
 		size_t vectors_needed=8;
-		size_t partial_width=free_sp/(vectors_needed*sizeof(vbx_uword_t));
+		short partial_width=free_sp/(vectors_needed*sizeof(vbx_uword_t));
 		if(partial_width>image_width){
 			sobel_argb32_3x3_partial(sobel_out, argb_in, image_width, image_height, image_pitch,renorm);
 		}else{
 			//can do entire row at a time, so do partial_width at a time
 			size_t partial_step=partial_width-2;
-			for(unsigned i=0;;i+=partial_step){
+			for(int i=0;;i+=partial_step){
 				//account for last tile being smaller
 				if(i+partial_width > image_width){
 					partial_width=image_width-i;
@@ -142,8 +142,9 @@ namespace vbw{
 		side.to2D(1,image_height,0).dma_write(sobel_out+image_width-1,image_pitch);//write to last pixel
 
 		vbx_sync();
-
+		return 0;
 	}
+
 	int sobel_luma8_3x3(vbx_uword_t *output,
 	                    unsigned char *input,
 	                    const short image_width,

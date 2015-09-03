@@ -121,7 +121,7 @@ static inline void divide_uhalf( uint16_t *div, uint16_t *rem, uint16_t a, uint1
 	uint16_t remainder = vcc;
 
 	if( a==0 ) { result = remainder = 0; }
-	if( b==0 ) { result = remainder = UINT_MAX; }
+	if( b==0 ) { result = remainder = ~0; }
 
 	*div = result;
 	if(rem) *rem = remainder;
@@ -166,7 +166,7 @@ static inline void divide_ubyte( uint8_t *div, uint8_t *rem, uint8_t a, uint8_t 
 	uint8_t remainder = vcc;
 
 	if( a==0 ) { result = remainder = 0; }
-	if( b==0 ) { result = remainder = UINT_MAX; }
+	if( b==0 ) { result = remainder = ~0; }
 
 	*div = result;
 	if(rem) *rem = remainder;
@@ -211,7 +211,7 @@ static inline void divide_word( int32_t *div, int32_t *rem, int32_t a, int32_t b
 	int32_t remainder = vcc;
 
 	if( a==0 ) { result = remainder = 0; }
-	if( b==0 ) { result = remainder = UINT_MAX; }
+	if( b==0 ) { result = remainder = ~0; }
 
 	*div = result;
 	if(rem) *rem = remainder;
@@ -256,7 +256,7 @@ static inline void divide_half( int16_t *div, int16_t *rem, int16_t a, int16_t b
 	int16_t remainder = vcc;
 
 	if( a==0 ) { result = remainder = 0; }
-	if( b==0 ) { result = remainder = UINT_MAX; }
+	if( b==0 ) { result = remainder = ~0; }
 
 	*div = result;
 	if(rem) *rem = remainder;
@@ -301,7 +301,7 @@ static inline void divide_byte( int8_t *div, int8_t *rem, int8_t a, int8_t b )
 	int8_t remainder = vcc;
 
 	if( a==0 ) { result = remainder = 0; }
-	if( b==0 ) { result = remainder = UINT_MAX; }
+	if( b==0 ) { result = remainder = ~0; }
 
 	*div = result;
 	if(rem) *rem = remainder;

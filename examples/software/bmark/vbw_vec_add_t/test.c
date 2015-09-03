@@ -98,7 +98,7 @@ int main(void)
 
 	int PRINT_LENGTH = min( N, MAX_PRINT_LENGTH );
 
-	double scalar_time, vector_time;
+	double scalar_time;
 	int errors=0;
 
 	vbx_mxp_print_params();
@@ -136,7 +136,7 @@ int main(void)
 
 	vbx_dma_to_vector( v_in1, (void *)vector_in1, N*sizeof(vbx_sp_t) );
 	vbx_dma_to_vector( v_in2, (void *)vector_in1, N*sizeof(vbx_sp_t) );
-	vector_time = test_vector( v_out, v_in1, v_in2, N, scalar_time );
+	test_vector( v_out, v_in1, v_in2, N, scalar_time );
 	vbx_dma_to_host( (void *)vector_out, v_out, N*sizeof(vbx_sp_t) );
 	vbx_sync();
 	VBX_T(test_print_array)( vector_out, PRINT_LENGTH );

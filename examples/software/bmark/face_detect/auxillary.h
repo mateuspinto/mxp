@@ -48,9 +48,10 @@
 void print_python_array(int32_t *dst, char* str, int width, int height);
 void print_python_pixel(pixel *dst, char* str, int width, int height);
 
-int match_array_pixel(pixel *a, pixel *b, char *str, int width, int height, int max_print_errors, int joffset);
-int match_array_word(unsigned int *a, unsigned int *b, char *str, int width, int height, int max_print_errors, int joffset);
-int match_array_half(unsigned short *a, unsigned short *b, char *str, int width, int height, int max_print_errors, int joffset);
-int match_array_byte(unsigned char *a, unsigned char *b, char *str, int width, int height, int max_print_errors, int bits, int joffset);
+int match_array_pixel(pixel *a, pixel *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset);
+int match_array_word(unsigned int *a, unsigned int *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset);
+int match_array_half(unsigned short *a, unsigned short *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset);
+int match_array_byte(unsigned char *a, unsigned char *b, char *str, int width, int height, int max_difference, int max_print_errors, int bits, int joffset);
+int match_array_half_byte(unsigned short *a, unsigned char *b, char *str, int width, int height, int max_difference, int max_print_errors, int joffset);
 
 #endif //__AUXILLARY_H

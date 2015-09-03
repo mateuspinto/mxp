@@ -56,6 +56,12 @@ typedef struct feat{
 	int w;
 }feat;
 
+typedef struct feat_array{
+	int x;
+	int y;
+	int w;
+}feat_array;
+
 typedef struct{
 	unsigned char x;
 	unsigned char y;

@@ -93,7 +93,7 @@ void vbw_fix16_div( vbx_word_t* v_result, vbx_word_t* v_a, vbx_word_t* v_b, int 
 	}
 
 	//correct the sign if necessary
-	vbx(SVWU,VMUL,v_tmp,-1,v_result);
+	vbx(SVWU,VMUL,v_tmp,-1,(vbx_uword_t*)v_result);
 	vbx(VVWU,VCMV_NZ,(vbx_uword_t*)v_result,v_tmp,(vbx_uword_t*)v_neg);
 }
 
