@@ -37,6 +37,12 @@
 
 #include "lbp.h"
 #include "haar_detect.h"
+#ifdef __NIOS2__
+#include "system.h"
+#include "io.h"
+#else
+#include "xparameters.h"
+#endif
 
 int LBPPassCascade(image_t img, lbp_stage_t *cascade, pair_t p0, int max_stage);
 int LBPPassStage(image_t img, lbp_stage_t stage, pair_t p0);
@@ -52,9 +58,18 @@ unsigned char** LBPRestrictedSums(unsigned short *img, const unsigned width, con
 unsigned char** LBPRestrictedPatterns(unsigned char **sums, const unsigned width, const unsigned height, const unsigned log);
 vptr_word vector_row_lbp_restricted_2D(vptr_ubyte *v_lbp, vptr_word v_tmp, int offset, int search_width, int image_width, int vector_2D, lbp_stage_t *cascade, short max_stage);
 vptr_word vector_row_lbp_restricted_masked(vptr_ubyte *v_lbp, vptr_word v_tmp, int offset, int search_width, int image_width, int vector_2D, lbp_stage_t *cascade, short max_stage);
+void vector_row_lbp_restricted_max(unsigned char *output, vptr_ubyte *v_lbp, vptr_byte v_tmp, int x_offset, int search_width, int image_width, int vector_2D, lbp_stage_t *cascade, short max_stage);
 
 unsigned short** LBPRestrictedSums2(unsigned short *img, const unsigned width, const unsigned height, const unsigned log);
 unsigned char** LBPRestrictedPatterns2(unsigned short *img, unsigned short **sums, const unsigned width, const unsigned height, const unsigned log);
 unsigned char** LBPRestricted(unsigned short *img, const unsigned width, const unsigned height, const unsigned log);
+unsigned char** LBPRestrictedCI(unsigned short *img, const unsigned width, const unsigned height, const unsigned log);
+unsigned char** LBPRestrictedCI2(unsigned short *img, const unsigned width, const unsigned height, const unsigned log);
+/* unsigned char** LBPRestrictedCI28(unsigned char *img, const unsigned width, const unsigned height, const unsigned log); */
+unsigned char** LBPRestrictedCI28(unsigned char **patterns, unsigned char *img, const unsigned width, const unsigned height, const unsigned log);
+void LBPRestricted_CI_column_8(unsigned char **patterns, unsigned char *img, const unsigned width, const unsigned height, const unsigned log);
+void LBPRestricted_CI_column_8_scratch(unsigned char **patterns, unsigned char *img, const unsigned width, const unsigned height, const unsigned log);
 unsigned short** ScalarLBPRestrictedSums(unsigned short* img, const unsigned width, const unsigned height, const unsigned log);
 unsigned char** ScalarLBPRestrictedPatterns(unsigned short **sums, const unsigned width, const unsigned height, const unsigned log);
+
+int assign_lbp_lut_ci();

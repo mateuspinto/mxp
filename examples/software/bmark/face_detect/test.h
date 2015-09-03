@@ -43,10 +43,23 @@
 #include "vbx_test.h"
 #include "haar.h"
 #include "lbp.h"
+#ifdef __NIOS2__
+#include "io.h"
+#include "system.h"
+#else
+#include "xparameters.h"
+#endif
 
 #include "blank_small.h"
 #include "lenna.h"
 #include "ms_small.h"
+
+#define VLBPLUT VCUSTOM0
+#define VLBPPAT VCUSTOM1
+#define DOUBLE_LUT 1
+#define LUT_CI 1
+#define LBP_CI 1
+#define BLIP 1
 
 #define PRINT 0
 #define UNIT 1
@@ -56,7 +69,7 @@
 #define DEBUG 0
 
 int compare_scalar_rgb2luma_to_vbw_rgb2luma16(unsigned short *img, unsigned short *vbx_img, pixel *vbx_input, int width, int height, int stride, int max_print_errors);
-int compate_vbx_lut_to_vbx_lut_ci(int sz, int max_print_errors);
+int compare_vbx_lut_to_vbx_lut_ci(int stage, int max_print_errors);
 int compare_LBPRestrictedSums_to_test_scalar_sums_byte(unsigned short* vbx_img, int log, int width, int height, int max_print_errors);
 int compare_LBPRestrictedSums2_to_test_scalar_sums_half(unsigned short* vbx_img, int log, int width, int height, int max_print_errors);
 int compare_ScalarLBPRestrictedSums_to_test_scalar_sums_half(unsigned short* vbx_img, int log, int width, int height, int max_print_errors);

@@ -245,7 +245,7 @@ void test_print_hex_array_byte( int8_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", d[i] );
+		printf( "%02X ", 0xFF & d[i] );
 	}
 	printf("\n");
 }
@@ -254,7 +254,7 @@ void test_print_hex_matrix_byte( int8_t *d, int row, int col, int width )
 	int i, j;
 	for( j = 0; j < row; j++ ) {
 		for( i = 0; i < col; i++ ) {
-			printf( "%04X ", d[j*width+i] );
+			printf( "%02X ", 0xFF & d[j*width+i] );
 		}
 		printf("\n");
 	}
@@ -353,7 +353,7 @@ void test_print_hex_array_half( int16_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", d[i] );
+		printf( "%04X ", 0xFFFF & d[i] );
 	}
 	printf("\n");
 }
@@ -362,7 +362,7 @@ void test_print_hex_matrix_half( int16_t *d, int row, int col, int width )
 	int i, j;
 	for( j = 0; j < row; j++ ) {
 		for( i = 0; i < col; i++ ) {
-			printf( "%04X ", d[j*width+i] );
+			printf( "%04X ", 0xFFFF & d[j*width+i] );
 		}
 		printf("\n");
 	}
@@ -461,7 +461,7 @@ void test_print_hex_array_word( int32_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", (unsigned int)d[i] );
+		printf( "%08X ", (unsigned int)d[i] );
 	}
 	printf("\n");
 }
@@ -470,7 +470,7 @@ void test_print_hex_matrix_word( int32_t *d, int row, int col, int width )
 	int i, j;
 	for( j = 0; j < row; j++ ) {
 		for( i = 0; i < col; i++ ) {
-			printf( "%04X ", (unsigned int)d[j*width+i] );
+			printf( "%08X ", (unsigned int)d[j*width+i] );
 		}
 		printf("\n");
 	}
@@ -569,7 +569,7 @@ void test_print_hex_array_ubyte( uint8_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", d[i] );
+		printf( "%02X ", 0xFF & d[i] );
 	}
 	printf("\n");
 }
@@ -578,7 +578,7 @@ void test_print_hex_matrix_ubyte( uint8_t *d, int row, int col, int width )
 	int i, j;
 	for( j = 0; j < row; j++ ) {
 		for( i = 0; i < col; i++ ) {
-			printf( "%04X ", d[j*width+i] );
+			printf( "%02X ", 0xFF & d[j*width+i] );
 		}
 		printf("\n");
 	}
@@ -677,7 +677,7 @@ void test_print_hex_array_uhalf( uint16_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", d[i] );
+		printf( "%04X ", 0xFFFF & d[i] );
 	}
 	printf("\n");
 }
@@ -785,7 +785,7 @@ void test_print_hex_array_uword( uint32_t *d, int size )
 {
 	int i;
 	for( i = 0; i < size; i++ ) {
-		printf( "%04X ", (unsigned int)d[i] );
+		printf( "%08X ", (unsigned int)d[i] );
 	}
 	printf("\n");
 }
@@ -794,7 +794,7 @@ void test_print_hex_matrix_uword( uint32_t *d, int row, int col, int width )
 	int i, j;
 	for( j = 0; j < row; j++ ) {
 		for( i = 0; i < col; i++ ) {
-			printf( "%04X ", (unsigned int)d[j*width+i] );
+			printf( "%08X ", (unsigned int)d[j*width+i] );
 		}
 		printf("\n");
 	}

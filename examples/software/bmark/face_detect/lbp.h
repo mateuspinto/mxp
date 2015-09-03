@@ -68,4 +68,5 @@ typedef struct{
 }lbp_stage_t;
 
 extern lbp_stage_t face_lbp[];
+extern int face_lbp_max_stage;
 #endif //__LBP_H

@@ -4,7 +4,7 @@
 
 const int num_elements=10;
 
-int main() 
+int main()
 {
 
 #if VBX_SIMULATOR==1
@@ -29,7 +29,8 @@ int main()
 
 	//print out vector c
 	printf( "%8d", c[0] );
-	for( int i=1; i<num_elements; i++ ) {
+	int i;
+	for( i=1; i<num_elements; i++ ) {
 		printf( ",%8d", c[i] );
 	}
 	printf( "\n" );

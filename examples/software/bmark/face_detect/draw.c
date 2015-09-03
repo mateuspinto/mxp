@@ -41,49 +41,15 @@ VBXCOPYRIGHT( draw )
 
 #include "draw.h"
 
-//draw a rectangle of given size, in a given color, on the output image
-void draw_rectangle(int startx, int starty, int width, int height, pixel* color, pixel *output_buffer, const int image_width, const int image_height, const int image_pitch)
-{
-	int endy = starty + height;
-	int endx = startx + width;
-	int x,y;
-
-	if(startx <= 0){
-		startx = 1;
-	}
-	if(starty <= 0){
-		starty = 1;
-	}
-	if(endy >= image_height-1){
-		endy = image_height-2;
-	}
-	if(endx >= image_width-1){
-		endx = image_width-2;
-	}
-
-	for(y = starty; y < endy; y++){
-	output_buffer[y*image_pitch+startx+1] = *color;
-	output_buffer[y*image_pitch+startx] = *color;
-	output_buffer[y*image_pitch+endx+1] = *color;
-	output_buffer[y*image_pitch+endx] = *color;
-	}
-
-	for(x = startx; x < endx; x++){
-		output_buffer[starty*image_pitch+x] = *color;
-		output_buffer[(starty+1)*image_pitch+x] = *color;
-		output_buffer[endy*image_pitch+x] = *color;
-		output_buffer[(endy+1)*image_pitch+x] = *color;
-	}
-}
-
-//draw a given set of haar features as rectangles on the output image
+// function stubs
 void draw_features( feat* feature, pixel* color, pixel* output, const int image_width, const int image_height, const int image_pitch)
 {
-	feat* current;
+}
 
-	current = feature;
-	while(current){
-		draw_rectangle(current->x, current->y, current->w, current->w, color, output, image_width, image_height, image_pitch);
-		current = current->next;
-	}
+void draw_features_array( feat_array* feature, int num, pixel* color, pixel* output, const int image_width, const int image_height, const int image_pitch)
+{
+}
+
+void draw_features_array2(feat_array* feature, int num, pixel* output, const int image_width, const int image_height, const int image_pitch)
+{
 }

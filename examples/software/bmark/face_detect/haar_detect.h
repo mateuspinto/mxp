@@ -44,16 +44,20 @@
 #include <math.h>
 #include "draw.h"
 
-#define LBP_CI          0
-#define LUT_CI          0
+#define BAD_NO_MASK     0
+#define NEIGHBOR_OVERLAP 50
+#define MAX_POTENTIAL 1024
+#define LBP_CI          1
+#define LUT_CI          1
 #define USE_BYTES       1
 #define USE_RESTRICTED  1
 #define USE_LBP         1
+#define USE_SMALL       1
 
 #define DEBUG        0
 #define DRAW_FACES   1
 #define PRINT_FACES  0
-#define PRINT_MERGED 0
+#define PRINT_MERGED 1
 #define PRINT_ASCII  0
 
 #if DEBUG
@@ -65,17 +69,19 @@ extern int prev_frame;
 #define LOAD_IMAGE 0
 
 #if LOAD_IMAGE
-#define SCALE_FACTOR ((int) 1000.0 * 1.1)
-#define INITIAL_ZOOM  ((int) 1000.0 * 1.0)
-#define BIN 1
+#define INITIAL_ZOOM  1.0
+#define SCALE_FACTOR 10 // 11/10 aka 1.1
+#define LBP_NEIGHBORS 3
 #else
-#define SCALE_FACTOR ((int) 1000.0 * 1.125)
-#define INITIAL_ZOOM  ((int) 1000.0 * 5.0)
-#define BIN 4
+#define INITIAL_ZOOM  3.0
+#define SCALE_FACTOR 5 //  6/5 aka 1.2
+#define LBP_NEIGHBORS 6
 #endif
+
+#define BIN (((int)INITIAL_ZOOM / 2) * 2)
+#define SCALE_PERCENT ((int) 1000.0 * (SCALE_FACTOR + 1)/ SCALE_FACTOR)
 #define Y_STEP 1
 #define MIN_NEIGHBORS 4
-#define LBP_NEIGHBORS 4
 
 
 #define USE_MASKED             (VBX_GET_THIS_MXP()->mask_partitions)
@@ -85,12 +91,15 @@ extern int prev_frame;
 #define SQRT_FXP16             0
 #define SCAN_CI                0
 #define SKIP_HAAR_STAGES       0
-#define SKIP_HAAR_COMPUTE      0
 #define SKIP_HAAR              0
 #define SKIP_INTEGRALS         USE_RESTRICTED
-#define SKIP_RESIZE            0
-#define SKIP_APPEND_FEATURE    0
 #define SKIP_MERGE_FEATURE     0
+#define SKIP_APPEND_FEATURE    0
+#define SKIP_COMPUTE_FEATURE   0
+#define SKIP_PATTERNS          0
+#define SKIP_RESIZE            0
+#define SKIP_MAIN              0
+#define SKIP_INIT              0
 
 #define SWAP(x1,x2,tmp) do { tmp=x1; x1=x2; x2=tmp; } while(0)
 typedef vbx_uword_t* vptr_uword;
@@ -100,7 +109,7 @@ typedef vbx_word_t* vptr_word;
 typedef vbx_half_t* vptr_half;
 typedef vbx_byte_t* vptr_byte;
 
-feat* vector_face_detect(pixel *input, const int image_width, const int image_height, const int image_pitch, short use_masked, char *str, const int return_features);
+feat* vector_face_detect(pixel *input, const int image_width, const int image_height, const int image_pitch, short neighbors, short use_masked, char *str, const int return_features);
 
 //dynamically add features to the feature set -- implemented as a linked list
 feat* append_feature(feat* features, int x0, int y0, int w0);
@@ -114,10 +123,13 @@ feat* pop_biggest(feat* feature);
 int overlapped_features( int ax, int ay, int aw , int bx, int by, int bw );
 
 //merge overlapping features, producing a reduced feature list where overlapped features are averaged together
+void merge_features_array(feat_array* merged, feat_array* raw, int total, int *num_merged, const int min_neighbors);
+void vector_merge_features(feat_array* merged, feat_array* raw, int total, int *num_merged, const int min_neighbors);
 feat* merge_features(feat* raw, feat* merged, const int min_neighbors);
 void print_merged(feat* merged, char *str);
 void print_ascii(feat* feature, int const width, const int height);
 
 //find and display the features found in an image using a haar cascade
-feat* scalar_face_detect_luma(unsigned short *input, pixel *output, const int image_width, const int image_height, const int image_pitch, char* str, const int return_features);
+feat* scalar_face_detect_luma(unsigned short *input, pixel *output, const int image_width, const int image_height, const int image_pitch, short neighbors, char* str, const int return_features);
+
 #endif //__HAAR_DETECT_H

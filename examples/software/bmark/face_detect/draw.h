@@ -48,4 +48,5 @@ void draw_rectangle(int startx, int starty, int width, int height, pixel* color,
 //draw a given set of haar features as rectangles on the output image
 void draw_features( feat* feature, pixel* color, pixel* output, const int image_width, const int image_height, const int image_pitch);
 
+void draw_features_array( feat_array* feature, int num, pixel* color, pixel* output, const int image_width, const int image_height, const int image_pitch);
 #endif //__DRAW_H
