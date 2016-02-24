@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (C) 2012-2015 VectorBlox Computing, Inc.
+# Copyright (C) 2012-2016 VectorBlox Computing, Inc.
 #
 ###########################################################################
 
@@ -21,6 +21,7 @@ add_sw_property supported_bsp_type HAL
 add_sw_property c_source src/vbx_api.c
 add_sw_property c_source src/vectorblox_mxp_nios.c
 add_sw_property cpp_source src/Vector.cpp
+add_sw_property include_source inc/vendor.h
 add_sw_property include_source inc/vbx_all.h
 add_sw_property include_source inc/vbx_common.h
 add_sw_property include_source inc/vbx_lib.h

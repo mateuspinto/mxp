@@ -1,5 +1,5 @@
 -- component_pkg.vhd
--- Copyright (C) 2013-2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2013-2016 VectorBlox Computing, Inc.
 
 -- Component declarations
 

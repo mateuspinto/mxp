@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -141,7 +141,7 @@ typedef struct {
 #endif
 	int         spstack_top;
 	int         spstack_max;
-#if ARM_XIL_LINUX
+#if ARM_LINUX
 	int mxp_fd;/*file descriptor*/
 	int cma_fd;/*file descriptor*/
 #endif

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,21 +61,27 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "vendor.h"
 //figure out target from builtin compilier defines
 #if defined(__nios2__)
-#define NIOS_STANDALONE 1
-#elif defined(XILINX_STANDALONE_BSP) && defined(__arm__)
-#define ARM_XIL_STANDALONE 1
+#  define NIOS_STANDALONE 1
+#elif defined(__arm__)
+#  if defined(linux)
+#    define ARM_LINUX 1
+#  elif !defined(XILINX)
+#    define ARM_ALT_STANDALONE 1
+#  else
+#    define ARM_XIL_STANDALONE 1
+#  endif
 #elif defined(__microblaze__)
-#define MB_STANDALONE 1
+#  define MB_STANDALONE 1
 #endif
 
 #ifndef ARM_XIL_STANDALONE
 #define ARM_XIL_STANDALONE 0
 #endif
-#ifndef ARM_XIL_LINUX
-#define ARM_XIL_LINUX 0
+#ifndef ARM_LINUX
+#define ARM_LINUX 0
 #endif
 #ifndef ARM_ALT_STANDALONE
 #define ARM_ALT_STANDALONE 0
@@ -91,20 +97,20 @@ extern "C" {
 #endif
 
 #if (ARM_XIL_STANDALONE +	  \
-     ARM_XIL_LINUX +	  \
+     ARM_LINUX +	  \
      ARM_ALT_STANDALONE +	  \
      MB_STANDALONE +	  \
      NIOS_STANDALONE + \
      VBX_SIMULATOR) == 0
-#error Must define one of ARM_XIL_STANDALONE, ARM_XIL_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE, VBX_SIMULATOR
+#error Must define one of ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE, VBX_SIMULATOR
 #endif
 #if (ARM_XIL_STANDALONE +	  \
-     ARM_XIL_LINUX +	  \
+     ARM_LINUX +	  \
      ARM_ALT_STANDALONE +	  \
      MB_STANDALONE +	  \
      NIOS_STANDALONE +	  \
      VBX_SIMULATOR ) > 1
-#error May only define one of ARM_XIL_STANDALONE, ARM_XIL_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE,VBX_SIMULATOR
+#error May only define one of ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE,VBX_SIMULATOR
 #endif
 
 #include <assert.h>

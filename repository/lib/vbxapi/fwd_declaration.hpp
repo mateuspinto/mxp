@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,8 @@ namespace VBX{
 	template<typename T,int Dim=1>
 	class Vector;
 	class enum_t;
+	template<typename T>
+	class accum_t;
 
 	enum mask_choice{IS_MASK=1,NO_MASK=0};
 	enum acc_choice{IS_ACC=1,NO_ACC=0};

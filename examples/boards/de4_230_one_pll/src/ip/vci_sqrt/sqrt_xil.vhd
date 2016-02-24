@@ -1,5 +1,5 @@
 -- sqrt_xil.vhd
--- Copyright (C) 2012-2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2012-2016 VectorBlox Computing, Inc.
 
 -- synthesis library vci_sqrt_lib
 library IEEE;

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,6 +67,7 @@ namespace vbw{
 
 		//use 1/8 of scratchpad, only really need 1/4, but lets be safe
 		int chunk_size = vbx_sp_getfree()>>3;
+
 		//divide by sizeof vbx_sp_t
 		chunk_size >>= (sizeof(vbx_sp_t)==sizeof(vbx_word_t)?2:
 		                sizeof(vbx_sp_t)==sizeof(vbx_half_t)?1:0);
@@ -82,7 +83,9 @@ namespace vbw{
 
 		input_dbl_buf.fetch();
 		//if the entire sample ifts in the scratchpad, do that.
+
 		if(chunk_size>sample_size-num_taps){
+
 			//do in sp fir filter
 			VBX::Vector<vbx_sp_t>& v_in=input_dbl_buf[0];
 			VBX::Vector<vbx_sp_t> v_out(sample_size-num_taps);
@@ -92,8 +95,7 @@ namespace vbw{
 			return VBW_SUCCESS;
 		}
 		VBX::Vector<vbx_sp_t> v_out(chunk_size);
-
-		int num_chunks=(sample_size + chunk_size/2)/chunk_size;
+		int num_chunks=(sample_size + chunk_size-num_taps-1)/(chunk_size-num_taps);
 		for(int chunk=0;chunk<num_chunks;chunk++){
 			input_dbl_buf.fetch();
 			VBX::Vector<vbx_sp_t>& v_in=input_dbl_buf[0];

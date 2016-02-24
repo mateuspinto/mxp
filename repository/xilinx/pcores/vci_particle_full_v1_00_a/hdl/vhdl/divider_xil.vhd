@@ -1,5 +1,5 @@
 -- divider_xil.vhd
--- Copyright (C) 2013-2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2013-2016 VectorBlox Computing, Inc.
 
 -- synthesis library vci_particle_full_lib
 library IEEE;

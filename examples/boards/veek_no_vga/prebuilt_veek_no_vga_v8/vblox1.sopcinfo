@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="vblox1" kind="vblox1" version="1.0" fabric="QSYS">
  <!-- Format version 13.1 182 (Future versions may contain additional information.) -->
- <!-- 2015.07.17.11:29:44 -->
+ <!-- 2015.11.24.23:07:31 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1437157783</value>
+  <value>1448435251</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -32504,147 +32504,19 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>conduit_end</endConnectionPoint>
  </connection>
  <plugin>
-  <instanceCount>3</instanceCount>
-  <name>reset_sink</name>
+  <instanceCount>1</instanceCount>
+  <name>altera_avalon_new_sdram_controller</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>SDRAM Controller</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>reset_source</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Reset Input</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>vectorblox_mxp</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>VectorBlox MXP</displayName>
-  <version>1.1</version>
- </plugin>
- <plugin>
-  <instanceCount>3</instanceCount>
-  <name>clock_source</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Clock Output</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>TERASIC_MULTI_TOUCH</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>TERASIC_MULTI_TOUCH</displayName>
-  <version>1.0</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>altera_avalon_mm_bridge</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Avalon-MM Pipeline Bridge</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>24</instanceCount>
-  <name>conduit_end</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Conduit</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>2</instanceCount>
-  <name>altpll</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Avalon ALTPLL</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>audio_avalon_controller</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>audio_avalon_controller</displayName>
-  <version>1.0</version>
- </plugin>
- <plugin>
-  <instanceCount>56</instanceCount>
-  <name>reset</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Reset Connection</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>5</instanceCount>
-  <name>altera_avalon_pio</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>PIO (Parallel I/O)</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>altera_tristate_conduit_bridge</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Tri-State Conduit Bridge</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>alt_vip_vfr</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Frame Reader</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>25</instanceCount>
-  <name>avalon</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Avalon Memory Mapped Connection</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>7</instanceCount>
-  <name>interrupt</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Interrupt Connection</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>3</instanceCount>
-  <name>clock_source</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Clock Source</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>3</instanceCount>
-  <name>clock_sink</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Clock Input</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>7</instanceCount>
-  <name>interrupt_sender</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Interrupt Sender</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>altera_avalon_jtag_uart</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>JTAG UART</displayName>
+  <displayName>Reset Output</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
@@ -32656,19 +32528,35 @@ parameters are a RESULT of the module parameters. -->
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>29</instanceCount>
-  <name>clock_sink</name>
+  <instanceCount>1</instanceCount>
+  <name>nios_custom_instruction_master</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Clock Input</displayName>
+  <displayName>Custom Instruction Master</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>1</instanceCount>
-  <name>altera_nios2_qsys</name>
+  <instanceCount>26</instanceCount>
+  <name>reset_sink</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Nios II Processor</displayName>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Reset Input</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>20</instanceCount>
+  <name>avalon_slave</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Avalon Memory Mapped Slave</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>56</instanceCount>
+  <name>reset</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Reset Connection</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
@@ -32680,75 +32568,147 @@ parameters are a RESULT of the module parameters. -->
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>2</instanceCount>
-  <name>tristate_conduit_slave</name>
+  <instanceCount>3</instanceCount>
+  <name>clock_sink</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Tristate Conduit Slave</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>5</instanceCount>
-  <name>clock_source</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Clock Output</displayName>
+  <displayName>Clock Input</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>3</instanceCount>
-  <name>reset_source</name>
+  <name>conduit</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Reset Output</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>altera_avalon_new_sdram_controller</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>SDRAM Controller</displayName>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Conduit Connection</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>2</instanceCount>
-  <name>tristate_conduit_master</name>
+  <name>avalon_streaming</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Avalon Streaming Connection</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>vci_divide</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>MXP CI: B / A (32-bit Unsigned)</displayName>
+  <version>1.0</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>avalon_streaming_source</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Tristate Conduit Master</displayName>
+  <displayName>Avalon Streaming Source</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>altera_tristate_conduit_pin_sharer</name>
+  <name>vci_sqrt</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Tri-State Conduit Pin Sharer</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>vbvip_planar2is</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>vbvip_planar2is</displayName>
+  <displayName>MXP CI: Sqrt(A)</displayName>
   <version>1.0</version>
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>nios_custom_instruction_master</name>
+  <name>vectorblox_mxp</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Custom Instruction Master</displayName>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>VectorBlox MXP</displayName>
+  <version>1.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>altera_tristate_conduit_bridge</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Tri-State Conduit Bridge</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>20</instanceCount>
-  <name>avalon_slave</name>
+  <instanceCount>25</instanceCount>
+  <name>avalon</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Avalon Memory Mapped Connection</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>frame_writer</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Frame Writer</displayName>
+  <version>1.0</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>alt_vip_vfr</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Frame Reader</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>audio_avalon_controller</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>audio_avalon_controller</displayName>
+  <version>1.0</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>altpll</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Avalon ALTPLL</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>24</instanceCount>
+  <name>conduit_end</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Avalon Memory Mapped Slave</displayName>
+  <displayName>Conduit</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>7</instanceCount>
+  <name>avalon_master</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Avalon Memory Mapped Master</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>avalon_streaming_sink</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Avalon Streaming Sink</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>3</instanceCount>
+  <name>clock_source</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Clock Source</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>5</instanceCount>
+  <name>altera_avalon_pio</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>PIO (Parallel I/O)</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
@@ -32769,34 +32729,106 @@ parameters are a RESULT of the module parameters. -->
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>vci_divide</name>
+  <name>altera_avalon_mm_bridge</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>MXP CI: B / A (32-bit Unsigned)</displayName>
+  <displayName>Avalon-MM Pipeline Bridge</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>vbvip_planar2is</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>vbvip_planar2is</displayName>
   <version>1.0</version>
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>vci_sqrt</name>
+  <name>altera_nios2_qsys</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>MXP CI: Sqrt(A)</displayName>
-  <version>1.0</version>
+  <displayName>Nios II Processor</displayName>
+  <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>reset_source</name>
+  <name>vci_particle_full</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Reset Output</displayName>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>MXP CI: Particle (Full)</displayName>
+  <version>1.0</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>altera_avalon_timer</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Interval Timer</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>3</instanceCount>
-  <name>conduit</name>
+  <name>reset_sink</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Reset Input</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>tristate_conduit_slave</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Tristate Conduit Slave</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>tristate_conduit_master</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Tristate Conduit Master</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>2</instanceCount>
+  <name>tristate_conduit</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Conduit Connection</displayName>
+  <displayName>Tristate Conduit Connection</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>29</instanceCount>
+  <name>clock_sink</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Clock Input</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>7</instanceCount>
+  <name>interrupt_sender</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Interrupt Sender</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>7</instanceCount>
+  <name>interrupt</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Interrupt Connection</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>nios_custom_instruction_slave</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Custom Instruction Slave</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
@@ -32808,19 +32840,27 @@ parameters are a RESULT of the module parameters. -->
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>2</instanceCount>
-  <name>avalon_streaming_source</name>
+  <instanceCount>3</instanceCount>
+  <name>clock_source</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Avalon Streaming Source</displayName>
+  <displayName>Clock Output</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
-  <instanceCount>2</instanceCount>
-  <name>avalon_streaming</name>
+  <instanceCount>5</instanceCount>
+  <name>clock_source</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Avalon Streaming Connection</displayName>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Clock Output</displayName>
+  <version>13.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>altera_tristate_conduit_pin_sharer</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>Tri-State Conduit Pin Sharer</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
@@ -32833,66 +32873,26 @@ parameters are a RESULT of the module parameters. -->
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>vci_particle_full</name>
+  <name>altera_avalon_jtag_uart</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>MXP CI: Particle (Full)</displayName>
-  <version>1.0</version>
- </plugin>
- <plugin>
-  <instanceCount>26</instanceCount>
-  <name>reset_sink</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Reset Input</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>2</instanceCount>
-  <name>avalon_streaming_sink</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Avalon Streaming Sink</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>2</instanceCount>
-  <name>altera_avalon_timer</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Interval Timer</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>7</instanceCount>
-  <name>avalon_master</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Avalon Memory Mapped Master</displayName>
+  <displayName>JTAG UART</displayName>
   <version>13.1</version>
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>nios_custom_instruction_slave</name>
-  <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
-  <displayName>Custom Instruction Slave</displayName>
-  <version>13.1</version>
- </plugin>
- <plugin>
-  <instanceCount>1</instanceCount>
-  <name>frame_writer</name>
+  <name>TERASIC_MULTI_TOUCH</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Frame Writer</displayName>
+  <displayName>TERASIC_MULTI_TOUCH</displayName>
   <version>1.0</version>
  </plugin>
  <plugin>
-  <instanceCount>2</instanceCount>
-  <name>tristate_conduit</name>
+  <instanceCount>3</instanceCount>
+  <name>reset_source</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
-  <subtype>com.altera.entityinterfaces.IConnection</subtype>
-  <displayName>Tristate Conduit Connection</displayName>
+  <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
+  <displayName>Reset Output</displayName>
   <version>13.1</version>
  </plugin>
  <reportVersion>13.1 182</reportVersion>

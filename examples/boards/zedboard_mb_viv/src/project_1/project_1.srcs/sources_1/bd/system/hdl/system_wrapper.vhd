@@ -1,8 +1,8 @@
 --Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2014.2 (lin64) Build 928826 Thu Jun  5 17:55:10 MDT 2014
---Date        : Thu Sep  3 10:25:26 2015
---Host        : avx running 64-bit Ubuntu 12.04.5 LTS
+--Date        : Tue Feb 23 16:37:29 2016
+--Host        : avx running 64-bit Ubuntu 14.04.3 LTS
 --Command     : generate_target system_wrapper.bd
 --Design      : system_wrapper
 --Purpose     : IP block netlist

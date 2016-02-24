@@ -1,6 +1,6 @@
 # +-----------------------------------
 # |
-# | Copyright (C) 2012-2015 VectorBlox Computing, Inc.
+# | Copyright (C) 2012-2016 VectorBlox Computing, Inc.
 # |
 # +-----------------------------------
 
@@ -1078,6 +1078,7 @@ proc elaboration_callback {} {
 				set_port_property vci_[set vci]_data_out   WIDTH_EXPR [expr $vector_lanes * 32]
 				set_port_property vci_[set vci]_flag_out   WIDTH_EXPR [expr $vector_lanes * 4]
 				set_port_property vci_[set vci]_byteenable WIDTH_EXPR [expr $vector_lanes * 4]
+				set_port_property vci_[set vci]_byte_valid WIDTH_EXPR [expr $vector_lanes * 4]
 				set vci_[set vci]_opcode_start       $vci
 				set vci_[set vci]_functions          1
 				set_port_property vci_[set vci]_valid WIDTH_EXPR 1

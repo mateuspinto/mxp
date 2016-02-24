@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1010,7 +1010,7 @@ int vbx_test_init()
 	return XST_SUCCESS;
 }
 
-#elif ARM_XIL_LINUX
+#elif ARM_LINUX
 
 #include "vectorblox_mxp_lin.h"
 

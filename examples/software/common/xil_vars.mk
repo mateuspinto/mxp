@@ -56,13 +56,10 @@ ifeq ($(SIMULATOR),true)
 CROSS_COMPILER=
 else ifeq ($(OS_TARGET),LINUX)
 CROSS_COMPILER=arm-xilinx-linux-gnueabi-
-CC_FLAGS+= -DARM_XIL_LINUX
 else ifeq ($(PROCESSOR_TYPE), microblaze)
 CROSS_COMPILER=mb-
-CC_FLAGS+= -DMB_STANDALONE
 else
 CROSS_COMPILER=arm-xilinx-eabi-
-CC_FLAGS+= -DARM_XIL_STANDALONE
 endif
 
 CC := $(CROSS_COMPILER)gcc

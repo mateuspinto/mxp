@@ -1,4 +1,4 @@
--- Copyright (C) 2012-2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2012-2016 VectorBlox Computing, Inc.
 
 -- synthesis library vbx_lib
 library IEEE;

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,8 +67,8 @@ void init_matrix(pixel *input, const int image_width, const int image_height)
 }
 
 int test_sobel_argb(){
-	int IMAGE_WIDTH   = 19200;
-	int IMAGE_HEIGHT  = 108;
+	int IMAGE_WIDTH   = 1920;
+	int IMAGE_HEIGHT  = 1080;
 	int IMAGE_PITCH   = IMAGE_WIDTH;
 	int RENORM_AMOUNT = 2;
 
@@ -702,6 +702,14 @@ int main(void)
 
 	vbxsim_set_dma_type(IMMEDIATE);
 
+
+	VBX::Vector<vbx_word_t> v(10);
+	v=4;
+	v[0]=7;
+	int k;
+	k=v[1];
+	debug(k);
+	v.printVec();
 	errors+=test_sobel_argb();
 	errors+=test_vec_fir();
 	errors+=test_vec_power();
