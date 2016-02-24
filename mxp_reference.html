@@ -968,8 +968,9 @@ vb.cond_mov(vc,<span class="dv">0</span>);
 <span class="co">//because vc no longer remembers that it is a less than relationship,</span>
 <span class="co">//because it&#39;s last operation was an addition</span></code></pre>
 <h2 id="accumulating-vectors"><span class="header-section-number">4.6</span> Accumulating Vectors</h2>
-<p>To accumulate (sum) a vector or expression, use the function <code>accumulate(vexpr expr, size_t len)</code>. The result of that function can be assigned to a <code>VBX::accum&lt;T&gt;</code> where T is an integral type. An <code>VBX::accum&lt;T&gt;</code> is a integer that resides in the scratchpad memory. It can mostly be treated like any other integer, except that the fact that it can be written to by both the vector engine and the scalar engine presents some synchronization issues. Assigning a regular integer to an <code>accum&lt;T&gt;</code> is done in order with other vector operations, not with the scalar CPU instructions. There are two ways of reading the value: <code>async_getval()</code> and <code>sync_getval()</code>. The asynchronous method reads the current value in the memory without waiting for the MXP to finish operations. The synchronous method issues a <code>vbx_sync()</code> instruction before reading the value, which assures that all vector instructions have completed. For convenience there is also a implicit conversion to integer which does a synchronous read.</p>
+<p>To accumulate (sum) a vector or expression, use the function <code>accumulate(vexpr expr)</code>. The result of that function can be assigned to a <code>VBX::accum_t&lt;T&gt;</code> where T is an integral type. An <code>VBX::accum&lt;T&gt;</code> is a integer that resides in the scratchpad memory. It can mostly be treated like any other integer, except that the fact that it can be written to by both the vector engine and the scalar engine presents some synchronization issues. Assigning a regular integer to an <code>accum_t&lt;T&gt;</code> is done in order with other vector operations, not with the scalar CPU instructions. There are two ways of reading the value: <code>async_getval()</code> and <code>sync_getval()</code>. The asynchronous method reads the current value in the memory without waiting for the MXP to finish operations. The synchronous method issues a <code>vbx_sync()</code> instruction before reading the value, which assures that all vector instructions have completed. For convenience there is also a implicit conversion to integer which does a synchronous read.</p>
 <p>Using the array subscript operator with an integer rather than a range (<code>upto</code>) creates a <code>accum&lt;T&gt;</code> for that element. Using this feature it is possible to do an accumulate into an element of a Vector i.e.: <code>va[5]=accumulate(vb);</code></p>
+<p>It is important to note that certain statements like <code>v[0]=accumulate(1+VBX::ENUM)</code> are illegal since it is impossible to ascertain the length of the source vector.</p>
 <h2 id="multi-dimensional-operations"><span class="header-section-number">4.7</span> Multi-Dimensional Operations</h2>
 <p>Two and three dimensional operations can be used to increase code density and provide higher performance in some cases.</p>
 <p>To declare a 2D Vector use the constructor <code>Vector&lt;T,2&gt;(columns,rows,increment)</code>. Where <code>rows</code>and <code>columns</code> are the dimensions of the matrix and <code>increment</code> is the number of elements between two successive rows.</p>
@@ -1176,25 +1177,9 @@ vbx_dma_to_vector( v_a0, a, M*<span class="kw">sizeof</span>(vbx_word_t) );
 <div class="figure">
 <img src="images/double_buffer.png" alt="Communication and computation over time with no overlap" /><p class="caption">Communication and computation over time with no overlap</p>
 </div>
-<h1 id="vbx_rtc"><span class="header-section-number">6</span> Runtime Checks</h1>
-<p>The VBX API supports checking parameters given to the api calls. The checks are enabled at compile time, using the following defines:</p>
-<pre class="sourceCode c"><code class="sourceCode c">VBX_RTC_ALL
-VBX_RTC_NONE
-VBX_RTC_SP_BOUNDS
-VBX_RTC_COP_FWD
-VBX_RTC_DMA
-VBX_RTC_VEC_LEN</code></pre>
-<p>The first macros , when defined, overide the other four, but cannot be both defined.</p>
-<ul>
-<li><p><code>VBX_RTC_SP_BOUNDS</code> when calling vbx*() warn if vectors extend outside of scratchpad</p></li>
-<li><p><code>VBX_RTC_COP_FWD</code> when calling vbx*() warn if there exists a copy forward hazard</p></li>
-<li><p><code>VBX_RTC_DMA</code> when calling vbx_dma*() warn if host buffer overlaps without the scratchpad or the vector buffer extends outside of the scratchpad</p></li>
-<li><p><code>VBX_RTC_VEC_LEN</code> When calling <code>vbx_set_vl()</code>, <code>vbx_set_2D()</code>, or <code>vbx_set_3D()</code> make sure the sizes don't exceed the size of the scratchpad</p></li>
-</ul>
-<p>If it is your intent to violate one of these warnings, and you want to suppress them for brief periods, you can suppress/express them at runtime. Using <code>SUPPRESS_RT_CHECK( check )</code> or <code>EXPRESS_RT_CHECK( check )</code> respectively, where <code>check</code> is one of <code>RT_CHECK_SP_BOUND</code> , <code>RT_CHECK_COP_FWD</code>, <code>RT_CHECK_DMA</code>, <code>RT_CHECK_VEC_LEN</code>, or <code>RT_CHECK_ALL</code>.</p>
-<h1 id="vbx_port_lib"><span class="header-section-number">7</span> VBX Portability Library</h1>
+<h1 id="vbx_port_lib"><span class="header-section-number">6</span> VBX Portability Library</h1>
 <p>Vectorblox provides a selection of functions defined in vbx_port.h to provide portability between the ARM cortex-A9, Nios II and Microblaze processors. The functions provided fall into two categories; <a href="#port_timing">Timing</a> and <a href="#port_cache">Cache Management</a></p>
-<h2 id="port_timing"><span class="header-section-number">7.1</span> Timing</h2>
+<h2 id="port_timing"><span class="header-section-number">6.1</span> Timing</h2>
 <p>The Timing functions are as follows:</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> vbx_timestamp_start();
 
@@ -1205,7 +1190,7 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 <p><code>vbx_timestamp_start()</code> Resets the counter to zero and starts the timer running.</p>
 <p><code>vbx_timestamp_freq()</code> Returns the frequency of the timer tick in Hz</p>
 <p><code>vbx_timestamp()</code> Returns the current value of timer.</p>
-<h3 id="timestamp-example"><span class="header-section-number">7.1.1</span> Timestamp Example</h3>
+<h3 id="timestamp-example"><span class="header-section-number">6.1.1</span> Timestamp Example</h3>
 <pre class="sourceCode c"><code class="sourceCode c">
 <span class="ot">#include &lt;stdio.h&gt;</span>
 <span class="ot">#include &quot;vbx_port.h&quot;</span>
@@ -1235,7 +1220,7 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
     printf(<span class="st">&quot;Took %u timer ticks -&gt; %f ms</span><span class="ch">\n</span><span class="st">&quot;</span> , end-start, milliseconds);
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h2 id="port_cache"><span class="header-section-number">7.2</span> Cache Management</h2>
+<h2 id="port_cache"><span class="header-section-number">6.2</span> Cache Management</h2>
 <p>The cache management functions are as follows:</p>
 <pre class="sourceCode c"><code class="sourceCode c">
 <span class="dt">volatile</span> <span class="dt">void</span>* vbx_uncached_malloc(<span class="dt">unsigned</span> size);
@@ -1257,9 +1242,9 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 <span class="dt">volatile</span> <span class="dt">void</span>* vbx_remap_uncached_flush(<span class="dt">void</span>* ptr,<span class="dt">unsigned</span> len);</code></pre>
 <p>The MXP cannot directly read the CPU cache, so it must read and write to main memory instead. This means that the programmer must used uncached memory, or flush the data from the cache before doing DMA or reading from the scratchpad. Use <code>vbx_uncached_malloc()</code> or <code>vbx_uncached_alloca()</code> in place of <code>malloc()</code> and <code>alloca</code> respectively to get pointers to uncached buffers. Use the <code>vbx_flush_*()</code> to flush the cache. <code>vbx_remap_cached(ptr)</code> returns an uncached pointer to the same data as <code>ptr</code>. To get an uncached pointer and flush the cache at the same time, use `vbx_uncached_flush();</p>
 <p>Note That in order to use either the timestamp functions or the cache management functions, you have to include <code>vbx_port.h</code></p>
-<h1 id="vbxware"><span class="header-section-number">8</span> VBXware Library</h1>
+<h1 id="vbxware"><span class="header-section-number">7</span> VBXware Library</h1>
 <p>The VBXware library is an example library showing advanced use of the VBX API .The VBXware library can be used for illustrative purposes, or used directly in user applications.</p>
-<h2 id="vbxware_functionality"><span class="header-section-number">8.1</span> VBXware Functionality</h2>
+<h2 id="vbxware_functionality"><span class="header-section-number">7.1</span> VBXware Functionality</h2>
 <p>The VBXware library provides the following functionality:</p>
 <ul>
 <li><p>Fixed Point Math</p></li>
@@ -1276,9 +1261,9 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 <li><p>Vector Reversal</p></li>
 </ul>
 <p>For further information on this the VBXware library, see the documentation.</p>
-<h2 id="vbx_templates"><span class="header-section-number">8.2</span> VBXware Templates</h2>
+<h2 id="vbx_templates"><span class="header-section-number">7.2</span> VBXware Templates</h2>
 <p>Many of the functions in the VBXware libraries use the template engine. The VBX temperate engine makes it easy to create functions for all six vector types: word, half, byte, uword, uhalf and ubyte.</p>
-<h3 id="summary"><span class="header-section-number">8.2.1</span> Summary</h3>
+<h3 id="summary"><span class="header-section-number">7.2.1</span> Summary</h3>
 <p>In a nutshell the templating engine does the following:</p>
 <pre class="sourceCode c"><code class="sourceCode c">VBX_T(vbw_vec_add)(); -&gt; vbx_vec_add_word();
                       -&gt; vbx_vec_add_half();
@@ -1300,7 +1285,7 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
       -&gt; SVBU</code></pre>
 <p>And so on...</p>
 <p>After including the relevant files all of the vbx_vec_add_*() functions are defined, and can therefore be called.</p>
-<h3 id="explanation"><span class="header-section-number">8.2.2</span> Explanation</h3>
+<h3 id="explanation"><span class="header-section-number">7.2.2</span> Explanation</h3>
 <p>The mechanics of how to set up your code to use this is somewhat complicated. To explain further how this works, let us look for a moment at the addition example located in the VBXware directory in the files vbw_add_t.* and vbw_add_all.*</p>
 <p>vbw_vec_add_all.c:</p>
 <pre class="sourceCode c"><code class="sourceCode c">    <span class="ot">#define VBX_TEMPLATE_T VBX_BYTESIZE_DEF</span>
@@ -1359,22 +1344,21 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 
     <span class="dt">void</span> VBX_T(vbw_vec_add)(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2);</code></pre>
 <p>What happens here is the function name is; vbx_vec_add_all.h includes vbx_vec_add_t.h multiple times, each time with <code>VBX_TEMPLATE_T</code> defined to a different type. In vbx_vec_add_t.h the macro expands to <code>vbw_vec_add_word</code> if <code>VBX_TEMPLATE_T</code> is defined as <code>VBX_WORDSIZE_DEF</code> etc. vbw_template_t.h redefines <code>vbx_sp_t</code> to the correct type based on the <code>VBX_TEMPLATE_T</code> definition as well. One last thing to note is in vbx_vec_add_t.c the mode parameter of the <code>vbx()</code> call is <code>VV(T)</code> this will be translated to the correct mode(<code>VVW</code> when <code>VBX_TEMPLATE_T</code> equals <code>VBX_WORDSIZE_DEF</code>. )</p>
-<h1 id="simulator"><span class="header-section-number">9</span> Simulator</h1>
+<h1 id="simulator"><span class="header-section-number">8</span> Simulator</h1>
 <p>The VectorBlox simulator is a x86 library for Linux or windows (via mingw) that accurately simulates the VBX MXP. The following sections document the functionality of the simulator.</p>
 <p>It also provides the ability to count instructions, a provide a rough estimate of cycle counts.</p>
-<h2 id="usage"><span class="header-section-number">9.1</span> Usage</h2>
+<h2 id="usage"><span class="header-section-number">8.1</span> Usage</h2>
 <p>The simulator provides the same functionality as the regular MXP. It works in place of the BSP. Simply linking with libvbxsim.a rather than libbsp.a or libxil.a will allow using VectorBlox functions without hardware to run on.</p>
-<h2 id="initialization"><span class="header-section-number">9.2</span> Initialization</h2>
+<h2 id="initialization"><span class="header-section-number">8.2</span> Initialization</h2>
 <p>To initialize the simulator the following function is provided.</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> vbxsim_init( <span class="dt">int</span> num_lanes,
-                  <span class="dt">int</span> vci_lanes,
                   <span class="dt">int</span> scratchpad_capacity_kb ,
                   <span class="dt">int</span> max_masked_waves,
                   <span class="dt">int</span> fxp_word_frac_bits,
                   <span class="dt">int</span> fxp_half_frac_bits,
                   <span class="dt">int</span> fxp_byte_frac_bits);</code></pre>
 <p>Using this initialization function it is possible to create the desirable configuration. The parameters are analogous to the corresponding parameter in the hardware configuration.There is a symmetrical function <code>vbxsim_destroy()</code> that cleans up the simulator, freeing any memory.</p>
-<h2 id="diagnostics"><span class="header-section-number">9.3</span> Diagnostics</h2>
+<h2 id="diagnostics"><span class="header-section-number">8.3</span> Diagnostics</h2>
 <p>The simulator provides the following functions to query diagnostics, and modify it's behaviour.</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#define MAX_DMA_ALIGN 128</span>
 <span class="ot">#define MAX_VEC_LANE  10</span>
@@ -1440,15 +1424,16 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 <span class="dt">void</span> vbxsim_enable_warnings();</code></pre>
 <p>The simulator keeps track of how many cycles of execution the MXP must perform for the calculations. It does this simultaneously for any number of lanes, if the number of lanes is <span class="math">2<sup><em>i</em></sup></span>, <span class="math"><em>i</em> ∈ [0, 10)</span>. To get examine these statistics use the function <code>vbxsim_get_stats()</code>, it returns the simulator_statistics structure that is described above. The counts can be reset back to zero using <code>reset_cycle_counts()</code>. Lastly,there is a pair of useful functions that print out the structure in a pretty format: <code>vbxsim_print_stats()</code> and <code>vbxsim_print_stats_extended()</code>.</p>
 <p>The simulator has a limitation in that it is run synchronously with host, which means that race conditions that make bugs on the hardware would not show up in the simulator. To deal with this limitation we have developed two modes of DMA, <code>DEFERRED</code> and <code>IMMEDIATE</code>. When the simulator is in deferred mode (default), DMA requests are not done until a) vbx_sync() is called, b) a vbx() call depends on the data in the DMA request's buffers, or c) a vbx() call depends on data in a subsequent DMA request's buffer. When the simulator is in immediate mode, the simulator does all DMA synchronously. So it is as if there is a <code>vbx_sync()</code> call right after every DMA call. If an algorithm works for both modes on the simulator it should work on the hardware, the opposite is not necessarily true. To switch between these two modes, use <code>set_dma_type(enum dma_type)</code>.</p>
-<h2 id="sim_cust_inst"><span class="header-section-number">9.4</span> Adding Custom Instructions</h2>
+<h2 id="sim_cust_inst"><span class="header-section-number">8.4</span> Adding Custom Instructions</h2>
 <p>It is possible to implement custom instructions in Vectorblox's Matrrix processor, if your project makes use of this functionality, you may also want to simulate it as well.</p>
 <p>To do this, the simulator provides a hook :</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="dt">void</span> (*custom_instr_func)(vbxsim_custom_instr_t*);
+
 <span class="dt">void</span> vbxsim_set_custom_instruction(<span class="dt">int</span> opcode_start,
                                    <span class="dt">int</span> internal_functions,
                                    <span class="dt">int</span> lanes,
                                    custom_instr_func fun);</code></pre>
-<p>where num is the custom instruction number(0 to 15), from zero to fifteen and func is a pointer to a function that will carry out the operations to emulate the hardware. The function takes one structure as a parameter. The following describes said structure (taken from vbx_sim.h) :</p>
+<p>where num is the custom instruction number, from zero to fifteen and func is a pointer to a function that will carry out the operations to emulate the hardware. The function takes one structure as a parameter. The following describes said structure (taken from vbx_sim.h) :</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span>{
         <span class="co">//bool reset;         ///&lt; Global (hard) synchronous reset</span>
         <span class="dt">uint16_t</span> valid;       <span class="co">///&lt; Current wavefront contains valid data</span>
