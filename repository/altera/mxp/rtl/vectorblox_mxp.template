@@ -40,47 +40,47 @@ entity vectorblox_mxp is
     ncs_result  : out std_logic_vector(31 downto 0) := (others => '0');
 
     -- AXI4 Slave Instruction Port
-    axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)                        := (others => '0');
-    axs_awvalid : in  std_logic                                             := '0';
-    axs_awready : out std_logic                                             := '0';
-    axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0)                       := (others => '0');
-    axs_awlen   : in  std_logic_vector(3 downto 0)                          := (others => '0');
-    axs_awsize  : in  std_logic_vector(2 downto 0)                          := (others => '0');
-    axs_awburst : in  std_logic_vector(1 downto 0)                          := (others => '0');
-    axs_awlock  : in  std_logic_vector(1 downto 0)                          := (others => '0');
-    axs_awcache : in  std_logic_vector(3 downto 0)                          := (others => '0');
-    axs_awprot  : in  std_logic_vector(2 downto 0)                          := (others => '0');
+    axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0) := (others => '0');
+    axs_awvalid : in  std_logic                                     := '0';
+    axs_awready : out std_logic                                     := '0';
+    axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0)         := (others => '0');
+    axs_awlen   : in  std_logic_vector(3 downto 0)                  := (others => '0');
+    axs_awsize  : in  std_logic_vector(2 downto 0)                  := (others => '0');
+    axs_awburst : in  std_logic_vector(1 downto 0)                  := (others => '0');
+    axs_awlock  : in  std_logic_vector(1 downto 0)                  := (others => '0');
+    axs_awcache : in  std_logic_vector(3 downto 0)                  := (others => '0');
+    axs_awprot  : in  std_logic_vector(2 downto 0)                  := (others => '0');
 
-    axs_wdata  : in  std_logic_vector(32-1 downto 0)                        := (others => '0');
-    axs_wstrb  : in  std_logic_vector((32/8)-1 downto 0)                    := (others => '0');
-    axs_wvalid : in  std_logic                                              := '0';
-    axs_wlast  : in  std_logic                                              := '0';
-    axs_wready : out std_logic                                              := '0';
-    axs_wid    : in std_logic_vector(ID_WIDTH-1 downto 0)                         := (others => '0');
+    axs_wdata  : in  std_logic_vector(32-1 downto 0)       := (others => '0');
+    axs_wstrb  : in  std_logic_vector((32/8)-1 downto 0)   := (others => '0');
+    axs_wvalid : in  std_logic                             := '0';
+    axs_wlast  : in  std_logic                             := '0';
+    axs_wready : out std_logic                             := '0';
+    axs_wid    : in  std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
-    axs_bready : in  std_logic                                              := '0';
-    axs_bresp  : out std_logic_vector(1 downto 0)                           := (others => '0');
-    axs_bvalid : out std_logic                                              := '0';
-    axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0)                        := (others => '0');
+    axs_bready : in  std_logic                             := '0';
+    axs_bresp  : out std_logic_vector(1 downto 0)          := (others => '0');
+    axs_bvalid : out std_logic                             := '0';
+    axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
-    axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)                        := (others => '0');
-    axs_arvalid : in  std_logic                                             := '0';
-    axs_arready : out std_logic                                             := '0';
-    axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0)                       := (others => '0');
-    axs_arlen   : in  std_logic_vector(3 downto 0)                          := (others => '0');
-    axs_arsize  : in  std_logic_vector(2 downto 0)                          := (others => '0');
-    axs_arburst : in  std_logic_vector(1 downto 0)                          := (others => '0');
-    axs_arlock  : in  std_logic_vector(1 downto 0)                          := (others => '0');
-    axs_arcache : in  std_logic_vector(3 downto 0)                          := (others => '0');
-    axs_arprot  : in  std_logic_vector(2 downto 0)                          := (others => '0');
+    axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0) := (others => '0');
+    axs_arvalid : in  std_logic                                     := '0';
+    axs_arready : out std_logic                                     := '0';
+    axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0)         := (others => '0');
+    axs_arlen   : in  std_logic_vector(3 downto 0)                  := (others => '0');
+    axs_arsize  : in  std_logic_vector(2 downto 0)                  := (others => '0');
+    axs_arburst : in  std_logic_vector(1 downto 0)                  := (others => '0');
+    axs_arlock  : in  std_logic_vector(1 downto 0)                  := (others => '0');
+    axs_arcache : in  std_logic_vector(3 downto 0)                  := (others => '0');
+    axs_arprot  : in  std_logic_vector(2 downto 0)                  := (others => '0');
 
 
-    axs_rready : in  std_logic                                              := '0';
-    axs_rdata  : out std_logic_vector(32-1 downto 0)                        := (others => '0');
-    axs_rresp  : out std_logic_vector(1 downto 0)                           := (others => '0');
-    axs_rvalid : out std_logic                                              := '0';
-    axs_rlast  : out std_logic                                              := '0';
-    axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0)                         := (others => '0');
+    axs_rready : in  std_logic                             := '0';
+    axs_rdata  : out std_logic_vector(32-1 downto 0)       := (others => '0');
+    axs_rresp  : out std_logic_vector(1 downto 0)          := (others => '0');
+    axs_rvalid : out std_logic                             := '0';
+    axs_rlast  : out std_logic                             := '0';
+    axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
     -- Core Clocks --
     core_clk    : in std_logic;
@@ -107,9 +107,9 @@ entity vectorblox_mxp is
     slave_waitrequest   : out std_logic;
     slave_readdatavalid : out std_logic;
 
-    slave_writedata  : in  std_logic_vector(31 downto 0);
-    slave_byteenable : in  std_logic_vector(3 downto 0);
-    slave_readdata   : out std_logic_vector(31 downto 0);
+    slave_writedata  : in  std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
+    slave_byteenable : in  std_logic_vector(SLAVE_WIDTH_LANES*4-1 downto 0);
+    slave_readdata   : out std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
 
     -- Vector Custom Instructions --
     vci_0_clk   : out std_logic;
@@ -470,19 +470,20 @@ end entity vectorblox_mxp;
 architecture rtl of vectorblox_mxp is
 
   component vectorblox_1
-  generic (
+    generic (
       VECTOR_LANES       : positive range 1 to MAX_VECTOR_LANES := 1;
       MEMORY_WIDTH_LANES : positive range 1 to MAX_VECTOR_LANES := 1;
+      SLAVE_WIDTH_LANES  : positive range 1 to MAX_VECTOR_LANES := 1;
       SCRATCHPAD_KB      : positive                             := 8;
       BURSTLENGTH_BYTES  : positive                             := 32;
       MAX_MASKED_WAVES   : positive range 128 to 1024           := 128;
       MASK_PARTITIONS    : natural                              := 1;
 
-      INSTR_PORT_CHOICE : natural ;
-		ID_WIDTH           : natural range 0 to 32 := 6;
-		INSTR_ADDR_WIDTH   : natural range 1 to 32 := 6;
-      MIN_MULTIPLIER_HW : min_size_type      := BYTE;
-      CFG_FAM           : config_family_type := CFG_FAM_ALTERA;
+      INSTR_PORT_CHOICE : natural;
+      ID_WIDTH          : natural range 0 to 32 := 6;
+      INSTR_ADDR_WIDTH  : natural range 1 to 32 := 6;
+      MIN_MULTIPLIER_HW : min_size_type         := BYTE;
+      CFG_FAM           : config_family_type    := CFG_FAM_ALTERA;
 
       MULFXP_WORD_FRACTION_BITS : natural range 1 to 31 := 25;
       MULFXP_HALF_FRACTION_BITS : natural range 1 to 15 := 15;
@@ -614,46 +615,46 @@ architecture rtl of vectorblox_mxp is
       ncs_writerc : in  std_logic;
       ncs_result  : out std_logic_vector(31 downto 0) := (others => '0');
 
-      axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)    ;
-      axs_awvalid : in  std_logic                         ;
-      axs_awready : out std_logic                         ;
-      axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0)   ;
-      axs_awlen   : in  std_logic_vector(3 downto 0)      ;
-      axs_awsize  : in  std_logic_vector(2 downto 0)      ;
-      axs_awburst : in  std_logic_vector(1 downto 0)      ;
-      axs_awlock  : in  std_logic_vector(1 downto 0)      ;
-      axs_awcache : in  std_logic_vector(3 downto 0)      ;
-      axs_awprot  : in  std_logic_vector(2 downto 0)      ;
-      axs_wdata  : in  std_logic_vector(32-1 downto 0)    ;
-      axs_wstrb  : in  std_logic_vector((32/8)-1 downto 0);
-      axs_wvalid : in  std_logic                          ;
-      axs_wlast  : in  std_logic                          ;
-      axs_wready : out std_logic                          ;
-      axs_wid    : in std_logic_vector(ID_WIDTH-1 downto 0)     ;
+      axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0);
+      axs_awvalid : in  std_logic;
+      axs_awready : out std_logic;
+      axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0);
+      axs_awlen   : in  std_logic_vector(3 downto 0);
+      axs_awsize  : in  std_logic_vector(2 downto 0);
+      axs_awburst : in  std_logic_vector(1 downto 0);
+      axs_awlock  : in  std_logic_vector(1 downto 0);
+      axs_awcache : in  std_logic_vector(3 downto 0);
+      axs_awprot  : in  std_logic_vector(2 downto 0);
+      axs_wdata   : in  std_logic_vector(32-1 downto 0);
+      axs_wstrb   : in  std_logic_vector((32/8)-1 downto 0);
+      axs_wvalid  : in  std_logic;
+      axs_wlast   : in  std_logic;
+      axs_wready  : out std_logic;
+      axs_wid     : in  std_logic_vector(ID_WIDTH-1 downto 0);
 
-      axs_bready : in  std_logic                          ;
-      axs_bresp  : out std_logic_vector(1 downto 0)       ;
-      axs_bvalid : out std_logic                          ;
-      axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0)    ;
+      axs_bready : in  std_logic;
+      axs_bresp  : out std_logic_vector(1 downto 0);
+      axs_bvalid : out std_logic;
+      axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0);
 
-      axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)    ;
-      axs_arvalid : in  std_logic                         ;
-      axs_arready : out std_logic                         ;
-      axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0)   ;
-      axs_arlen   : in  std_logic_vector(3 downto 0)      ;
-      axs_arsize  : in  std_logic_vector(2 downto 0)      ;
-      axs_arburst : in  std_logic_vector(1 downto 0)      ;
-      axs_arlock  : in  std_logic_vector(1 downto 0)      ;
-      axs_arcache : in  std_logic_vector(3 downto 0)      ;
-      axs_arprot  : in  std_logic_vector(2 downto 0)      ;
+      axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0);
+      axs_arvalid : in  std_logic;
+      axs_arready : out std_logic;
+      axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0);
+      axs_arlen   : in  std_logic_vector(3 downto 0);
+      axs_arsize  : in  std_logic_vector(2 downto 0);
+      axs_arburst : in  std_logic_vector(1 downto 0);
+      axs_arlock  : in  std_logic_vector(1 downto 0);
+      axs_arcache : in  std_logic_vector(3 downto 0);
+      axs_arprot  : in  std_logic_vector(2 downto 0);
 
 
-      axs_rready : in  std_logic                          ;
-      axs_rdata  : out std_logic_vector(32-1 downto 0)    ;
-      axs_rresp  : out std_logic_vector(1 downto 0)       ;
-      axs_rvalid : out std_logic                          ;
-      axs_rlast  : out std_logic                          ;
-      axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0)     ;
+      axs_rready : in  std_logic;
+      axs_rdata  : out std_logic_vector(32-1 downto 0);
+      axs_rresp  : out std_logic_vector(1 downto 0);
+      axs_rvalid : out std_logic;
+      axs_rlast  : out std_logic;
+      axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0);
 
       core_clk    : in std_logic;
       core_reset  : in std_logic;
@@ -676,9 +677,9 @@ architecture rtl of vectorblox_mxp is
       slave_write         : in  std_logic;
       slave_waitrequest   : out std_logic;
       slave_readdatavalid : out std_logic;
-      slave_writedata     : in  std_logic_vector(31 downto 0);
-      slave_byteenable    : in  std_logic_vector(3 downto 0);
-      slave_readdata      : out std_logic_vector(31 downto 0);
+      slave_writedata     : in  std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
+      slave_byteenable    : in  std_logic_vector(SLAVE_WIDTH_LANES*4-1 downto 0);
+      slave_readdata      : out std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
 
       vci_0_clk   : out std_logic;
       vci_0_reset : out std_logic;
@@ -1040,14 +1041,15 @@ begin
     generic map (
       VECTOR_LANES       => VECTOR_LANES,
       MEMORY_WIDTH_LANES => MEMORY_WIDTH_LANES,
+      SLAVE_WIDTH_LANES  => SLAVE_WIDTH_LANES,
       SCRATCHPAD_KB      => SCRATCHPAD_KB,
       BURSTLENGTH_BYTES  => BURSTLENGTH_BYTES,
       MAX_MASKED_WAVES   => MAX_MASKED_WAVES,
       MASK_PARTITIONS    => MASK_PARTITIONS,
 
-      INSTR_PORT_CHOICE  => INSTR_PORT_CHOICE_TMPLT,
-		ID_WIDTH           => ID_WIDTH,
-		INSTR_ADDR_WIDTH   => INSTR_ADDR_WIDTH,
+      INSTR_PORT_CHOICE => INSTR_PORT_CHOICE_TMPLT,
+      ID_WIDTH          => ID_WIDTH,
+      INSTR_ADDR_WIDTH  => INSTR_ADDR_WIDTH,
       MIN_MULTIPLIER_HW => MIN_MULTIPLIER_HW,
 
 
@@ -1183,46 +1185,46 @@ begin
       core_reset  => core_reset,
       core_clk_2x => core_clk_2x,
 
-      axs_awaddr  => axs_awaddr  ,
-      axs_awvalid => axs_awvalid ,
-      axs_awready => axs_awready ,
-      axs_awid    => axs_awid    ,
-      axs_awlen   => axs_awlen   ,
-      axs_awsize  => axs_awsize  ,
-      axs_awburst => axs_awburst ,
-      axs_awlock  => axs_awlock  ,
-      axs_awcache => axs_awcache ,
-      axs_awprot  => axs_awprot  ,
+      axs_awaddr  => axs_awaddr,
+      axs_awvalid => axs_awvalid,
+      axs_awready => axs_awready,
+      axs_awid    => axs_awid,
+      axs_awlen   => axs_awlen,
+      axs_awsize  => axs_awsize,
+      axs_awburst => axs_awburst,
+      axs_awlock  => axs_awlock,
+      axs_awcache => axs_awcache,
+      axs_awprot  => axs_awprot,
 
-      axs_wdata   => axs_wdata   ,
-      axs_wstrb   => axs_wstrb   ,
-      axs_wvalid  => axs_wvalid  ,
-      axs_wlast   => axs_wlast   ,
-      axs_wready  => axs_wready  ,
-      axs_wid     => axs_wid     ,
+      axs_wdata  => axs_wdata,
+      axs_wstrb  => axs_wstrb,
+      axs_wvalid => axs_wvalid,
+      axs_wlast  => axs_wlast,
+      axs_wready => axs_wready,
+      axs_wid    => axs_wid,
 
-      axs_bready  => axs_bready  ,
-      axs_bresp   => axs_bresp   ,
-      axs_bvalid  => axs_bvalid  ,
-      axs_bid     => axs_bid     ,
+      axs_bready => axs_bready,
+      axs_bresp  => axs_bresp,
+      axs_bvalid => axs_bvalid,
+      axs_bid    => axs_bid,
 
-      axs_araddr  => axs_araddr  ,
-      axs_arvalid => axs_arvalid ,
-      axs_arready => axs_arready ,
-      axs_arid    => axs_arid    ,
-      axs_arlen   => axs_arlen   ,
-      axs_arsize  => axs_arsize  ,
-      axs_arburst => axs_arburst ,
-      axs_arlock  => axs_arlock  ,
-      axs_arcache => axs_arcache ,
-      axs_arprot  => axs_arprot  ,
+      axs_araddr  => axs_araddr,
+      axs_arvalid => axs_arvalid,
+      axs_arready => axs_arready,
+      axs_arid    => axs_arid,
+      axs_arlen   => axs_arlen,
+      axs_arsize  => axs_arsize,
+      axs_arburst => axs_arburst,
+      axs_arlock  => axs_arlock,
+      axs_arcache => axs_arcache,
+      axs_arprot  => axs_arprot,
 
-      axs_rready  => axs_rready  ,
-      axs_rdata   => axs_rdata   ,
-      axs_rresp   => axs_rresp   ,
-      axs_rvalid  => axs_rvalid  ,
-      axs_rlast   => axs_rlast   ,
-      axs_rid     => axs_rid     ,
+      axs_rready => axs_rready,
+      axs_rdata  => axs_rdata,
+      axs_rresp  => axs_rresp,
+      axs_rvalid => axs_rvalid,
+      axs_rlast  => axs_rlast,
+      axs_rid    => axs_rid,
 
 
 

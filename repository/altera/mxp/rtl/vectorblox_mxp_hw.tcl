@@ -139,6 +139,7 @@ proc common_add_files {entity_name fileset} {
     }
 
     set memory_width_lanes [get_parameter_value MEMORY_WIDTH_LANES]
+    set slave_width_lanes  [get_parameter_value SLAVE_WIDTH_LANES]
     set scratchpad_kb      [get_parameter_value SCRATCHPAD_KB]
     set burstlength_bytes  [get_parameter_value BURSTLENGTH_BYTES]
     set min_multiplier_hw  [get_parameter_value MIN_MULTIPLIER_HW]
@@ -235,12 +236,16 @@ proc common_add_files {entity_name fileset} {
             # the generic declaration or map.
             regsub {MEMORY_WIDTH_LANES([ \t]*[^:= \t])} $line \
                 "$memory_width_lanes\\1" line
+            regsub {SLAVE_WIDTH_LANES([ \t]*[^:= \t])} $line \
+                "$slave_width_lanes\\1" line
 
             # parameters mapped to generics:
             regsub {(VECTOR_LANES.*=>[ \t]*)([^ \t,]+)} $line \
                 "\\1$vector_lanes" line
             regsub {(MEMORY_WIDTH_LANES.*=>[ \t]*)([^ \t,]+)} $line \
                 "\\1$memory_width_lanes" line
+            regsub {(SLAVE_WIDTH_LANES.*=>[ \t]*)([^ \t,]+)} $line \
+                "\\1$slave_width_lanes" line
             regsub {(SCRATCHPAD_KB.*=>[ \t]*)([^ \t,]+)} $line \
                 "\\1$scratchpad_kb" line
             regsub {(BURSTLENGTH_BYTES.*=>[ \t]*)([^ \t,]+)} $line \
@@ -342,6 +347,19 @@ set_parameter_property MEMORY_WIDTH_LANES DESCRIPTION [concat \
 # The maximum Avalon data bus width is 1024 bits, allowing at most 32 lanes.
 set_parameter_property MEMORY_WIDTH_LANES ALLOWED_RANGES {1 2 4 8 16 32}
 set_parameter_property MEMORY_WIDTH_LANES DISPLAY_UNITS "Words"
+
+add_parameter SLAVE_WIDTH_LANES INTEGER 1
+set_parameter_property SLAVE_WIDTH_LANES DISPLAY_NAME "Number of Slave Memory Lanes"
+set_parameter_property SLAVE_WIDTH_LANES DESCRIPTION [concat \
+																			  "The data bus width of the Avalon-MM slave interface expressed in " \
+																			  "terms of 32-bit lanes. " \
+																			  "The number of memory lanes must be a power of two and no larger than " \
+																			  "the number of vector lanes. " \
+																			  "For best performance, the width of this interface should match the " \
+																			  "width of the Avalon master port of the external processor."]
+# The maximum Avalon data bus width is 1024 bits, allowing at most 32 lanes.
+set_parameter_property SLAVE_WIDTH_LANES ALLOWED_RANGES {1 2 4 8 16 32}
+set_parameter_property SLAVE_WIDTH_LANES DISPLAY_UNITS "Words"
 
 add_parameter BEATS_PER_BURST INTEGER 8
 set_parameter_property BEATS_PER_BURST DISPLAY_NAME "Maximum Burst Size in Beats"
@@ -832,10 +850,10 @@ add_interface_port scratchpad_slave slave_read read Input 1
 add_interface_port scratchpad_slave slave_write write Input 1
 add_interface_port scratchpad_slave slave_waitrequest waitrequest Output 1
 add_interface_port scratchpad_slave slave_readdatavalid readdatavalid Output 1
-add_interface_port scratchpad_slave slave_writedata writedata Input 32
-add_interface_port scratchpad_slave slave_byteenable byteenable Input 4
-add_interface_port scratchpad_slave slave_readdata readdata Output 32
 # Width will be set in elaboration callback.
+add_interface_port scratchpad_slave slave_writedata writedata Input
+add_interface_port scratchpad_slave slave_byteenable byteenable Input
+add_interface_port scratchpad_slave slave_readdata readdata Output
 add_interface_port scratchpad_slave slave_address address Input
 # |
 # +-----------------------------------
@@ -966,6 +984,17 @@ proc elaboration_callback {} {
     } elseif {$params_valid && ($memory_width_lanes > $vector_lanes)} {
         send_message Error [concat \
 										  "The number of memory lanes cannot be larger than the number of " \
+										  "vector lanes. Reduce the number of memory lanes or increase " \
+										  "the number of vector lanes."]
+        set params_valid false
+    }
+    set slave_width_lanes [get_parameter_value SLAVE_WIDTH_LANES]
+    if {![is_pow2 $slave_width_lanes]} {
+        send_message Error "The number of memory lanes is not a power of two."
+        set params_valid false
+    } elseif {$params_valid && ($slave_width_lanes > $vector_lanes)} {
+        send_message Error [concat \
+										  "The number of slave memory lanes cannot be larger than the number of " \
 										  "vector lanes. Reduce the number of memory lanes or increase " \
 										  "the number of vector lanes."]
         set params_valid false
@@ -1145,6 +1174,12 @@ proc elaboration_callback {} {
         set_parameter_value MEMORY_BUS_WIDTH $bus_width
     }
 
+    # Derive Avalon slave port widths that are a function of
+    # SLAVE_WIDTH_LANES.
+    set_port_property slave_writedata WIDTH_EXPR [expr $slave_width_lanes*32]
+    set_port_property slave_readdata WIDTH_EXPR [expr $slave_width_lanes*32]
+    set_port_property slave_byteenable WIDTH_EXPR [expr $slave_width_lanes*4]
+
     set beats_per_burst [get_parameter_value BEATS_PER_BURST]
     # Allowed range guarantees that beats per burst is a power of two
     # between 1 and 1024, but just check again...
@@ -1236,7 +1271,7 @@ proc elaboration_callback {} {
     # word size = slave data bus width = 32 bits
     set scratchpad_kb [get_parameter_value SCRATCHPAD_KB]
     set scratchpad_size [expr $scratchpad_kb*1024]
-    set slave_bus_width_bytes 4
+    set slave_bus_width_bytes [expr [get_parameter_value SLAVE_WIDTH_LANES]*4]
     set max_avalon_addr_w 32
     # Exponentiation operator ** only works in Tcl 8.5 and later...
     set max_scratchpad_size [expr pow(2, $max_avalon_addr_w)]
@@ -1337,6 +1372,8 @@ proc elaboration_callback {} {
     }
     set_module_assignment embeddedsw.CMacro.MEMORY_WIDTH_LANES \
         $memory_width_lanes
+    set_module_assignment embeddedsw.CMacro.SLAVE_WIDTH_LANES \
+        $slave_width_lanes
     set_module_assignment embeddedsw.CMacro.BURSTLENGTH_BYTES \
         $burstlength_bytes
     set_module_assignment embeddedsw.CMacro.SCRATCHPAD_KB $scratchpad_kb

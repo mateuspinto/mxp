@@ -37,47 +37,47 @@ package vectorblox_mxp_pkg is
       ncs_result  : out std_logic_vector(31 downto 0) := (others => '0');
 
       -- AXI4 Slave Instruction Port
-      axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)                        := (others => '0');
-      axs_awvalid : in  std_logic                                             := '0';
-      axs_awready : out std_logic                                             := '0';
-      axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0)                 := (others => '0');
-      axs_awlen   : in  std_logic_vector(3 downto 0)                          := (others => '0');
-      axs_awsize  : in  std_logic_vector(2 downto 0)                          := (others => '0');
-      axs_awburst : in  std_logic_vector(1 downto 0)                          := (others => '0');
-      axs_awlock  : in  std_logic_vector(1 downto 0)                          := (others => '0');
-      axs_awcache : in  std_logic_vector(3 downto 0)                          := (others => '0');
-      axs_awprot  : in  std_logic_vector(2 downto 0)                          := (others => '0');
+      axs_awaddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0) := (others => '0');
+      axs_awvalid : in  std_logic                                     := '0';
+      axs_awready : out std_logic                                     := '0';
+      axs_awid    : in  std_logic_vector(ID_WIDTH-1 downto 0)         := (others => '0');
+      axs_awlen   : in  std_logic_vector(3 downto 0)                  := (others => '0');
+      axs_awsize  : in  std_logic_vector(2 downto 0)                  := (others => '0');
+      axs_awburst : in  std_logic_vector(1 downto 0)                  := (others => '0');
+      axs_awlock  : in  std_logic_vector(1 downto 0)                  := (others => '0');
+      axs_awcache : in  std_logic_vector(3 downto 0)                  := (others => '0');
+      axs_awprot  : in  std_logic_vector(2 downto 0)                  := (others => '0');
 
-      axs_wdata  : in  std_logic_vector(32-1 downto 0)                        := (others => '0');
-      axs_wstrb  : in  std_logic_vector((32/8)-1 downto 0)                    := (others => '0');
-      axs_wvalid : in  std_logic                                              := '0';
-      axs_wlast  : in  std_logic                                              := '0';
-      axs_wready : out std_logic                                              := '0';
-      axs_wid    : in std_logic_vector(ID_WIDTH-1 downto 0)                         := (others => '0');
+      axs_wdata  : in  std_logic_vector(32-1 downto 0)       := (others => '0');
+      axs_wstrb  : in  std_logic_vector((32/8)-1 downto 0)   := (others => '0');
+      axs_wvalid : in  std_logic                             := '0';
+      axs_wlast  : in  std_logic                             := '0';
+      axs_wready : out std_logic                             := '0';
+      axs_wid    : in  std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
-      axs_bready : in  std_logic                                              := '0';
-      axs_bresp  : out std_logic_vector(1 downto 0)                           := (others => '0');
-      axs_bvalid : out std_logic                                              := '0';
-      axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0)                        := (others => '0');
+      axs_bready : in  std_logic                             := '0';
+      axs_bresp  : out std_logic_vector(1 downto 0)          := (others => '0');
+      axs_bvalid : out std_logic                             := '0';
+      axs_bid    : out std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
-      axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0)                        := (others => '0');
-      axs_arvalid : in  std_logic                                             := '0';
-      axs_arready : out std_logic                                             := '0';
-      axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0)                       := (others => '0');
-      axs_arlen   : in  std_logic_vector(3 downto 0)                          := (others => '0');
-      axs_arsize  : in  std_logic_vector(2 downto 0)                          := (others => '0');
-      axs_arburst : in  std_logic_vector(1 downto 0)                          := (others => '0');
-      axs_arlock  : in  std_logic_vector(1 downto 0)                          := (others => '0');
-      axs_arcache : in  std_logic_vector(3 downto 0)                          := (others => '0');
-      axs_arprot  : in  std_logic_vector(2 downto 0)                          := (others => '0');
+      axs_araddr  : in  std_logic_vector(INSTR_ADDR_WIDTH-1 downto 0) := (others => '0');
+      axs_arvalid : in  std_logic                                     := '0';
+      axs_arready : out std_logic                                     := '0';
+      axs_arid    : in  std_logic_vector(ID_WIDTH-1 downto 0)         := (others => '0');
+      axs_arlen   : in  std_logic_vector(3 downto 0)                  := (others => '0');
+      axs_arsize  : in  std_logic_vector(2 downto 0)                  := (others => '0');
+      axs_arburst : in  std_logic_vector(1 downto 0)                  := (others => '0');
+      axs_arlock  : in  std_logic_vector(1 downto 0)                  := (others => '0');
+      axs_arcache : in  std_logic_vector(3 downto 0)                  := (others => '0');
+      axs_arprot  : in  std_logic_vector(2 downto 0)                  := (others => '0');
 
 
-      axs_rready : in  std_logic                                              := '0';
-      axs_rdata  : out std_logic_vector(32-1 downto 0)                        := (others => '0');
-      axs_rresp  : out std_logic_vector(1 downto 0)                           := (others => '0');
-      axs_rvalid : out std_logic                                              := '0';
-      axs_rlast  : out std_logic                                              := '0';
-      axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0)                         := (others => '0');
+      axs_rready : in  std_logic                             := '0';
+      axs_rdata  : out std_logic_vector(32-1 downto 0)       := (others => '0');
+      axs_rresp  : out std_logic_vector(1 downto 0)          := (others => '0');
+      axs_rvalid : out std_logic                             := '0';
+      axs_rlast  : out std_logic                             := '0';
+      axs_rid    : out std_logic_vector(ID_WIDTH-1 downto 0) := (others => '0');
 
       -- Core Clocks --
       core_clk    : in std_logic;
@@ -104,9 +104,9 @@ package vectorblox_mxp_pkg is
       slave_waitrequest   : out std_logic;
       slave_readdatavalid : out std_logic;
 
-      slave_writedata  : in  std_logic_vector(31 downto 0);
-      slave_byteenable : in  std_logic_vector(3 downto 0);
-      slave_readdata   : out std_logic_vector(31 downto 0);
+      slave_writedata  : in  std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
+      slave_byteenable : in  std_logic_vector(SLAVE_WIDTH_LANES*4-1 downto 0);
+      slave_readdata   : out std_logic_vector(SLAVE_WIDTH_LANES*32-1 downto 0);
 
       -- Vector Custom Instructions --
       vci_0_clk   : out std_logic;
