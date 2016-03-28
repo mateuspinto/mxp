@@ -1,7 +1,0 @@
-# Files in dependency order for Modelsim
-util_pkg.vhd
-architecture_pkg.vhd
-component_pkg.vhd
-fwft_fifo_reg.vhd
-buffer_list.vhd
-stream_writer.vhd

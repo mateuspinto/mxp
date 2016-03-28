@@ -120,10 +120,10 @@ void   vbx_sp_pop_debug( int LINE, const char *FNAME );
 
 // Memory APIs
 
-void       *vbx_shared_alloca_nodebug( size_t num_bytes, void *p );
-void       *vbx_shared_alloca_debug( int LINE,const  char *FNAME, size_t num_bytes, void *p );
-void       *vbx_shared_malloc( size_t num_bytes );
-void        vbx_shared_free( void *shared_ptr );
+/* void       *vbx_shared_alloca_nodebug( size_t num_bytes, void *p ); */
+/* void       *vbx_shared_alloca_debug( int LINE,const  char *FNAME, size_t num_bytes, void *p ); */
+/* void       *vbx_shared_malloc( size_t num_bytes ); */
+/* void        vbx_shared_free( void *shared_ptr ); */
 
 // MXP device APIs
 vbx_mxp_t  *vbx_open( const char* name );

@@ -131,6 +131,7 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 	}
 	rp_fetch(&input_dbl_buf);
 	//if the entire sample ifts in the scratchpad, do that.
+
 	if(chunk_size>sample_size){
 		//do in sp fir filter
 		v_in=(vbx_sp_t*)rp_get_buffer(&input_dbl_buf,0);
@@ -150,17 +151,19 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 	// incremented by (chunksize-numtaps) every iteration.
 	// The output chunk follows the in_start pointer delayed
 	// by one iteration.
-	int num_chunks=(sample_size + chunk_size/2)/chunk_size;
+	int num_chunks=(sample_size + chunk_size-num_taps-1)/(chunk_size-num_taps);
 	for(int chunk=0;chunk<num_chunks;chunk++){
+		int current_chunksize=input_dbl_buf.chunk_size/sizeof(vbx_sp_t);
 		rp_fetch(&input_dbl_buf);
 		v_in=(vbx_sp_t*)rp_get_buffer(&input_dbl_buf,0);
-		int current_chunksize=input_dbl_buf.chunk_size/sizeof(vbx_sp_t)-num_taps;
+
 		if(transpose){
-			vec_fir_transpose_helper(v_out,v_in,coeffs,current_chunksize+num_taps,num_taps,v_mul);
+			vec_fir_transpose_helper(v_out,v_in,coeffs,current_chunksize,num_taps,v_mul);
 		}else{
-			vec_fir_helper(v_out,v_in,v_coeffs,current_chunksize+num_taps,num_taps);
+			vec_fir_helper(v_out,v_in,v_coeffs,current_chunksize,num_taps);
+
 		}
-		vbx_dma_to_host(output+chunk*chunk_size,v_out,current_chunksize);
+		vbx_dma_to_host(output+chunk*chunk_size,v_out,current_chunksize-num_taps);
 	}
 
 	vbx_sync();

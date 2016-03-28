@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'vblox1'
  * SOPC Builder design path: ../../../vblox1.sopcinfo
  *
- * Generated: Fri Jul 17 17:51:22 PDT 2015
+ * Generated: Mon Mar 07 18:27:01 PST 2016
  */
 
 /*
@@ -138,6 +138,7 @@
 #define MULFXP_HALF_FRACTION_BITS 15
 #define MULFXP_WORD_FRACTION_BITS 16
 #define SCRATCHPAD_KB 64
+#define SLAVE_WIDTH_LANES 1
 #define VCUSTOM0_LANES 0
 #define VCUSTOM10_LANES 0
 #define VCUSTOM11_LANES 0
@@ -401,6 +402,7 @@
 #define VBX1_MULFXP_WORD_FRACTION_BITS 16
 #define VBX1_NAME "/dev/vbx1"
 #define VBX1_SCRATCHPAD_KB 64
+#define VBX1_SLAVE_WIDTH_LANES 1
 #define VBX1_SPAN 65536
 #define VBX1_TYPE "vectorblox_mxp"
 #define VBX1_VCUSTOM0_LANES 0

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2015 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -113,7 +113,7 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 
 	// Allocate space in scratchpad for vectors
 	struct rotating_prefetcher_t v_row_db=rotating_prefetcher(1,image_width*sizeof(vbx_uword_t),
-	                                                          input,input+image_pitch*image_width,
+	                                                          input,input+image_pitch*image_height,
 	                                                          image_pitch*sizeof(vbx_uword_t));
 
 	v_luma_top      = (vbx_uhalf_t*)vbx_sp_malloc(image_width*sizeof(vbx_uhalf_t));
@@ -267,5 +267,5 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 	                   0);/*sp incr*/
 	vbx_sp_pop();
 	vbx_sync();
-
+	return 0;
 }

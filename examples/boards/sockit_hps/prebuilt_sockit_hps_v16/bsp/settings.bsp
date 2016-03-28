@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>spl</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>18-Aug-2015 9:44:24 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1439916264075</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>8-Jun-2015 1:37:04 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1433795824390</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>./</BspGeneratedLocation>
         <BspSettingsFile>software/lib/bsp/settings.bsp</BspSettingsFile>
         <HpsSettingsPath>../../../hps_isw_handoff/vblox1_hps_0</HpsSettingsPath>

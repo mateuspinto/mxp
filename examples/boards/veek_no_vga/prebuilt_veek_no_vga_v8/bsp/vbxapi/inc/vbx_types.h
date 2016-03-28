@@ -141,7 +141,7 @@ typedef struct {
 #endif
 	int         spstack_top;
 	int         spstack_max;
-#if ARM_XIL_LINUX
+#if ARM_LINUX
 	int mxp_fd;/*file descriptor*/
 	int cma_fd;/*file descriptor*/
 #endif

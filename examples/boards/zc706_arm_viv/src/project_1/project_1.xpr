@@ -3,10 +3,10 @@
 <!--                                                         -->
 <!-- Copyright (c) 2001-2013 Xilinx Inc, All rights reserved -->
 
-<Project Version="7" Minor="1" Path="/nfs/home/joel/Documents/vblox.release/outdir1/vectorblox/examples/boards/zc706_arm_viv/src/project_1/project_1.xpr">
+<Project Version="7" Minor="1" Path="/nfs/home/joel/Documents/vblox.release/outdir/vectorblox/examples/boards/zc706_arm_viv/src/project_1/project_1.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="a3592705b82b48919bcda4ed1ae53f05"/>
+    <Option Name="Id" Val="57b87e0f36904438b383a4db7ad4a282"/>
     <Option Name="Part" Val="xc7z045ffg900-2"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="TargetLanguage" Val="VHDL"/>
@@ -32,7 +32,7 @@
       <File Path="$PSRCDIR/sources_1/imports/hdl/system_wrapper.vhd">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/bd/system/hdl/system_wrapper.vhd"/>
-          <Attr Name="ImportTime" Val="1456345328"/>
+          <Attr Name="ImportTime" Val="1459196792"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>

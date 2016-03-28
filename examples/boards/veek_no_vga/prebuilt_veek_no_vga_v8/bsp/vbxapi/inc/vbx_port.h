@@ -250,6 +250,7 @@ void vbx_uncached_free(volatile void *p);
 void *vbx_remap_cached(volatile void *p, u32 len);
 volatile void *vbx_remap_uncached(void *p);
 volatile void *vbx_remap_uncached_flush(void *p, u32 len);
+
 #elif ARM_ALT_STANDALONE
 
 #include "alt_cache.h"
@@ -313,7 +314,7 @@ static inline void  vbx_dcache_flush(void* ptr,size_t len) {	  \
 #include "vbxsim_port.h"
 #endif // VBX_SIMULATOR
 
-#if ARM_XIL_LINUX
+#if ARM_LINUX
 #define VBX_CPU_DCACHE_SIZE      32768
 #define VBX_CPU_DCACHE_LINE_SIZE    32
 

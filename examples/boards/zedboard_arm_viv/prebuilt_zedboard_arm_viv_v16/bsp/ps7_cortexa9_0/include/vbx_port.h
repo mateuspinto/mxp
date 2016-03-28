@@ -250,6 +250,7 @@ void vbx_uncached_free(volatile void *p);
 void *vbx_remap_cached(volatile void *p, u32 len);
 volatile void *vbx_remap_uncached(void *p);
 volatile void *vbx_remap_uncached_flush(void *p, u32 len);
+
 #elif ARM_ALT_STANDALONE
 
 #include "alt_cache.h"
@@ -344,6 +345,70 @@ volatile void *vbx_remap_uncached_flush(void *p, uint32_t len);
 
 
 #endif
+
+	/////////////////////////////
+	// SHARED ALLOCATION ROUTINES,
+	//
+	// Declared as static inline to avoid needing another *.c file
+	//
+	// Allocate and deallocate memory that is shared between host CPU and vector processor.
+	// This shared memory is (1) uncached and (2) aligned to a Data cache linesize so a
+	// fraction of the line is not cachable.
+	//
+	// The alloca() version allocates from the local stack. It will be automatically freed when the
+	// current function returns.
+
+	static inline void *vbx_shared_alloca_nodebug( size_t num_bytes, void *p )
+	{
+		void *alloced_ptr;
+		void *aligned_ptr = NULL;
+
+		unsigned int padding = VBX_PADDING();
+
+		alloced_ptr = (void *)p;
+		if( alloced_ptr ) {
+			aligned_ptr = (void *)VBX_PAD_UP( alloced_ptr, padding );
+			aligned_ptr = (void *)vbx_remap_uncached_flush( aligned_ptr, num_bytes );
+		}
+
+		return aligned_ptr;
+	}
+
+	static inline void *vbx_shared_alloca_debug( int LINE, const char *FNAME, size_t num_bytes, void *p )
+	{
+		return vbx_shared_alloca_nodebug( num_bytes, p );
+	}
+
+	static inline void *vbx_shared_malloc( size_t num_bytes )
+	{
+		void *alloced_ptr;
+		void *aligned_ptr = NULL;
+
+		unsigned int padding = VBX_PADDING();
+
+#if VBX_DEBUG_MALLOC
+		printf("shared_malloc %d bytes\n", num_bytes);
+#endif
+		alloced_ptr = (void *)vbx_uncached_malloc(num_bytes+sizeof(void*)+2*padding);
+		if( alloced_ptr ) {
+			aligned_ptr = (void *)VBX_PAD_UP( ((size_t)alloced_ptr+sizeof(void*)), padding );
+			*((void **)((size_t)aligned_ptr-sizeof(void*))) = alloced_ptr;
+		}
+
+		return aligned_ptr;
+	}
+
+
+	static inline void vbx_shared_free(void *shared_ptr)
+	{
+		void *alloced_ptr;
+		if( shared_ptr ) {
+			alloced_ptr = *((void **)((size_t)shared_ptr-sizeof(void*)));
+			vbx_uncached_free(alloced_ptr);
+		}
+	}
+
+
 #ifdef __cplusplus
 }
 #endif

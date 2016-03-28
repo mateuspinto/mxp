@@ -349,9 +349,10 @@ namespace VBX{
 			return toret;
 		}
 
-		INLINE Vector<T,0> operator[](int index) const
+		INLINE accum_t<T> operator[](int index) const
 		{
-			return Vector<T,0>(this->data+index,1);
+			return accum_t<T>(this->data+index);
+
 		}
 		template<typename if_t,typename then_t>
 		INLINE void cond_move(const if_t& v_if,const then_t& v_then)
@@ -440,6 +441,9 @@ namespace VBX{
 	public:
 		accum_t()
 			:v(1){}
+		accum_t(T* sp_ptr)
+			:v(sp_ptr,1)
+		{}
 		accum_t(int init)
 			:v(1){
 			v=init;
