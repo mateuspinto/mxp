@@ -60,11 +60,7 @@ extern "C" {
  * @retval returns minimum of x and y
  */
 #define min(x,y) \
-	({\
-		typeof(x) __x__ = (x);\
-		typeof(y) __y__ = (y);\
-		(__x__<__y__)? __x__ : __y__;\
-	})
+	(((x)<(y))? (x) : (y))
 #endif // min()
 
 #ifndef max
@@ -76,11 +72,7 @@ extern "C" {
  * @retval returns maximum of x and y
  */
 #define max(x,y) \
-	({\
-		typeof(x) __x__ = (x);\
-		typeof(y) __y__ = (y);\
-		(__x__>__y__)? __x__ : __y__;\
-	})
+		(((x)>(y))? (x) : (y))
 #endif // max()
 
 

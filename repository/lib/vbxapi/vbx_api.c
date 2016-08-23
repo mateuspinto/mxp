@@ -88,7 +88,7 @@ void _vbx_init( vbx_mxp_t *this_mxp )
 
 #if VBX_USE_GLOBAL_MXP_PTR
 	// Must be set before any MXP instructions can be issued!
-	vbx_mxp_ptr = this_mxp;
+	VBX_SET_THIS_MXP(this_mxp);
 #endif
 
 	// FIXME WARNING: the function call below only works for uniprocessors
@@ -126,7 +126,7 @@ vbx_void_t *vbx_sp_malloc_debug( int LINE,const char *FNAME, size_t num_bytes )
 
 	// pad to scratchpad width to reduce occurrence of false hazards
 	size_t padded = VBX_PAD_UP( num_bytes, this_mxp->scratchpad_alignment_bytes );
-	size_t freesp = (size_t)(this_mxp->scratchpad_end - this_mxp->sp); //VBX_SCRATCHPAD_END - (size_t)vbx_sp; // vbx_sp_getfree();
+	size_t freesp = ((size_t)(this_mxp->scratchpad_end) - (size_t)(this_mxp->sp)); //VBX_SCRATCHPAD_END - (size_t)vbx_sp; // vbx_sp_getfree();
 
 	vbx_void_t  *result = NULL;
 	if( VBX_DEBUG_LEVEL && (num_bytes==0) ) {
@@ -135,7 +135,7 @@ vbx_void_t *vbx_sp_malloc_debug( int LINE,const char *FNAME, size_t num_bytes )
 		print_sp_malloc_full( num_bytes, padded );
 	} else if( num_bytes > 0  &&  freesp >= padded ) {
 		result        = this_mxp->sp;
-		this_mxp->sp += padded;
+		this_mxp->sp = (void*)((size_t)this_mxp->sp + padded);
 #if VBX_DEBUG_SP_MALLOC
 		printf("sp_malloc %d bytes padded to %d, sp=0x%08x\n", num_bytes, padded, this_mxp->sp);
 #endif
@@ -165,7 +165,7 @@ vbx_void_t *vbx_sp_malloc_nodebug( size_t num_bytes )
 	// pad to scratchpad width to reduce occurrence of false hazards
 	size_t padded = VBX_PAD_UP( num_bytes, this_mxp->scratchpad_alignment_bytes );
 	vbx_void_t *old_sp = this_mxp->sp;
-	this_mxp->sp += padded;
+	this_mxp->sp =(void*)((size_t)this_mxp->sp + padded);
 
 	// scratchpad full
 	if( this_mxp->sp > this_mxp->scratchpad_end ) {
@@ -230,7 +230,7 @@ int vbx_sp_getused()
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 	int used = 0;
 	if( this_mxp )
-		used = (int)(this_mxp->sp - this_mxp->scratchpad_addr);
+		used = (int)((size_t)this_mxp->sp - (size_t)this_mxp->scratchpad_addr);
 	return used;
 }
 
@@ -239,7 +239,7 @@ int vbx_sp_getfree()
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 	int free = 0;
 	if( this_mxp )
-		free = (int)(this_mxp->scratchpad_end - this_mxp->sp);
+		free = (int)((size_t)this_mxp->scratchpad_end - (size_t)this_mxp->sp);
 	return free;
 }
 
@@ -260,7 +260,7 @@ void vbx_sp_set_debug( int LINE, const char *FNAME, vbx_void_t *new_sp )
 	           && VBX_IS_ALIGNED(new_sp, 4) ) {
 		this_mxp->sp = new_sp;
 	} else {
-		VBX_PRINTF( "ERROR: attempt to set scratchpad to illegal or unaligned address 0x%08lx.\n", (long int)new_sp );
+		VBX_PRINTF( "ERROR: attempt to set scratchpad to illegal or unaligned address %p.\n", new_sp );
 		VBX_FATAL(LINE,FNAME,-1);
 	}
 }

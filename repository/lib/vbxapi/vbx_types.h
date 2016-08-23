@@ -56,14 +56,20 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 
+//For some reason windows does not define ssize_t.
+//Should investigate this and figure out a better 
+//solution than doing it myself.
+#if defined(_WIN32) && !defined(_WIN64)
+typedef int32_t ssize_t;
+#elif defined(_WIN32) && defined(_WIN64)
+typedef int64_t ssize_t;
+#endif
 /**
  * @name Scratchpad Data Typedef
  *
  * Pointers to these datatypes should always be used for scratchpad accesses
  */
 /**@{*/
-
-#if defined( __GNUC__)
 typedef uint32_t vbx_uword_t; ///< 4-byte word, unsigned
 typedef uint16_t vbx_uhalf_t; ///< 2-byte half, unsigned
 typedef uint8_t vbx_ubyte_t;  ///< byte, unsigned
@@ -71,7 +77,7 @@ typedef int32_t vbx_word_t;   ///< 4-byte word
 typedef int16_t vbx_half_t;   ///< 2-byte half
 typedef int8_t vbx_byte_t;    ///< byte
 typedef void vbx_void_t;      ///< void, used for generic pointers
-#endif
+
 
 /*
  * If not compiling with gcc, it would have to be verified that values loaded into
@@ -89,7 +95,7 @@ typedef void vbx_void_t;      ///< void, used for generic pointers
  *
  */
 
-	typedef struct{} vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
+typedef struct { char _; } vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
 /**@}*/
 
 

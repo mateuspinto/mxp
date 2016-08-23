@@ -37,6 +37,7 @@
 
 #ifndef FWD_DECLARATION_HPP
 #define FWD_DECLARATION_HPP
+
 namespace VBX{
 
 	template<typename T,int Dim=1>

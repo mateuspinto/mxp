@@ -61,6 +61,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#if defined(_MSC_VER)
+	//Visual studio doesn't have __attribute__s
+#define __attribute__(...)
+#endif
 #include "vendor.h"
 //figure out target from builtin compilier defines
 #if defined(__nios2__)
