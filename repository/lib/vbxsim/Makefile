@@ -12,10 +12,10 @@ SRC_LIB:=libvbxsim_mac.a
 endif
 
 ifdef ComSpec
-SRC_LIB=libvbxsim_windows.a
+SRC_LIB=libvbxsim_mingw32.a
 endif
 ifdef COMSPEC
-SRC_LIB=libvbxsim_windows.a
+SRC_LIB=libvbxsim_mingw32.a
 endif
 
 DST_LIB = libvbxsim.a
