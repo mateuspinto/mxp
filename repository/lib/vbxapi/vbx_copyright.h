@@ -56,17 +56,22 @@ extern "C" {
 #define VBXPROTOHEADER2(fname) vbx_ ## fname ## _info
 #define VBXPROTOHEADER1(fname) VBXPROTOHEADER2(fname)
 
-
+#if defined(_MSC_VER)
+#define COMPILER "Microsoft Visual Studio " STRINGY(_MSC_VER)
+#else
+#define COMPILER "gcc " __VERSION__
+#endif
 
 #define VBXCOPYRIGHT(fname) \
 char *VBXPROTOHEADER1(fname) () \
 { \
 	char *buf = (char *)malloc( HEADER_SIZE ); \
 	snprintf( buf, HEADER_SIZE, \
-	              "Function " STRINGY(fname) \
-	              "\nCopyright (C) 2012-2016 VectorBlox Computing, Inc.\n" \
-	              "File " __FILE__ " compiled on " __TIME__ " " __DATE__\
-	              " using gcc version " __VERSION__ ".\n" ); \
+	          "Function " STRINGY(fname) \
+	          "\nCopyright (C) 2012-2016 VectorBlox Computing, Inc.\n" \
+	          "File " __FILE__ " compiled on " __TIME__ " " __DATE__ \
+	          " using " COMPILER \
+	          ".\n" ); \
 	return buf; \
 }
 

@@ -70,7 +70,15 @@ extern "C" {
 #define VBX_REG_MXPCPU       16
 
 #if VBX_USE_GLOBAL_MXP_PTR
+#ifdef CATAPULTPS_SIMULATOR
+vbx_mxp_t *VBX_GET_THIS_MXP();
+void VBX_SET_THIS_MXP(vbx_mxp_t *POINTER);
+#else
 #define VBX_GET_THIS_MXP() (vbx_mxp_ptr)
+	static inline void VBX_SET_THIS_MXP(vbx_mxp_t *POINTER){
+		vbx_mxp_ptr = POINTER;
+	}
+#endif
 #else
 #define VBX_GET_THIS_MXP() \
 	({ int __t__; vbx_get_reg( VBX_REG_MXPCPU, &__t__ ); (vbx_mxp_t*)__t__; })
@@ -87,16 +95,11 @@ extern "C" {
 //#define IS_VPTR(PTR) ( (((vbx_void_t *)PTR)&(VPTR_MASK))==(VBX_SCRATCHPAD_ADDR) )
 
 #define VBX_PAD_UP(BYTES,ALIGNMENT) \
-	({ \
-		size_t __mask__ = ((size_t)(ALIGNMENT))-1; \
-		( ((size_t)(BYTES)) + __mask__) & ~__mask__; \
-	})
+	(( ((size_t)(BYTES)) + (((size_t)(ALIGNMENT))-1)) & ~(((size_t)(ALIGNMENT))-1))
 
 #define VBX_PAD_DN(BYTES,ALIGNMENT) \
-	({ \
-		size_t __mask__ = ((size_t)(ALIGNMENT))-1; \
-		((size_t)(BYTES))  &  ~__mask__; \
-	})
+	(((size_t)(BYTES))  &  ~(((size_t)(ALIGNMENT))-1))
+	
 
 #define VBX_IS_MISALIGNED(LENGTH,ALIGNMENT)	((((size_t)(LENGTH))&((size_t)(ALIGNMENT)-1))?1:0)
 #define VBX_IS_ALIGNED(LENGTH,ALIGNMENT)	(!VBX_IS_MISALIGNED((LENGTH),(ALIGNMENT)))

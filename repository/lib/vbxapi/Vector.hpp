@@ -52,7 +52,7 @@ namespace VBX{
 			//also doesn't play well with vbx_set_vl()
 			size_t& vl=__old_vl__;
 			if(len!=vl){
-				vbx_set_vl(len);
+				vbx_set_vl((int)len);
 				vl=len;
 			}
 		}
@@ -222,7 +222,7 @@ namespace VBX{
 				this->increment2=cp.increment2;
 			}
 			if(dim==3){
-				this->mats=mats;
+				this->mats=cp.mats;
 				this->increment3=cp.increment3;
 			}
 			data=(T*)vbx_sp_malloc(sizeof(T)*size);
@@ -317,18 +317,18 @@ namespace VBX{
 			return *this;
 		}
 		template<typename U>
-		INLINE Vector<U> cast() const
+		INLINE Vector<U,dim> cast() const
 		{
 			//only do a copy if
 			if(sizeof(T)==sizeof(U)){
-				return Vector<U>((U*)data,size);
+				return Vector<U,dim>((U*)data,size,rows,increment2,mats,increment3);
 			}else{
-				return Vector<U>(*this);
+				return Vector<U,dim>(*this);
 			}
 		}
 		template<typename U,int dim1>
-		INLINE Vector<U> cast_to_typeof(const Vector<U,dim1>&) const{
-			return cast<U>();
+		INLINE Vector<U,dim1> cast_to_typeof(const Vector<U,dim1>&) const{
+			return cast<U,dim1>();
 		}
 		Vector<T>
 		INLINE operator[](const range_t& range) const
