@@ -6,7 +6,7 @@
         <BspGeneratedUnixTimeStamp>1433795824390</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>./</BspGeneratedLocation>
         <BspSettingsFile>software/lib/bsp/settings.bsp</BspSettingsFile>
-        <HpsSettingsPath>../../../hps_isw_handoff/vblox1_hps_0</HpsSettingsPath>
+        <HpsSettingsPath>../hps_isw_handoff/vblox1_hps_0</HpsSettingsPath>
         <JdiFile>default</JdiFile>
         <Cpu xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         <SchemaVersion>1.9</SchemaVersion>

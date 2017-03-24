@@ -7,6 +7,7 @@ ALT_INCLUDE_DIRS += $(VBXAPI_DIR)
 ALT_INCLUDE_DIRS += $(VBXWARE_DIR)
 
 ALT_INCLUDE_DIRS += $(QUARTUS_ROOTDIR)/../embedded/ip/altera/hps/altera_hps/hwlib/include/
+ALT_INCLUDE_DIRS += $(QUARTUS_ROOTDIR)/../embedded/ip/altera/hps/altera_hps/hwlib/include/soc_cv_av/
 ALT_CFLAGS += -mcpu=cortex-a9 -mfloat-abi=softfp -mfpu=neon -DARM_ALT_STANDALONE -std=gnu99
 ALT_CXXFLAGS += -std=gnu++11
 AVOID_NIOS2_GCC3_OPTIONS := true
@@ -21,7 +22,7 @@ HWLIB_SRCS += $(HWLIB_PATH)/alt_timers.c
 HWLIB_SRCS += $(HWLIB_PATH)/alt_globaltmr.c
 HWLIB_SRCS += $(HWLIB_PATH)/alt_cache.c
 HWLIB_SRCS += $(HWLIB_PATH)/alt_mmu.c
-HWLIB_SRCS += $(HWLIB_PATH)/alt_clock_manager.c
+HWLIB_SRCS += $(HWLIB_PATH)/soc_cv_av/alt_clock_manager.c
 HWLIB_SRCS += $(HWLIB_PATH)/alt_watchdog.c
 
 HPS=true
