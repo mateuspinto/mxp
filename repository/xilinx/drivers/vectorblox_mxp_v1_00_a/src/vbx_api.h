@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -88,9 +88,13 @@ void vbx_mxp_is_initialized(vbx_mxp_t* this_mxp){
 
 __attribute__((always_inline)) static inline void vbx_sp_push()
 {
+
 	// do it, but do not print pretty error messages
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
+#if !VBX_SKIP_ALL_CHECKS
 	vbx_mxp_is_initialized(this_mxp);
+#endif
+
 #if (!VBX_STATIC_ALLOCATE_SP_STACK)
 	if(this_mxp->spstack_top == this_mxp->spstack_max ) {
 		void vbx_sp_push_realloc();
@@ -98,8 +102,12 @@ __attribute__((always_inline)) static inline void vbx_sp_push()
 	}
 #endif
 	this_mxp->spstack[ this_mxp->spstack_top++ ] = this_mxp->sp;
+
+#if !VBX_SKIP_ALL_CHECKS
 	assert(this_mxp->spstack_top < this_mxp->spstack_max);
+#endif
 }
+
 /** Pop current scratchpad address to stack
  *
  * Use with @ref vbx_sp_push for partial freeing of scratchpad memory
@@ -108,8 +116,11 @@ __attribute__((always_inline)) static inline void vbx_sp_pop()
 {
 	// do it, but do not print pretty error messages
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
+#if !VBX_SKIP_ALL_CHECKS
 	vbx_mxp_is_initialized(this_mxp);
 	assert(this_mxp->spstack_top > 0);
+#endif
+
 	this_mxp->sp = this_mxp->spstack[ --this_mxp->spstack_top ];
 
 }

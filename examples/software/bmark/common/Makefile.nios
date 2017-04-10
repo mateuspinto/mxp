@@ -203,7 +203,7 @@ BSP_ROOT_DIR := $(VBXSIM_DIRECTORY)
 else
 BSP_ROOT_DIR ?= $(PROJ_ROOT)/bsp$(CPU_NUMBER)
 endif
-VBXAPI_DIR := $(abspath ../../../../repository/lib/vbxapi)
+VBXAPI_DIR := ../../../../repository/lib/vbxapi
 VBXWARE_DIR := ../../lib/vbxware
 # List of application specific include directories, library directories and library names
 APP_INCLUDE_DIRS :=
@@ -955,7 +955,7 @@ LIB_TARGETS := $(patsubst %,%-recurs-make-lib,$(MAKEABLE_LIBRARY_ROOT_DIRS))
 .PHONY : libs
 libs : $(LIB_TARGETS)
 ifeq ($(HPS),true)
- HPS_MAKE_VARS :=VBXAPI_DIR=$(VBXAPI_DIR) SYSTEM_HEADER=$(abspath $(BSP_ROOT_DIR))/system.h HPS=true
+ HPS_MAKE_VARS :=VBXAPI_DIR=$(VBXAPI_DIR) SYSTEM_HEADER=$(ABS_BSP_ROOT_DIR)/system.h HPS=true
 endif
 ifneq ($(strip $(LIB_TARGETS)),)
 $(LIB_TARGETS): %-recurs-make-lib:

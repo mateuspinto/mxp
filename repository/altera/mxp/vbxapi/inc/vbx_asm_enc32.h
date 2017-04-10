@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -328,6 +328,8 @@ extern "C" {
 #define VMULHI_I    13
 #define VMULFXP_I   14
 
+#define VSUBFXP_I   15
+
 #define VSHL_I      16
 #define VSHR_I      17
 #define VROTL_I     18
@@ -341,6 +343,8 @@ extern "C" {
 #define VCMV_FC_I   27 // ~N
 #define VCMV_Z_I    28 // Z
 #define VCMV_NZ_I   29 // ~Z
+
+#define VADDFXP_I   30
 
 #define VABSDIFF_I  31
 

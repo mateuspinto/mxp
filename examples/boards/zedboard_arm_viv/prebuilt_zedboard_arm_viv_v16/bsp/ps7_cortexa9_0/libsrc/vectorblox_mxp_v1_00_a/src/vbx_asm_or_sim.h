@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,11 +71,11 @@ extern "C" {
 
 // Include the assembler
 #if VBX_ASSEMBLER
-#if __NIOS2__
+#if defined(__NIOS2__)
 #include "vbx_asm_nios.h"
-#elif __MICROBLAZE__
+#elif defined(__MICROBLAZE__)
 #include "vbx_asm_mb.h"
-#elif __arm__
+#elif defined(__arm__)
 #include "vbx_asm_arm.h"
 #endif
 #endif

@@ -1,48 +1,40 @@
-/* $Id: xemacps_bdring.h,v 1.1.2.1 2011/01/20 03:39:02 sadanan Exp $ */
 /******************************************************************************
 *
-* (c) Copyright 2010 Xilinx, Inc. All rights reserved.
+* Copyright (C) 2010 - 2015 Xilinx, Inc.  All rights reserved.
 *
-* This file contains confidential and proprietary information of Xilinx, Inc.
-* and is protected under U.S. and international copyright and other
-* intellectual property laws.
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
 *
-* DISCLAIMER
-* This disclaimer is not a license and does not grant any rights to the
-* materials distributed herewith. Except as otherwise provided in a valid
-* license issued to you by Xilinx, and to the maximum extent permitted by
-* applicable law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND WITH ALL
-* FAULTS, AND XILINX HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS, EXPRESS,
-* IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
-* MERCHANTABILITY, NON-INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE;
-* and (2) Xilinx shall not be liable (whether in contract or tort, including
-* negligence, or under any other theory of liability) for any loss or damage
-* of any kind or nature related to, arising under or in connection with these
-* materials, including for any direct, or any indirect, special, incidental,
-* or consequential loss or damage (including loss of data, profits, goodwill,
-* or any type of loss or damage suffered as a result of any action brought by
-* a third party) even if such damage or loss was reasonably foreseeable or
-* Xilinx had been advised of the possibility of the same.
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
 *
-* CRITICAL APPLICATIONS
-* Xilinx products are not designed or intended to be fail-safe, or for use in
-* any application requiring fail-safe performance, such as life-support or
-* safety devices or systems, Class III medical devices, nuclear facilities,
-* applications related to the deployment of airbags, or any other applications
-* that could lead to death, personal injury, or severe property or
-* environmental damage (individually and collectively, "Critical
-* Applications"). Customer assumes the sole risk and liability of any use of
-* Xilinx products in Critical Applications, subject only to applicable laws
-* and regulations governing limitations on product liability.
+* Use of the Software is limited solely to applications:
+* (a) running on a Xilinx device, or
+* (b) that interact with a Xilinx device through a bus or interconnect.
 *
-* THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS PART OF THIS FILE
-* AT ALL TIMES.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+* XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+* Except as contained in this notice, the name of the Xilinx shall not be used
+* in advertising or otherwise to promote the sale, use or other dealings in
+* this Software without prior written authorization from Xilinx.
 *
 ******************************************************************************/
 /*****************************************************************************/
 /**
 *
 * @file xemacps_bdring.h
+* @addtogroup emacps_v3_1
+* @{
 *
 * The Xiline EmacPs Buffer Descriptor ring driver. This is part of EmacPs
 * DMA functionalities.
@@ -53,6 +45,9 @@
 * Ver   Who  Date     Changes
 * ----- ---- -------- -------------------------------------------------------
 * 1.00a wsy  01/10/10 First release
+* 2.1   srt  07/15/14 Add support for Zynq Ultrascale Mp architecture.
+* 3.0   kvn  02/13/15 Modified code for MISRA-C:2012 compliance.
+*
 * </pre>
 *
 ******************************************************************************/
@@ -69,9 +64,9 @@ extern "C" {
 
 /** This is an internal structure used to maintain the DMA list */
 typedef struct {
-	u32 PhysBaseAddr;/**< Physical address of 1st BD in list */
-	u32 BaseBdAddr;	 /**< Virtual address of 1st BD in list */
-	u32 HighBdAddr;	 /**< Virtual address of last BD in the list */
+	UINTPTR PhysBaseAddr;/**< Physical address of 1st BD in list */
+	UINTPTR BaseBdAddr;	 /**< Virtual address of 1st BD in list */
+	UINTPTR HighBdAddr;	 /**< Virtual address of last BD in the list */
 	u32 Length;	 /**< Total size of ring in bytes */
 	u32 RunState;	 /**< Flag to indicate DMA is started */
 	u32 Separation;	 /**< Number of bytes between the starting address
@@ -85,11 +80,12 @@ typedef struct {
 			     /**< First BD in the post-work group */
 	XEmacPs_Bd *BdaRestart;
 			     /**< BDA to load when channel is started */
-	unsigned HwCnt;	     /**< Number of BDs in work group */
-	unsigned PreCnt;     /**< Number of BDs in pre-work group */
-	unsigned FreeCnt;    /**< Number of allocatable BDs in the free group */
-	unsigned PostCnt;    /**< Number of BDs in post-work group */
-	unsigned AllCnt;     /**< Total Number of BDs for channel */
+
+	u32 HwCnt;	     /**< Number of BDs in work group */
+	u32 PreCnt;     /**< Number of BDs in pre-work group */
+	u32 FreeCnt;    /**< Number of allocatable BDs in the free group */
+	u32 PostCnt;    /**< Number of BDs in post-work group */
+	u32 AllCnt;     /**< Total Number of BDs for channel */
 } XEmacPs_BdRing;
 
 
@@ -114,8 +110,7 @@ typedef struct {
 *
 ******************************************************************************/
 #define XEmacPs_BdRingCntCalc(Alignment, Bytes)                    \
-    (u32)((Bytes) / ((sizeof(XEmacPs_Bd) + ((Alignment)-1)) &   \
-    ~((Alignment)-1)))
+    (u32)((Bytes) / (sizeof(XEmacPs_Bd)))
 
 /*****************************************************************************/
 /**
@@ -136,8 +131,7 @@ typedef struct {
 *
 ******************************************************************************/
 #define XEmacPs_BdRingMemCalc(Alignment, NumBd)                    \
-    (u32)((sizeof(XEmacPs_Bd) + ((Alignment)-1)) &              \
-    ~((Alignment)-1)) * (NumBd)
+    (u32)(sizeof(XEmacPs_Bd) * (NumBd))
 
 /****************************************************************************/
 /**
@@ -187,9 +181,9 @@ typedef struct {
 *
 *****************************************************************************/
 #define XEmacPs_BdRingNext(RingPtr, BdPtr)                           \
-    (((u32)(BdPtr) >= (RingPtr)->HighBdAddr) ?                     \
-    (XEmacPs_Bd*)(RingPtr)->BaseBdAddr :                              \
-    (XEmacPs_Bd*)((u32)(BdPtr) + (RingPtr)->Separation))
+    (((UINTPTR)((void *)(BdPtr)) >= (RingPtr)->HighBdAddr) ?                     \
+    (XEmacPs_Bd*)((void*)(RingPtr)->BaseBdAddr) :                              \
+    (XEmacPs_Bd*)((UINTPTR)((void *)(BdPtr)) + (RingPtr)->Separation))
 
 /****************************************************************************/
 /**
@@ -207,32 +201,33 @@ typedef struct {
 *
 *****************************************************************************/
 #define XEmacPs_BdRingPrev(RingPtr, BdPtr)                           \
-    (((u32)(BdPtr) <= (RingPtr)->BaseBdAddr) ?                     \
+    (((UINTPTR)(BdPtr) <= (RingPtr)->BaseBdAddr) ?                     \
     (XEmacPs_Bd*)(RingPtr)->HighBdAddr :                              \
-    (XEmacPs_Bd*)((u32)(BdPtr) - (RingPtr)->Separation))
+    (XEmacPs_Bd*)((UINTPTR)(BdPtr) - (RingPtr)->Separation))
 
 /************************** Function Prototypes ******************************/
 
 /*
  * Scatter gather DMA related functions in xemacps_bdring.c
  */
-int XEmacPs_BdRingCreate(XEmacPs_BdRing * RingPtr, u32 PhysAddr,
-			  u32 VirtAddr, u32 Alignment, unsigned BdCount);
-int XEmacPs_BdRingClone(XEmacPs_BdRing * RingPtr, XEmacPs_Bd * SrcBdPtr,
+LONG XEmacPs_BdRingCreate(XEmacPs_BdRing * RingPtr, UINTPTR PhysAddr,
+			  UINTPTR VirtAddr, u32 Alignment, u32 BdCount);
+LONG XEmacPs_BdRingClone(XEmacPs_BdRing * RingPtr, XEmacPs_Bd * SrcBdPtr,
 			 u8 Direction);
-int XEmacPs_BdRingAlloc(XEmacPs_BdRing * RingPtr, unsigned NumBd,
+LONG XEmacPs_BdRingAlloc(XEmacPs_BdRing * RingPtr, u32 NumBd,
 			 XEmacPs_Bd ** BdSetPtr);
-int XEmacPs_BdRingUnAlloc(XEmacPs_BdRing * RingPtr, unsigned NumBd,
+LONG XEmacPs_BdRingUnAlloc(XEmacPs_BdRing * RingPtr, u32 NumBd,
 			   XEmacPs_Bd * BdSetPtr);
-int XEmacPs_BdRingToHw(XEmacPs_BdRing * RingPtr, unsigned NumBd,
+LONG XEmacPs_BdRingToHw(XEmacPs_BdRing * RingPtr, u32 NumBd,
 			XEmacPs_Bd * BdSetPtr);
-int XEmacPs_BdRingFree(XEmacPs_BdRing * RingPtr, unsigned NumBd,
+LONG XEmacPs_BdRingFree(XEmacPs_BdRing * RingPtr, u32 NumBd,
 			XEmacPs_Bd * BdSetPtr);
-unsigned XEmacPs_BdRingFromHwTx(XEmacPs_BdRing * RingPtr, unsigned BdLimit,
+u32 XEmacPs_BdRingFromHwTx(XEmacPs_BdRing * RingPtr, u32 BdLimit,
 				 XEmacPs_Bd ** BdSetPtr);
-unsigned XEmacPs_BdRingFromHwRx(XEmacPs_BdRing * RingPtr, unsigned BdLimit,
+u32 XEmacPs_BdRingFromHwRx(XEmacPs_BdRing * RingPtr, u32 BdLimit,
 				 XEmacPs_Bd ** BdSetPtr);
-int XEmacPs_BdRingCheck(XEmacPs_BdRing * RingPtr, u8 Direction);
+LONG XEmacPs_BdRingCheck(XEmacPs_BdRing * RingPtr, u8 Direction);
+
 
 #ifdef __cplusplus
 }
@@ -240,3 +235,4 @@ int XEmacPs_BdRingCheck(XEmacPs_BdRing * RingPtr, u8 Direction);
 
 
 #endif /* end of protection macros */
+/** @} */

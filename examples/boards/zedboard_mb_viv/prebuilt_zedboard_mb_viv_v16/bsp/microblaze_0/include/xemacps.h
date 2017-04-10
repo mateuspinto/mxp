@@ -1,47 +1,41 @@
-/*****************************************************************************
+/******************************************************************************
 *
-* (c) Copyright 2010-11 Xilinx, Inc. All rights reserved.
+* Copyright (C) 2010 - 2016 Xilinx, Inc.  All rights reserved.
 *
-* This file contains confidential and proprietary information of Xilinx, Inc.
-* and is protected under U.S. and international copyright and other
-* intellectual property laws.
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
 *
-* DISCLAIMER
-* This disclaimer is not a license and does not grant any rights to the
-* materials distributed herewith. Except as otherwise provided in a valid
-* license issued to you by Xilinx, and to the maximum extent permitted by
-* applicable law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND WITH ALL
-* FAULTS, AND XILINX HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS, EXPRESS,
-* IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
-* MERCHANTABILITY, NON-INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE;
-* and (2) Xilinx shall not be liable (whether in contract or tort, including
-* negligence, or under any other theory of liability) for any loss or damage
-* of any kind or nature related to, arising under or in connection with these
-* materials, including for any direct, or any indirect, special, incidental,
-* or consequential loss or damage (including loss of data, profits, goodwill,
-* or any type of loss or damage suffered as a result of any action brought by
-* a third party) even if such damage or loss was reasonably foreseeable or
-* Xilinx had been advised of the possibility of the same.
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
 *
-* CRITICAL APPLICATIONS
-* Xilinx products are not designed or intended to be fail-safe, or for use in
-* any application requiring fail-safe performance, such as life-support or
-* safety devices or systems, Class III medical devices, nuclear facilities,
-* applications related to the deployment of airbags, or any other applications
-* that could lead to death, personal injury, or severe property or
-* environmental damage (individually and collectively, "Critical
-* Applications"). Customer assumes the sole risk and liability of any use of
-* Xilinx products in Critical Applications, subject only to applicable laws
-* and regulations governing limitations on product liability.
+* Use of the Software is limited solely to applications:
+* (a) running on a Xilinx device, or
+* (b) that interact with a Xilinx device through a bus or interconnect.
 *
-* THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS PART OF THIS FILE
-* AT ALL TIMES.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+* XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
 *
-*****************************************************************************/
+* Except as contained in this notice, the name of the Xilinx shall not be used
+* in advertising or otherwise to promote the sale, use or other dealings in
+* this Software without prior written authorization from Xilinx.
+*
+******************************************************************************/
 /****************************************************************************/
 /**
  *
  * @file xemacps.h
+* @addtogroup emacps_v3_1
+* @{
+* @details
  *
  * The Xilinx Embedded Processor Block Ethernet driver.
  *
@@ -301,6 +295,27 @@
  *			  Made changes in example file xemacps_example.h to fix compilation
  *			  issues with iarcc compiler.
  * 2.0   adk  10/12/13 Updated as per the New Tcl API's
+ * 2.1   adk  11/08/14 Fixed the CR#811288. Changes are made in the driver tcl file.
+ * 2.1   bss  09/08/14 Modified driver tcl to fix CR#820349 to export phy
+ *		       address in xparameters.h when GMII to RGMII converter
+ *		       is present in hw.
+ * 2.1   srt  07/15/14 Add support for Zynq Ultrascale Mp GEM specification and 64-bit
+ *		       changes.
+ * 2.2   adk  29/10/14 Fixed CR#827686 when PCS/PMA core is configured with
+ *                    1000BASE-X mode export proper values to the xparameters.h
+ *                    file. Changes are made in the driver tcl file.
+ * 3.0   adk  08/1/15  Don't include gem in peripheral test when gem is
+ *                    configured with PCS/PMA Core. Changes are made in the
+ *		       test app tcl(CR:827686).
+ * 3.0   kvn  02/13/15 Modified code for MISRA-C:2012 compliance.
+ * 3.0   hk   03/18/15 Added support for jumbo frames. Increase AHB burst.
+ *                     Disable extended mode. Perform all 64 bit changes under
+ *                     check for arch64.
+ *                     Remove "used bit set" from TX error interrupt masks.
+ * 3.1   hk   07/27/15 Do not call error handler with '0' error code when
+ *                     there is no error. CR# 869403
+ *            08/10/15 Update upper 32 bit tx and rx queue ptr registers.
+ * 3.2   hk   02/22/16 Added SGMII support for Zynq Ultrascale+ MPSoC.
  * </pre>
  *
  ****************************************************************************/
@@ -343,32 +358,32 @@ extern "C" {
  * @{
  */
 
-#define XEMACPS_PROMISC_OPTION               0x00000001
+#define XEMACPS_PROMISC_OPTION               0x00000001U
 /**< Accept all incoming packets.
  *   This option defaults to disabled (cleared) */
 
-#define XEMACPS_FRAME1536_OPTION             0x00000002
+#define XEMACPS_FRAME1536_OPTION             0x00000002U
 /**< Frame larger than 1516 support for Tx & Rx.
  *   This option defaults to disabled (cleared) */
 
-#define XEMACPS_VLAN_OPTION                  0x00000004
+#define XEMACPS_VLAN_OPTION                  0x00000004U
 /**< VLAN Rx & Tx frame support.
  *   This option defaults to disabled (cleared) */
 
-#define XEMACPS_FLOW_CONTROL_OPTION          0x00000010
+#define XEMACPS_FLOW_CONTROL_OPTION          0x00000010U
 /**< Enable recognition of flow control frames on Rx
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_FCS_STRIP_OPTION             0x00000020
+#define XEMACPS_FCS_STRIP_OPTION             0x00000020U
 /**< Strip FCS and PAD from incoming frames. Note: PAD from VLAN frames is not
  *   stripped.
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_FCS_INSERT_OPTION            0x00000040
+#define XEMACPS_FCS_INSERT_OPTION            0x00000040U
 /**< Generate FCS field and add PAD automatically for outgoing frames.
  *   This option defaults to disabled (cleared) */
 
-#define XEMACPS_LENTYPE_ERR_OPTION           0x00000080
+#define XEMACPS_LENTYPE_ERR_OPTION           0x00000080U
 /**< Enable Length/Type error checking for incoming frames. When this option is
  *   set, the MAC will filter frames that have a mismatched type/length field
  *   and if XEMACPS_REPORT_RXERR_OPTION is set, the user is notified when these
@@ -377,41 +392,43 @@ extern "C" {
  *
  *   This option defaults to disabled (cleared) */
 
-#define XEMACPS_TRANSMITTER_ENABLE_OPTION    0x00000100
+#define XEMACPS_TRANSMITTER_ENABLE_OPTION    0x00000100U
 /**< Enable the transmitter.
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_RECEIVER_ENABLE_OPTION       0x00000200
+#define XEMACPS_RECEIVER_ENABLE_OPTION       0x00000200U
 /**< Enable the receiver
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_BROADCAST_OPTION             0x00000400
+#define XEMACPS_BROADCAST_OPTION             0x00000400U
 /**< Allow reception of the broadcast address
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_MULTICAST_OPTION             0x00000800
+#define XEMACPS_MULTICAST_OPTION             0x00000800U
 /**< Allows reception of multicast addresses programmed into hash
  *   This option defaults to disabled (clear) */
 
-#define XEMACPS_RX_CHKSUM_ENABLE_OPTION      0x00001000
+#define XEMACPS_RX_CHKSUM_ENABLE_OPTION      0x00001000U
 /**< Enable the RX checksum offload
  *   This option defaults to enabled (set) */
 
-#define XEMACPS_TX_CHKSUM_ENABLE_OPTION      0x00002000
+#define XEMACPS_TX_CHKSUM_ENABLE_OPTION      0x00002000U
 /**< Enable the TX checksum offload
  *   This option defaults to enabled (set) */
 
+#define XEMACPS_JUMBO_ENABLE_OPTION	0x00004000U
+#define XEMACPS_SGMII_ENABLE_OPTION	0x00008000U
 
 #define XEMACPS_DEFAULT_OPTIONS                     \
-    (XEMACPS_FLOW_CONTROL_OPTION |                  \
-     XEMACPS_FCS_INSERT_OPTION |                    \
-     XEMACPS_FCS_STRIP_OPTION |                     \
-     XEMACPS_BROADCAST_OPTION |                     \
-     XEMACPS_LENTYPE_ERR_OPTION |                   \
-     XEMACPS_TRANSMITTER_ENABLE_OPTION |            \
-     XEMACPS_RECEIVER_ENABLE_OPTION |               \
-     XEMACPS_RX_CHKSUM_ENABLE_OPTION |              \
-     XEMACPS_TX_CHKSUM_ENABLE_OPTION)
+    ((u32)XEMACPS_FLOW_CONTROL_OPTION |                  \
+     (u32)XEMACPS_FCS_INSERT_OPTION |                    \
+     (u32)XEMACPS_FCS_STRIP_OPTION |                     \
+     (u32)XEMACPS_BROADCAST_OPTION |                     \
+     (u32)XEMACPS_LENTYPE_ERR_OPTION |                   \
+     (u32)XEMACPS_TRANSMITTER_ENABLE_OPTION |            \
+     (u32)XEMACPS_RECEIVER_ENABLE_OPTION |               \
+     (u32)XEMACPS_RX_CHKSUM_ENABLE_OPTION |              \
+     (u32)XEMACPS_TX_CHKSUM_ENABLE_OPTION)
 
 /**< Default options set when device is initialized or reset */
 /*@}*/
@@ -421,9 +438,9 @@ extern "C" {
  * These constants are used as parameters to XEmacPs_SetHandler()
  * @{
  */
-#define XEMACPS_HANDLER_DMASEND 1
-#define XEMACPS_HANDLER_DMARECV 2
-#define XEMACPS_HANDLER_ERROR   3
+#define XEMACPS_HANDLER_DMASEND 1U
+#define XEMACPS_HANDLER_DMARECV 2U
+#define XEMACPS_HANDLER_ERROR   3U
 /*@}*/
 
 /* Constants to determine the configuration of the hardware device. They are
@@ -434,23 +451,26 @@ extern "C" {
 /* The next few constants help upper layers determine the size of memory
  * pools used for Ethernet buffers and descriptor lists.
  */
-#define XEMACPS_MAC_ADDR_SIZE   6	/* size of Ethernet header */
+#define XEMACPS_MAC_ADDR_SIZE   6U	/* size of Ethernet header */
 
-#define XEMACPS_MTU             1500	/* max MTU size of Ethernet frame */
-#define XEMACPS_HDR_SIZE        14	/* size of Ethernet header */
-#define XEMACPS_HDR_VLAN_SIZE   18	/* size of Ethernet header with VLAN */
-#define XEMACPS_TRL_SIZE        4	/* size of Ethernet trailer (FCS) */
+#define XEMACPS_MTU             1500U	/* max MTU size of Ethernet frame */
+#define XEMACPS_MTU_JUMBO       10240U	/* max MTU size of jumbo frame */
+#define XEMACPS_HDR_SIZE        14U	/* size of Ethernet header */
+#define XEMACPS_HDR_VLAN_SIZE   18U	/* size of Ethernet header with VLAN */
+#define XEMACPS_TRL_SIZE        4U	/* size of Ethernet trailer (FCS) */
 #define XEMACPS_MAX_FRAME_SIZE       (XEMACPS_MTU + XEMACPS_HDR_SIZE + \
         XEMACPS_TRL_SIZE)
 #define XEMACPS_MAX_VLAN_FRAME_SIZE  (XEMACPS_MTU + XEMACPS_HDR_SIZE + \
         XEMACPS_HDR_VLAN_SIZE + XEMACPS_TRL_SIZE)
+#define XEMACPS_MAX_VLAN_FRAME_SIZE_JUMBO  (XEMACPS_MTU_JUMBO + XEMACPS_HDR_SIZE + \
+        XEMACPS_HDR_VLAN_SIZE + XEMACPS_TRL_SIZE)
 
 /* DMACR Bust length hash defines */
 
-#define XEMACPS_SINGLE_BURST	1
-#define XEMACPS_4BYTE_BURST		4
-#define XEMACPS_8BYTE_BURST		8
-#define XEMACPS_16BYTE_BURST	16
+#define XEMACPS_SINGLE_BURST	0x00000001
+#define XEMACPS_4BYTE_BURST		0x00000004
+#define XEMACPS_8BYTE_BURST		0x00000008
+#define XEMACPS_16BYTE_BURST	0x00000010
 
 
 /**************************** Type Definitions ******************************/
@@ -492,7 +512,7 @@ typedef void (*XEmacPs_ErrHandler) (void *CallBackRef, u8 Direction,
  */
 typedef struct {
 	u16 DeviceId;	/**< Unique ID  of device */
-	u32 BaseAddress;/**< Physical base address of IPIF registers */
+	UINTPTR BaseAddress;/**< Physical base address of IPIF registers */
 } XEmacPs_Config;
 
 
@@ -501,7 +521,7 @@ typedef struct {
  * structure of this type for every XEmacPs device in the system. A pointer
  * to a structure of this type is then passed to the driver API functions.
  */
-typedef struct XEmacPs {
+typedef struct XEmacPs_Instance {
 	XEmacPs_Config Config;	/* Hardware configuration */
 	u32 IsStarted;		/* Device is currently started */
 	u32 IsReady;		/* Device is initialized and ready */
@@ -517,6 +537,11 @@ typedef struct XEmacPs {
 
 	XEmacPs_ErrHandler ErrorHandler;
 	void *ErrorRef;
+	u32 Version;
+	u32 RxBufMask;
+	u32 MaxMtuSize;
+	u32 MaxFrameSize;
+	u32 MaxVlanFrameSize;
 
 } XEmacPs;
 
@@ -574,7 +599,7 @@ typedef struct XEmacPs {
 #define XEmacPs_IntEnable(InstancePtr, Mask)                            \
 	XEmacPs_WriteReg((InstancePtr)->Config.BaseAddress,             \
 		XEMACPS_IER_OFFSET,                                     \
-		(Mask & XEMACPS_IXR_ALL_MASK));
+		((Mask) & XEMACPS_IXR_ALL_MASK));
 
 /****************************************************************************/
 /**
@@ -595,7 +620,49 @@ typedef struct XEmacPs {
 #define XEmacPs_IntDisable(InstancePtr, Mask)                           \
 	XEmacPs_WriteReg((InstancePtr)->Config.BaseAddress,             \
 		XEMACPS_IDR_OFFSET,                                     \
-		(Mask & XEMACPS_IXR_ALL_MASK));
+		((Mask) & XEMACPS_IXR_ALL_MASK));
+
+/****************************************************************************/
+/**
+*
+* Enable interrupts specified in <i>Mask</i>. The corresponding interrupt for
+* each bit set to 1 in <i>Mask</i>, will be enabled.
+*
+* @param InstancePtr is a pointer to the instance to be worked on.
+* @param Mask contains a bit mask of interrupts to enable. The mask can
+*        be formed using a set of bitwise or'd values.
+*
+* @note
+* The state of the transmitter and receiver are not modified by this function.
+* C-style signature
+*     void XEmacPs_IntQ1Enable(XEmacPs *InstancePtr, u32 Mask)
+*
+*****************************************************************************/
+#define XEmacPs_IntQ1Enable(InstancePtr, Mask)                            \
+	XEmacPs_WriteReg((InstancePtr)->Config.BaseAddress,             \
+		XEMACPS_INTQ1_IER_OFFSET,                                \
+		((Mask) & XEMACPS_INTQ1_IXR_ALL_MASK));
+
+/****************************************************************************/
+/**
+*
+* Disable interrupts specified in <i>Mask</i>. The corresponding interrupt for
+* each bit set to 1 in <i>Mask</i>, will be enabled.
+*
+* @param InstancePtr is a pointer to the instance to be worked on.
+* @param Mask contains a bit mask of interrupts to disable. The mask can
+*        be formed using a set of bitwise or'd values.
+*
+* @note
+* The state of the transmitter and receiver are not modified by this function.
+* C-style signature
+*     void XEmacPs_IntDisable(XEmacPs *InstancePtr, u32 Mask)
+*
+*****************************************************************************/
+#define XEmacPs_IntQ1Disable(InstancePtr, Mask)                           \
+	XEmacPs_WriteReg((InstancePtr)->Config.BaseAddress,             \
+		XEMACPS_INTQ1_IDR_OFFSET,                               \
+		((Mask) & XEMACPS_INTQ1_IXR_ALL_MASK));
 
 /****************************************************************************/
 /**
@@ -612,9 +679,9 @@ typedef struct XEmacPs {
 *
 *****************************************************************************/
 #define XEmacPs_Transmit(InstancePtr)                              \
-        XEmacPs_WriteReg(InstancePtr->Config.BaseAddress,          \
+        XEmacPs_WriteReg((InstancePtr)->Config.BaseAddress,          \
         XEMACPS_NWCTRL_OFFSET,                                     \
-        (XEmacPs_ReadReg(InstancePtr->Config.BaseAddress,          \
+        (XEmacPs_ReadReg((InstancePtr)->Config.BaseAddress,          \
         XEMACPS_NWCTRL_OFFSET) | XEMACPS_NWCTRL_STARTTX_MASK))
 
 /****************************************************************************/
@@ -637,7 +704,7 @@ typedef struct XEmacPs {
 *****************************************************************************/
 #define XEmacPs_IsRxCsum(InstancePtr)                                     \
         ((XEmacPs_ReadReg((InstancePtr)->Config.BaseAddress,             \
-          XEMACPS_NWCFG_OFFSET) & XEMACPS_NWCFG_RXCHKSUMEN_MASK)         \
+          XEMACPS_NWCFG_OFFSET) & XEMACPS_NWCFG_RXCHKSUMEN_MASK) != 0U     \
           ? TRUE : FALSE)
 
 /****************************************************************************/
@@ -660,7 +727,7 @@ typedef struct XEmacPs {
 *****************************************************************************/
 #define XEmacPs_IsTxCsum(InstancePtr)                                     \
         ((XEmacPs_ReadReg((InstancePtr)->Config.BaseAddress,              \
-          XEMACPS_DMACR_OFFSET) & XEMACPS_DMACR_TCPCKSUM_MASK)           \
+          XEMACPS_DMACR_OFFSET) & XEMACPS_DMACR_TCPCKSUM_MASK) != 0U       \
           ? TRUE : FALSE)
 
 /************************** Function Prototypes *****************************/
@@ -668,11 +735,13 @@ typedef struct XEmacPs {
 /*
  * Initialization functions in xemacps.c
  */
-int XEmacPs_CfgInitialize(XEmacPs *InstancePtr, XEmacPs_Config *CfgPtr,
-			   u32 EffectiveAddress);
+LONG XEmacPs_CfgInitialize(XEmacPs *InstancePtr, XEmacPs_Config *CfgPtr,
+			   UINTPTR EffectiveAddress);
 void XEmacPs_Start(XEmacPs *InstancePtr);
 void XEmacPs_Stop(XEmacPs *InstancePtr);
 void XEmacPs_Reset(XEmacPs *InstancePtr);
+void XEmacPs_SetQueuePtr(XEmacPs *InstancePtr, UINTPTR QPtr, u8 QueueNum,
+			 u16 Direction);
 
 /*
  * Lookup configuration in xemacps_sinit.c
@@ -683,21 +752,22 @@ XEmacPs_Config *XEmacPs_LookupConfig(u16 DeviceId);
  * Interrupt-related functions in xemacps_intr.c
  * DMA only and FIFO is not supported. This DMA does not support coalescing.
  */
-int XEmacPs_SetHandler(XEmacPs *InstancePtr, u32 HandlerType,
-			void *FuncPtr, void *CallBackRef);
-void XEmacPs_IntrHandler(void *InstancePtr);
+LONG XEmacPs_SetHandler(XEmacPs *InstancePtr, u32 HandlerType,
+			void *FuncPointer, void *CallBackRef);
+void XEmacPs_IntrHandler(void *XEmacPsPtr);
 
 /*
  * MAC configuration/control functions in XEmacPs_control.c
  */
-int XEmacPs_SetOptions(XEmacPs *InstancePtr, u32 Options);
-int XEmacPs_ClearOptions(XEmacPs *InstancePtr, u32 Options);
+LONG XEmacPs_SetOptions(XEmacPs *InstancePtr, u32 Options);
+LONG XEmacPs_ClearOptions(XEmacPs *InstancePtr, u32 Options);
 u32 XEmacPs_GetOptions(XEmacPs *InstancePtr);
 
-int XEmacPs_SetMacAddress(XEmacPs *InstancePtr, void *AddressPtr, u8 Index);
+LONG XEmacPs_SetMacAddress(XEmacPs *InstancePtr, void *AddressPtr, u8 Index);
+LONG XEmacPs_DeleteHash(XEmacPs *InstancePtr, void *AddressPtr);
 void XEmacPs_GetMacAddress(XEmacPs *InstancePtr, void *AddressPtr, u8 Index);
 
-int XEmacPs_SetHash(XEmacPs *InstancePtr, void *AddressPtr);
+LONG XEmacPs_SetHash(XEmacPs *InstancePtr, void *AddressPtr);
 void XEmacPs_ClearHash(XEmacPs *InstancePtr);
 void XEmacPs_GetHash(XEmacPs *InstancePtr, void *AddressPtr);
 
@@ -705,17 +775,18 @@ void XEmacPs_SetMdioDivisor(XEmacPs *InstancePtr,
 				XEmacPs_MdcDiv Divisor);
 void XEmacPs_SetOperatingSpeed(XEmacPs *InstancePtr, u16 Speed);
 u16 XEmacPs_GetOperatingSpeed(XEmacPs *InstancePtr);
-int XEmacPs_PhyRead(XEmacPs *InstancePtr, u32 PhyAddress,
+LONG XEmacPs_PhyRead(XEmacPs *InstancePtr, u32 PhyAddress,
 		     u32 RegisterNum, u16 *PhyDataPtr);
-int XEmacPs_PhyWrite(XEmacPs *InstancePtr, u32 PhyAddress,
+LONG XEmacPs_PhyWrite(XEmacPs *InstancePtr, u32 PhyAddress,
 		      u32 RegisterNum, u16 PhyData);
-int XEmacPs_SetTypeIdCheck(XEmacPs *InstancePtr, u32 Id_Check, u8 Index);
+LONG XEmacPs_SetTypeIdCheck(XEmacPs *InstancePtr, u32 Id_Check, u8 Index);
 
-int XEmacPs_SendPausePacket(XEmacPs *InstancePtr);
-void XEmacPs_DMABLengthUpdate(XEmacPs *InstancePtr, int BLength);
+LONG XEmacPs_SendPausePacket(XEmacPs *InstancePtr);
+void XEmacPs_DMABLengthUpdate(XEmacPs *InstancePtr, s32 BLength);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* end of protection macro */
+/** @} */

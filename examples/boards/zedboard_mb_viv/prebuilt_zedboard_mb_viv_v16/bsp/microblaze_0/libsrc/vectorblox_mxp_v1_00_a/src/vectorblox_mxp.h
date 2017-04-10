@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@
  * @defgroup VectorBlox_MXP VectorBlox MXP
  * @brief Details the instance of our VectorBlox MXP processor
  *
- * @ingroup VBXapi 
+ * @ingroup VBXapi
  */
 /**@{*/
 
@@ -51,7 +51,7 @@
 extern "C" {
 #endif
 
-#if __NIOS2__
+#if defined(__NIOS2__)
 #include "vectorblox_mxp_nios.h"
 #else
 #include "vectorblox_mxp_xil.h"

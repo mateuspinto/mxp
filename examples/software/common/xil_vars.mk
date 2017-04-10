@@ -52,6 +52,7 @@ endif
 CC_FLAGS = -Wall -c -fmessage-length=0 $(CMACRO_DEFS) $(EXTRA_CC_FLAGS)
 CXX_FLAGS = -fno-rtti -fno-exceptions $(CC_FLAGS)
 
+ifndef CROSS_COMPILER
 ifeq ($(SIMULATOR),true)
 CROSS_COMPILER=
 else ifeq ($(OS_TARGET),LINUX)
@@ -61,7 +62,7 @@ CROSS_COMPILER=mb-
 else
 CROSS_COMPILER=arm-xilinx-eabi-
 endif
-
+endif
 CC := $(CROSS_COMPILER)gcc
 CXX := $(CROSS_COMPILER)gcc -xc++
 LD := $(CROSS_COMPILER)gcc
@@ -114,5 +115,6 @@ OBJ_DIR = $(OBJ_ROOT_DIR)/$(CC)
 
 
 OBJS := $(addprefix $(OBJ_DIR)/,$(notdir $(patsubst %.c,%.o,$(filter %.c,$(C_SRCS)))))
+OBJS += $(addprefix $(OBJ_DIR)/,$(notdir $(patsubst %.S,%.o,$(filter %.S,$(C_SRCS)))))
 OBJS += $(addprefix $(OBJ_DIR)/,$(notdir $(patsubst %.cpp,%.o,$(filter %.cpp,$(CXX_SRCS)))))
 C_DEPS := $(OBJS:.o=.d)

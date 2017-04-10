@@ -1,1 +1,1 @@
-C_SRCS += test.c
+C_SRCS += $(wildcard *.c)

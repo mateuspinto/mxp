@@ -1,8 +1,8 @@
---Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
+--Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2014.2 (lin64) Build 928826 Thu Jun  5 17:55:10 MDT 2014
---Date        : Mon Mar 28 14:29:44 2016
---Host        : avx running 64-bit Ubuntu 14.04.3 LTS
+--Tool Version: Vivado v.2016.2 (lin64) Build 1577090 Thu Jun  2 16:32:35 MDT 2016
+--Date        : Tue Apr 11 12:00:03 2017
+--Host        : avx running 64-bit Ubuntu 16.04.2 LTS
 --Command     : generate_target system_wrapper.bd
 --Design      : system_wrapper
 --Purpose     : IP block netlist
@@ -65,7 +65,7 @@ architecture STRUCTURE of system_wrapper is
   end component system;
 begin
 system_i: component system
-    port map (
+     port map (
       DDR_addr(14 downto 0) => DDR_addr(14 downto 0),
       DDR_ba(2 downto 0) => DDR_ba(2 downto 0),
       DDR_cas_n => DDR_cas_n,

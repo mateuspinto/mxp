@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (C) 2012-2016 VectorBlox Computing, Inc.
+# Copyright (C) 2012-2017 VectorBlox Computing, Inc.
 #
 ###########################################################################
 
@@ -28,6 +28,7 @@ proc generate {drv_handle} {
         "MASK_PARTITIONS" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \
+        "FIXED_POINT_SUPPORT" \
         "MULFXP_WORD_FRACTION_BITS" \
         "MULFXP_HALF_FRACTION_BITS" \
         "MULFXP_BYTE_FRACTION_BITS" \
@@ -96,6 +97,7 @@ proc generate {drv_handle} {
         "MASK_PARTITIONS" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \
+        "FIXED_POINT_SUPPORT" \
         "MULFXP_WORD_FRACTION_BITS" \
         "MULFXP_HALF_FRACTION_BITS" \
         "MULFXP_BYTE_FRACTION_BITS" \
@@ -199,6 +201,7 @@ proc generate {drv_handle} {
         "MASK_PARTITIONS" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \
+        "FIXED_POINT_SUPPORT" \
         "MULFXP_WORD_FRACTION_BITS" \
         "MULFXP_HALF_FRACTION_BITS" \
         "MULFXP_BYTE_FRACTION_BITS" \

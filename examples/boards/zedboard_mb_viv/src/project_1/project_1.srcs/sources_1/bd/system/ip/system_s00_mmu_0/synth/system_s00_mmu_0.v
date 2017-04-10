@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -48,11 +48,12 @@
 
 
 // IP VLNV: xilinx.com:ip:axi_mmu:2.1
-// IP Revision: 0
+// IP Revision: 7
 
-(* X_CORE_INFO = "axi_mmu_v2_1_top,Vivado 2014.2" *)
-(* CHECK_LICENSE_TYPE = "system_s00_mmu_0,axi_mmu_v2_1_top,{}" *)
-(* CORE_GENERATION_INFO = "system_s00_mmu_0,axi_mmu_v2_1_top,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_mmu,x_ipVersion=2.1,x_ipCoreRevision=0,x_ipLanguage=VHDL,C_FAMILY=zynq,C_AXI_PROTOCOL=2,C_AXI_ID_WIDTH=1,C_S_AXI_ADDR_WIDTH=32,C_M_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=32,C_AXI_SUPPORTS_USER_SIGNALS=0,C_AXI_AWUSER_WIDTH=1,C_AXI_ARUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_NUM_RANGES=6,C_BASE_ADDR=0x00000000fc00000000000000e0000000000000008000000000000000700000000000000041c000000000000041400000,C_RANGE_SIZE=0x00000018000000160000001d00000010000000100000000c,C_USES_DEST=0,C_DEST_WIDTH=1,C_DEST=0x0000000000000000,C_PREFIX_WIDTH=1,C_PREFIX=0x0000000000000000,C_S_AXI_SUPPORTS_WRITE=1,C_S_AXI_SUPPORTS_READ=1,C_M_AXI_SUPPORTS_WRITE=0b111111,C_M_AXI_SUPPORTS_READ=0b111111}" *)
+(* X_CORE_INFO = "axi_mmu_v2_1_7_top,Vivado 2016.2" *)
+(* CHECK_LICENSE_TYPE = "system_s00_mmu_0,axi_mmu_v2_1_7_top,{}" *)
+(* CORE_GENERATION_INFO = "system_s00_mmu_0,axi_mmu_v2_1_7_top,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=axi_mmu,x_ipVersion=2.1,x_ipCoreRevision=7,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=zynq,C_AXI_PROTOCOL=2,C_AXI_ID_WIDTH=1,C_S_AXI_ADDR_WIDTH=32,C_M_AXI_ADDR_WIDTH=32,C_AXI_DATA_WIDTH=32,C_AXI_SUPPORTS_USER_SIGNALS=0,C_AXI_AWUSER_WIDTH=1,C_AXI_ARUSER_WIDTH=1,C_AXI_WUSER_WIDTH=1,C_AXI_RUSER_WIDTH=1,C_AXI_BUSER_WIDTH=1,C_NUM_RANGES=6,C_BASE_ADDR=0x00000000fc00000000000000e0000000000\
+000008000000000000000700000000000000041c000000000000041400000,C_RANGE_SIZE=0x00000018000000160000001d00000010000000100000000c,C_USES_DEST=0,C_DEST_WIDTH=1,C_DEST=0x0000000000000000,C_PREFIX_WIDTH=1,C_PREFIX=0x0000000000000000,C_S_AXI_SUPPORTS_WRITE=1,C_S_AXI_SUPPORTS_READ=1,C_M_AXI_SUPPORTS_WRITE=0b111111,C_M_AXI_SUPPORTS_READ=0b111111}" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module system_s00_mmu_0 (
   aclk,
@@ -178,7 +179,7 @@ input wire m_axi_rvalid;
 (* X_INTERFACE_INFO = "xilinx.com:interface:aximm:1.0 M_AXI RREADY" *)
 output wire m_axi_rready;
 
-  axi_mmu_v2_1_top #(
+  axi_mmu_v2_1_7_top #(
     .C_FAMILY("zynq"),
     .C_AXI_PROTOCOL(2),
     .C_AXI_ID_WIDTH(1),
@@ -210,7 +211,7 @@ output wire m_axi_rready;
     .s_axi_awaddr(s_axi_awaddr),
     .s_axi_awlen(8'H00),
     .s_axi_awsize(3'H0),
-    .s_axi_awburst(2'H0),
+    .s_axi_awburst(2'H1),
     .s_axi_awlock(1'H0),
     .s_axi_awcache(4'H0),
     .s_axi_awprot(s_axi_awprot),
@@ -234,7 +235,7 @@ output wire m_axi_rready;
     .s_axi_araddr(s_axi_araddr),
     .s_axi_arlen(8'H00),
     .s_axi_arsize(3'H0),
-    .s_axi_arburst(2'H0),
+    .s_axi_arburst(2'H1),
     .s_axi_arlock(1'H0),
     .s_axi_arcache(4'H0),
     .s_axi_arprot(s_axi_arprot),

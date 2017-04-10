@@ -1,6 +1,6 @@
 # +-----------------------------------
 # |
-# | Copyright (C) 2012-2016 VectorBlox Computing, Inc.
+# | Copyright (C) 2012-2017 VectorBlox Computing, Inc.
 # |
 # +-----------------------------------
 
@@ -150,8 +150,9 @@ proc common_add_files {entity_name fileset} {
     set mulfxp_byte_fraction_bits \
         [get_parameter_value MULFXP_BYTE_FRACTION_BITS]
     # Convert true/false to 1/0.
-    set max_masked_waves   [get_parameter_value MAX_MASKED_WAVES]
-    set mask_partitions    [get_parameter_value MASK_PARTITIONS]
+    set max_masked_waves    [get_parameter_value MAX_MASKED_WAVES]
+    set mask_partitions     [get_parameter_value MASK_PARTITIONS]
+    set fixed_point_support [get_parameter_value FIXED_POINT_SUPPORT]
 
     foreach p [get_parameters] {
         send_message Info "$p = [get_parameter_value $p]"
@@ -254,6 +255,8 @@ proc common_add_files {entity_name fileset} {
                 "\\1$max_masked_waves" line
             regsub {(MASK_PARTITIONS.*=>[ \t]*)([^ \t,]+)} $line \
                 "\\1$mask_partitions" line
+            regsub {(FIXED_POINT_SUPPORT.*=>[ \t]*)([^ \t,]+)} $line \
+                "\\1[string is true -strict $fixed_point_support]" line
             regsub {(MIN_MULTIPLIER_HW.*=>[ \t]*)([^ \t,]+)} $line \
                 "\\1$min_multiplier_hw" line
             regsub {(MULFXP_WORD_FRACTION_BITS.*=>[ \t]*)([^ \t,]+)} $line \
@@ -519,6 +522,11 @@ for {set vci 0} {$vci < 16} {incr vci} {
 
 ###########################################################################
 set fxp_grp "Fixed-Point Multiply Format"
+
+add_parameter FIXED_POINT_SUPPORT BOOLEAN TRUE
+set_parameter_property FIXED_POINT_SUPPORT DISPLAY_NAME "Fixed Point Support"
+set_parameter_property FIXED_POINT_SUPPORT DESCRIPTION "Support fixed-point operations (VMULFXP, VADDFXP, VSUBFXP)."
+set_parameter_property FIXED_POINT_SUPPORT GROUP $fxp_grp
 
 add_parameter MULFXP_WORD_FRACTION_BITS INTEGER 25
 set_parameter_property MULFXP_WORD_FRACTION_BITS DISPLAY_NAME \
@@ -1362,6 +1370,8 @@ proc elaboration_callback {} {
         set params_valid false
     }
 
+    set fixed_point_support [get_parameter_value FIXED_POINT_SUPPORT]
+    
     ######################################################################
     # Set CMacros.
     set_module_assignment embeddedsw.CMacro.VECTOR_LANES $vector_lanes
@@ -1380,6 +1390,7 @@ proc elaboration_callback {} {
     # Convert true/false to 1/0.
     set_module_assignment embeddedsw.CMacro.MAX_MASKED_VECTOR_LENGTH [expr $max_masked_waves * $vector_lanes * 4]
     set_module_assignment embeddedsw.CMacro.MASK_PARTITIONS $mask_partitions
+    set_module_assignment embeddedsw.CMacro.FIXED_POINT_SUPPORT [string is true -strict $fixed_point_support]
     set_module_assignment embeddedsw.CMacro.MULFXP_WORD_FRACTION_BITS $word_qn
     set_module_assignment embeddedsw.CMacro.MULFXP_HALF_FRACTION_BITS $half_qn
     set_module_assignment embeddedsw.CMacro.MULFXP_BYTE_FRACTION_BITS $byte_qn

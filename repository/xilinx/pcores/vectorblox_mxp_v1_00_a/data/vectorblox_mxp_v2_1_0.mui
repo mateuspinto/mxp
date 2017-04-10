@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- Copyright (C) 2013-2016 VectorBlox Computing, Inc. -->
+<!-- Copyright (C) 2013-2017 VectorBlox Computing, Inc. -->
 
 <!DOCTYPE doc SYSTEM "../../ipdialog.dtd" [
 
@@ -66,6 +66,15 @@
         <key>MASK_PARTITIONS</key>
         <label>Number of Mask Partitions</label>
         <tip>Changes the granularity of masked instructions. Currently only 1
+        (enabled) and 0 (disabled) supported.</tip>
+    </widget>
+    '>
+
+    <!ENTITY FIXED_POINT_SUPPORT '
+    <widget id="FIXED_POINT_SUPPORT">
+        <key>FIXED_POINT_SUPPORT</key>
+        <label>Fixed-point support</label>
+        <tip>Fixed-point support. Currently only 1
         (enabled) and 0 (disabled) supported.</tip>
     </widget>
     '>
@@ -1036,6 +1045,7 @@
             <item>&BURSTLENGTH_BYTES;</item>
             <item>&MAX_MASKED_WAVES;</item>
             <item>&MASK_PARTITIONS;</item>
+            <item>&FIXED_POINT_SUPPORT;</item>
             <item>&VECTOR_CUSTOM_INSTRUCTIONS;</item>
             <item>&SCRATCHPAD_KB;</item>
             <item>&MIN_MULTIPLIER_HW;</item>

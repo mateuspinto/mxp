@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,6 +60,10 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+#if defined(_MSC_VER)
+	//Visual studio doesn't have __attribute__s
+#define __attribute__(...)
 #endif
 #include "vendor.h"
 //figure out target from builtin compilier defines

@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -140,9 +140,8 @@ ENTITY system_vectorblox_mxp_arm_0_0 IS
 END system_vectorblox_mxp_arm_0_0;
 
 ARCHITECTURE system_vectorblox_mxp_arm_0_0_arch OF system_vectorblox_mxp_arm_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF system_vectorblox_mxp_arm_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT vectorblox_mxp IS
     GENERIC (
       VECTOR_LANES : INTEGER;
@@ -150,6 +149,7 @@ ARCHITECTURE system_vectorblox_mxp_arm_0_0_arch OF system_vectorblox_mxp_arm_0_0
       BURSTLENGTH_BYTES : INTEGER;
       MAX_MASKED_WAVES : INTEGER;
       MASK_PARTITIONS : INTEGER;
+      FIXED_POINT_SUPPORT : INTEGER;
       MIN_MULTIPLIER_HW : INTEGER;
       MULFXP_WORD_FRACTION_BITS : INTEGER;
       MULFXP_HALF_FRACTION_BITS : INTEGER;
@@ -607,9 +607,9 @@ ARCHITECTURE system_vectorblox_mxp_arm_0_0_arch OF system_vectorblox_mxp_arm_0_0
     );
   END COMPONENT vectorblox_mxp;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF system_vectorblox_mxp_arm_0_0_arch: ARCHITECTURE IS "vectorblox_mxp,Vivado 2014.2";
+  ATTRIBUTE X_CORE_INFO OF system_vectorblox_mxp_arm_0_0_arch: ARCHITECTURE IS "vectorblox_mxp,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
-  ATTRIBUTE CHECK_LICENSE_TYPE OF system_vectorblox_mxp_arm_0_0_arch : ARCHITECTURE IS "system_vectorblox_mxp_arm_0_0,vectorblox_mxp,{ipvblox_mxp_1_0=BOUGHT}";
+  ATTRIBUTE CHECK_LICENSE_TYPE OF system_vectorblox_mxp_arm_0_0_arch : ARCHITECTURE IS "system_vectorblox_mxp_arm_0_0,vectorblox_mxp,{ipvblox_mxp_2017=bought}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF core_clk: SIGNAL IS "xilinx.com:signal:clock:1.0 aclk_intf CLK";
   ATTRIBUTE X_INTERFACE_INFO OF aresetn: SIGNAL IS "xilinx.com:signal:reset:1.0 aresetn_intf RST";
@@ -696,6 +696,7 @@ BEGIN
       BURSTLENGTH_BYTES => 128,
       MAX_MASKED_WAVES => 256,
       MASK_PARTITIONS => 1,
+      FIXED_POINT_SUPPORT => 1,
       MIN_MULTIPLIER_HW => 0,
       MULFXP_WORD_FRACTION_BITS => 16,
       MULFXP_HALF_FRACTION_BITS => 15,

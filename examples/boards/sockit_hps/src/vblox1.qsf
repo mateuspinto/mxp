@@ -1080,20 +1080,18 @@ set_location_assignment PIN_AE26 -to clk_i2c_sclk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_i2c_sdat
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_i2c_sclk
 set_location_assignment PIN_AJ29 -to clk_i2c_sdat
-set_global_assignment -name VERILOG_FILE ip/altsource_probe/hps_reset.v
-set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
-set_global_assignment -name VERILOG_FILE ip/edge_detect/altera_edge_detector.v
-set_global_assignment -name SDC_FILE soc_system_timing.sdc
+set_global_assignment -name VERILOG_FILE systems/sockit_hps/ip/altsource_probe/hps_reset.v
+set_global_assignment -name VERILOG_FILE systems/sockit_hps/ip/debounce/debounce.v
+set_global_assignment -name VERILOG_FILE systems/sockit_hps/ip/edge_detect/altera_edge_detector.v
+set_global_assignment -name SDC_FILE systems/sockit_hps/soc_system_timing.sdc
 set_global_assignment -name QIP_FILE vblox1/synthesis/vblox1.qip
-set_global_assignment -name VERILOG_FILE top/config_soc.v
-set_global_assignment -name VERILOG_FILE top/ghrd_top.v
-#set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis
-#set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis/submodules/
-#set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis/submodules/sequencer
-set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 2.0
-set_global_assignment -name FITTER_AGGRESSIVE_ROUTABILITY_OPTIMIZATION ALWAYS
-set_global_assignment -name ROUTER_CLOCKING_TOPOLOGY_ANALYSIS ON
+set_global_assignment -name VERILOG_FILE systems/sockit_hps/top/config_soc.v
+set_global_assignment -name VERILOG_FILE systems/sockit_hps/top/ghrd_top.v
+set_global_assignment -name SIGNALTAP_FILE systems/sockit_hps/cti_tapping.stp
+set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis
+set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis/submodules/
+set_global_assignment -name SEARCH_PATH /nfs/home/joel/Documents/vblox.altera/vblox1/synthesis/submodules/sequencer
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC_FOR_AREA ON
 set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC ON
 set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING ON
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

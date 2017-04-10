@@ -1,6 +1,6 @@
 -- Aaron Severance
 -- vci_configurable_lut_util_pkg.vhd
--- Copyright (C) 2012-2016 VectorBlox Computing, Inc.
+-- Copyright (C) 2012-2017 VectorBlox Computing, Inc.
 
 -- synthesis library vci_configurable_lut_lib
 library IEEE;

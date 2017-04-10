@@ -1,4 +1,4 @@
--- (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+-- (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
 -- 
 -- This file contains confidential and proprietary information
 -- of Xilinx, Inc. and is protected under U.S. and
@@ -46,15 +46,15 @@
 -- 
 -- DO NOT MODIFY THIS FILE.
 
--- IP VLNV: xilinx.com:ip:mdm:3.1
--- IP Revision: 1
+-- IP VLNV: xilinx.com:ip:mdm:3.2
+-- IP Revision: 6
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY mdm_v3_1;
-USE mdm_v3_1.MDM;
+LIBRARY mdm_v3_2_6;
+USE mdm_v3_2_6.MDM;
 
 ENTITY system_mdm_0_0 IS
   PORT (
@@ -91,9 +91,8 @@ ENTITY system_mdm_0_0 IS
 END system_mdm_0_0;
 
 ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
-  ATTRIBUTE DowngradeIPIdentifiedWarnings : string;
+  ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
   ATTRIBUTE DowngradeIPIdentifiedWarnings OF system_mdm_0_0_arch: ARCHITECTURE IS "yes";
-
   COMPONENT MDM IS
     GENERIC (
       C_FAMILY : STRING;
@@ -106,20 +105,30 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       C_DBG_REG_ACCESS : INTEGER;
       C_DBG_MEM_ACCESS : INTEGER;
       C_USE_CROSS_TRIGGER : INTEGER;
+      C_TRACE_OUTPUT : INTEGER;
+      C_TRACE_DATA_WIDTH : INTEGER;
+      C_TRACE_CLK_FREQ_HZ : INTEGER;
+      C_TRACE_CLK_OUT_PHASE : INTEGER;
       C_S_AXI_ADDR_WIDTH : INTEGER;
       C_S_AXI_DATA_WIDTH : INTEGER;
       C_S_AXI_ACLK_FREQ_HZ : INTEGER;
       C_M_AXI_ADDR_WIDTH : INTEGER;
       C_M_AXI_DATA_WIDTH : INTEGER;
       C_M_AXI_THREAD_ID_WIDTH : INTEGER;
-      C_DATA_SIZE : INTEGER
+      C_DATA_SIZE : INTEGER;
+      C_M_AXIS_DATA_WIDTH : INTEGER;
+      C_M_AXIS_ID_WIDTH : INTEGER
     );
     PORT (
       Config_Reset : IN STD_LOGIC;
+      Scan_Reset : IN STD_LOGIC;
+      Scan_Reset_Sel : IN STD_LOGIC;
       S_AXI_ACLK : IN STD_LOGIC;
       S_AXI_ARESETN : IN STD_LOGIC;
       M_AXI_ACLK : IN STD_LOGIC;
       M_AXI_ARESETN : IN STD_LOGIC;
+      M_AXIS_ACLK : IN STD_LOGIC;
+      M_AXIS_ARESETN : IN STD_LOGIC;
       Interrupt : OUT STD_LOGIC;
       Ext_BRK : OUT STD_LOGIC;
       Ext_NM_BRK : OUT STD_LOGIC;
@@ -546,6 +555,14 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       LMB_CE_31 : IN STD_LOGIC;
       LMB_UE_31 : IN STD_LOGIC;
       LMB_Wait_31 : IN STD_LOGIC;
+      M_AXIS_TDATA : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+      M_AXIS_TID : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+      M_AXIS_TREADY : IN STD_LOGIC;
+      M_AXIS_TVALID : OUT STD_LOGIC;
+      TRACE_CLK_OUT : OUT STD_LOGIC;
+      TRACE_CLK : IN STD_LOGIC;
+      TRACE_CTL : OUT STD_LOGIC;
+      TRACE_DATA : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
       Dbg_Clk_0 : OUT STD_LOGIC;
       Dbg_TDI_0 : OUT STD_LOGIC;
       Dbg_TDO_0 : IN STD_LOGIC;
@@ -558,6 +575,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_0 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_0 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_0 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_0 : OUT STD_LOGIC;
+      Dbg_TrData_0 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_0 : OUT STD_LOGIC;
+      Dbg_TrValid_0 : IN STD_LOGIC;
       Dbg_Clk_1 : OUT STD_LOGIC;
       Dbg_TDI_1 : OUT STD_LOGIC;
       Dbg_TDO_1 : IN STD_LOGIC;
@@ -570,6 +591,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_1 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_1 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_1 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_1 : OUT STD_LOGIC;
+      Dbg_TrData_1 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_1 : OUT STD_LOGIC;
+      Dbg_TrValid_1 : IN STD_LOGIC;
       Dbg_Clk_2 : OUT STD_LOGIC;
       Dbg_TDI_2 : OUT STD_LOGIC;
       Dbg_TDO_2 : IN STD_LOGIC;
@@ -582,6 +607,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_2 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_2 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_2 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_2 : OUT STD_LOGIC;
+      Dbg_TrData_2 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_2 : OUT STD_LOGIC;
+      Dbg_TrValid_2 : IN STD_LOGIC;
       Dbg_Clk_3 : OUT STD_LOGIC;
       Dbg_TDI_3 : OUT STD_LOGIC;
       Dbg_TDO_3 : IN STD_LOGIC;
@@ -594,6 +623,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_3 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_3 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_3 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_3 : OUT STD_LOGIC;
+      Dbg_TrData_3 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_3 : OUT STD_LOGIC;
+      Dbg_TrValid_3 : IN STD_LOGIC;
       Dbg_Clk_4 : OUT STD_LOGIC;
       Dbg_TDI_4 : OUT STD_LOGIC;
       Dbg_TDO_4 : IN STD_LOGIC;
@@ -606,6 +639,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_4 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_4 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_4 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_4 : OUT STD_LOGIC;
+      Dbg_TrData_4 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_4 : OUT STD_LOGIC;
+      Dbg_TrValid_4 : IN STD_LOGIC;
       Dbg_Clk_5 : OUT STD_LOGIC;
       Dbg_TDI_5 : OUT STD_LOGIC;
       Dbg_TDO_5 : IN STD_LOGIC;
@@ -618,6 +655,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_5 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_5 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_5 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_5 : OUT STD_LOGIC;
+      Dbg_TrData_5 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_5 : OUT STD_LOGIC;
+      Dbg_TrValid_5 : IN STD_LOGIC;
       Dbg_Clk_6 : OUT STD_LOGIC;
       Dbg_TDI_6 : OUT STD_LOGIC;
       Dbg_TDO_6 : IN STD_LOGIC;
@@ -630,6 +671,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_6 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_6 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_6 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_6 : OUT STD_LOGIC;
+      Dbg_TrData_6 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_6 : OUT STD_LOGIC;
+      Dbg_TrValid_6 : IN STD_LOGIC;
       Dbg_Clk_7 : OUT STD_LOGIC;
       Dbg_TDI_7 : OUT STD_LOGIC;
       Dbg_TDO_7 : IN STD_LOGIC;
@@ -642,6 +687,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_7 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_7 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_7 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_7 : OUT STD_LOGIC;
+      Dbg_TrData_7 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_7 : OUT STD_LOGIC;
+      Dbg_TrValid_7 : IN STD_LOGIC;
       Dbg_Clk_8 : OUT STD_LOGIC;
       Dbg_TDI_8 : OUT STD_LOGIC;
       Dbg_TDO_8 : IN STD_LOGIC;
@@ -654,6 +703,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_8 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_8 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_8 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_8 : OUT STD_LOGIC;
+      Dbg_TrData_8 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_8 : OUT STD_LOGIC;
+      Dbg_TrValid_8 : IN STD_LOGIC;
       Dbg_Clk_9 : OUT STD_LOGIC;
       Dbg_TDI_9 : OUT STD_LOGIC;
       Dbg_TDO_9 : IN STD_LOGIC;
@@ -666,6 +719,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_9 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_9 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_9 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_9 : OUT STD_LOGIC;
+      Dbg_TrData_9 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_9 : OUT STD_LOGIC;
+      Dbg_TrValid_9 : IN STD_LOGIC;
       Dbg_Clk_10 : OUT STD_LOGIC;
       Dbg_TDI_10 : OUT STD_LOGIC;
       Dbg_TDO_10 : IN STD_LOGIC;
@@ -678,6 +735,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_10 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_10 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_10 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_10 : OUT STD_LOGIC;
+      Dbg_TrData_10 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_10 : OUT STD_LOGIC;
+      Dbg_TrValid_10 : IN STD_LOGIC;
       Dbg_Clk_11 : OUT STD_LOGIC;
       Dbg_TDI_11 : OUT STD_LOGIC;
       Dbg_TDO_11 : IN STD_LOGIC;
@@ -690,6 +751,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_11 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_11 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_11 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_11 : OUT STD_LOGIC;
+      Dbg_TrData_11 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_11 : OUT STD_LOGIC;
+      Dbg_TrValid_11 : IN STD_LOGIC;
       Dbg_Clk_12 : OUT STD_LOGIC;
       Dbg_TDI_12 : OUT STD_LOGIC;
       Dbg_TDO_12 : IN STD_LOGIC;
@@ -702,6 +767,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_12 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_12 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_12 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_12 : OUT STD_LOGIC;
+      Dbg_TrData_12 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_12 : OUT STD_LOGIC;
+      Dbg_TrValid_12 : IN STD_LOGIC;
       Dbg_Clk_13 : OUT STD_LOGIC;
       Dbg_TDI_13 : OUT STD_LOGIC;
       Dbg_TDO_13 : IN STD_LOGIC;
@@ -714,6 +783,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_13 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_13 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_13 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_13 : OUT STD_LOGIC;
+      Dbg_TrData_13 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_13 : OUT STD_LOGIC;
+      Dbg_TrValid_13 : IN STD_LOGIC;
       Dbg_Clk_14 : OUT STD_LOGIC;
       Dbg_TDI_14 : OUT STD_LOGIC;
       Dbg_TDO_14 : IN STD_LOGIC;
@@ -726,6 +799,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_14 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_14 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_14 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_14 : OUT STD_LOGIC;
+      Dbg_TrData_14 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_14 : OUT STD_LOGIC;
+      Dbg_TrValid_14 : IN STD_LOGIC;
       Dbg_Clk_15 : OUT STD_LOGIC;
       Dbg_TDI_15 : OUT STD_LOGIC;
       Dbg_TDO_15 : IN STD_LOGIC;
@@ -738,6 +815,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_15 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_15 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_15 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_15 : OUT STD_LOGIC;
+      Dbg_TrData_15 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_15 : OUT STD_LOGIC;
+      Dbg_TrValid_15 : IN STD_LOGIC;
       Dbg_Clk_16 : OUT STD_LOGIC;
       Dbg_TDI_16 : OUT STD_LOGIC;
       Dbg_TDO_16 : IN STD_LOGIC;
@@ -750,6 +831,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_16 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_16 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_16 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_16 : OUT STD_LOGIC;
+      Dbg_TrData_16 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_16 : OUT STD_LOGIC;
+      Dbg_TrValid_16 : IN STD_LOGIC;
       Dbg_Clk_17 : OUT STD_LOGIC;
       Dbg_TDI_17 : OUT STD_LOGIC;
       Dbg_TDO_17 : IN STD_LOGIC;
@@ -762,6 +847,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_17 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_17 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_17 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_17 : OUT STD_LOGIC;
+      Dbg_TrData_17 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_17 : OUT STD_LOGIC;
+      Dbg_TrValid_17 : IN STD_LOGIC;
       Dbg_Clk_18 : OUT STD_LOGIC;
       Dbg_TDI_18 : OUT STD_LOGIC;
       Dbg_TDO_18 : IN STD_LOGIC;
@@ -774,6 +863,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_18 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_18 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_18 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_18 : OUT STD_LOGIC;
+      Dbg_TrData_18 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_18 : OUT STD_LOGIC;
+      Dbg_TrValid_18 : IN STD_LOGIC;
       Dbg_Clk_19 : OUT STD_LOGIC;
       Dbg_TDI_19 : OUT STD_LOGIC;
       Dbg_TDO_19 : IN STD_LOGIC;
@@ -786,6 +879,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_19 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_19 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_19 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_19 : OUT STD_LOGIC;
+      Dbg_TrData_19 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_19 : OUT STD_LOGIC;
+      Dbg_TrValid_19 : IN STD_LOGIC;
       Dbg_Clk_20 : OUT STD_LOGIC;
       Dbg_TDI_20 : OUT STD_LOGIC;
       Dbg_TDO_20 : IN STD_LOGIC;
@@ -798,6 +895,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_20 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_20 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_20 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_20 : OUT STD_LOGIC;
+      Dbg_TrData_20 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_20 : OUT STD_LOGIC;
+      Dbg_TrValid_20 : IN STD_LOGIC;
       Dbg_Clk_21 : OUT STD_LOGIC;
       Dbg_TDI_21 : OUT STD_LOGIC;
       Dbg_TDO_21 : IN STD_LOGIC;
@@ -810,6 +911,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_21 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_21 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_21 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_21 : OUT STD_LOGIC;
+      Dbg_TrData_21 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_21 : OUT STD_LOGIC;
+      Dbg_TrValid_21 : IN STD_LOGIC;
       Dbg_Clk_22 : OUT STD_LOGIC;
       Dbg_TDI_22 : OUT STD_LOGIC;
       Dbg_TDO_22 : IN STD_LOGIC;
@@ -822,6 +927,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_22 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_22 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_22 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_22 : OUT STD_LOGIC;
+      Dbg_TrData_22 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_22 : OUT STD_LOGIC;
+      Dbg_TrValid_22 : IN STD_LOGIC;
       Dbg_Clk_23 : OUT STD_LOGIC;
       Dbg_TDI_23 : OUT STD_LOGIC;
       Dbg_TDO_23 : IN STD_LOGIC;
@@ -834,6 +943,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_23 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_23 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_23 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_23 : OUT STD_LOGIC;
+      Dbg_TrData_23 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_23 : OUT STD_LOGIC;
+      Dbg_TrValid_23 : IN STD_LOGIC;
       Dbg_Clk_24 : OUT STD_LOGIC;
       Dbg_TDI_24 : OUT STD_LOGIC;
       Dbg_TDO_24 : IN STD_LOGIC;
@@ -846,6 +959,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_24 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_24 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_24 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_24 : OUT STD_LOGIC;
+      Dbg_TrData_24 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_24 : OUT STD_LOGIC;
+      Dbg_TrValid_24 : IN STD_LOGIC;
       Dbg_Clk_25 : OUT STD_LOGIC;
       Dbg_TDI_25 : OUT STD_LOGIC;
       Dbg_TDO_25 : IN STD_LOGIC;
@@ -858,6 +975,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_25 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_25 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_25 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_25 : OUT STD_LOGIC;
+      Dbg_TrData_25 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_25 : OUT STD_LOGIC;
+      Dbg_TrValid_25 : IN STD_LOGIC;
       Dbg_Clk_26 : OUT STD_LOGIC;
       Dbg_TDI_26 : OUT STD_LOGIC;
       Dbg_TDO_26 : IN STD_LOGIC;
@@ -870,6 +991,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_26 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_26 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_26 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_26 : OUT STD_LOGIC;
+      Dbg_TrData_26 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_26 : OUT STD_LOGIC;
+      Dbg_TrValid_26 : IN STD_LOGIC;
       Dbg_Clk_27 : OUT STD_LOGIC;
       Dbg_TDI_27 : OUT STD_LOGIC;
       Dbg_TDO_27 : IN STD_LOGIC;
@@ -882,6 +1007,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_27 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_27 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_27 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_27 : OUT STD_LOGIC;
+      Dbg_TrData_27 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_27 : OUT STD_LOGIC;
+      Dbg_TrValid_27 : IN STD_LOGIC;
       Dbg_Clk_28 : OUT STD_LOGIC;
       Dbg_TDI_28 : OUT STD_LOGIC;
       Dbg_TDO_28 : IN STD_LOGIC;
@@ -894,6 +1023,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_28 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_28 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_28 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_28 : OUT STD_LOGIC;
+      Dbg_TrData_28 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_28 : OUT STD_LOGIC;
+      Dbg_TrValid_28 : IN STD_LOGIC;
       Dbg_Clk_29 : OUT STD_LOGIC;
       Dbg_TDI_29 : OUT STD_LOGIC;
       Dbg_TDO_29 : IN STD_LOGIC;
@@ -906,6 +1039,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_29 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_29 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_29 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_29 : OUT STD_LOGIC;
+      Dbg_TrData_29 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_29 : OUT STD_LOGIC;
+      Dbg_TrValid_29 : IN STD_LOGIC;
       Dbg_Clk_30 : OUT STD_LOGIC;
       Dbg_TDI_30 : OUT STD_LOGIC;
       Dbg_TDO_30 : IN STD_LOGIC;
@@ -918,6 +1055,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_30 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_30 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_30 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_30 : OUT STD_LOGIC;
+      Dbg_TrData_30 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_30 : OUT STD_LOGIC;
+      Dbg_TrValid_30 : IN STD_LOGIC;
       Dbg_Clk_31 : OUT STD_LOGIC;
       Dbg_TDI_31 : OUT STD_LOGIC;
       Dbg_TDO_31 : IN STD_LOGIC;
@@ -930,6 +1071,10 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
       Dbg_Trig_Ack_In_31 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Out_31 : OUT STD_LOGIC_VECTOR(0 TO 7);
       Dbg_Trig_Ack_Out_31 : IN STD_LOGIC_VECTOR(0 TO 7);
+      Dbg_TrClk_31 : OUT STD_LOGIC;
+      Dbg_TrData_31 : IN STD_LOGIC_VECTOR(0 TO 35);
+      Dbg_TrReady_31 : OUT STD_LOGIC;
+      Dbg_TrValid_31 : IN STD_LOGIC;
       bscan_ext_tdi : IN STD_LOGIC;
       bscan_ext_reset : IN STD_LOGIC;
       bscan_ext_shift : IN STD_LOGIC;
@@ -949,11 +1094,12 @@ ARCHITECTURE system_mdm_0_0_arch OF system_mdm_0_0 IS
     );
   END COMPONENT MDM;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF system_mdm_0_0_arch: ARCHITECTURE IS "MDM,Vivado 2014.2";
+  ATTRIBUTE X_CORE_INFO OF system_mdm_0_0_arch: ARCHITECTURE IS "MDM,Vivado 2016.2";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF system_mdm_0_0_arch : ARCHITECTURE IS "system_mdm_0_0,MDM,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF system_mdm_0_0_arch: ARCHITECTURE IS "system_mdm_0_0,MDM,{x_ipProduct=Vivado 2014.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mdm,x_ipVersion=3.1,x_ipCoreRevision=1,x_ipLanguage=VHDL,C_FAMILY=zynq,C_JTAG_CHAIN=2,C_USE_BSCAN=0,C_USE_CONFIG_RESET=0,C_INTERCONNECT=2,C_MB_DBG_PORTS=1,C_USE_UART=1,C_DBG_REG_ACCESS=0,C_DBG_MEM_ACCESS=0,C_USE_CROSS_TRIGGER=0,C_S_AXI_ADDR_WIDTH=32,C_S_AXI_DATA_WIDTH=32,C_S_AXI_ACLK_FREQ_HZ=100000000,C_M_AXI_ADDR_WIDTH=32,C_M_AXI_DATA_WIDTH=32,C_M_AXI_THREAD_ID_WIDTH=1,C_DATA_SIZE=32}";
+  ATTRIBUTE CORE_GENERATION_INFO OF system_mdm_0_0_arch: ARCHITECTURE IS "system_mdm_0_0,MDM,{x_ipProduct=Vivado 2016.2,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=mdm,x_ipVersion=3.2,x_ipCoreRevision=6,x_ipLanguage=VHDL,x_ipSimLanguage=MIXED,C_FAMILY=zynq,C_JTAG_CHAIN=2,C_USE_BSCAN=0,C_USE_CONFIG_RESET=0,C_INTERCONNECT=2,C_MB_DBG_PORTS=1,C_USE_UART=1,C_DBG_REG_ACCESS=0,C_DBG_MEM_ACCESS=0,C_USE_CROSS_TRIGGER=0,C_TRACE_OUTPUT=0,C_TRACE_DATA_WIDTH=32,C_TRACE_CLK_FREQ_HZ=200000000,C_TRACE_CLK_OUT_PHASE=90,C_S_AXI_ADDR_WIDTH=32,C_S_AXI_DATA_WIDTH=32,C_S_AXI_ACLK_FREQ_HZ" & 
+"=100000000,C_M_AXI_ADDR_WIDTH=32,C_M_AXI_DATA_WIDTH=32,C_M_AXI_THREAD_ID_WIDTH=1,C_DATA_SIZE=32,C_M_AXIS_DATA_WIDTH=32,C_M_AXIS_ID_WIDTH=7}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF S_AXI_ACLK: SIGNAL IS "xilinx.com:signal:clock:1.0 CLK.S_AXI_ACLK CLK";
   ATTRIBUTE X_INTERFACE_INFO OF S_AXI_ARESETN: SIGNAL IS "xilinx.com:signal:reset:1.0 RST.S_AXI_ARESETN RST";
@@ -997,20 +1143,30 @@ BEGIN
       C_DBG_REG_ACCESS => 0,
       C_DBG_MEM_ACCESS => 0,
       C_USE_CROSS_TRIGGER => 0,
+      C_TRACE_OUTPUT => 0,
+      C_TRACE_DATA_WIDTH => 32,
+      C_TRACE_CLK_FREQ_HZ => 200000000,
+      C_TRACE_CLK_OUT_PHASE => 90,
       C_S_AXI_ADDR_WIDTH => 32,
       C_S_AXI_DATA_WIDTH => 32,
       C_S_AXI_ACLK_FREQ_HZ => 100000000,
       C_M_AXI_ADDR_WIDTH => 32,
       C_M_AXI_DATA_WIDTH => 32,
       C_M_AXI_THREAD_ID_WIDTH => 1,
-      C_DATA_SIZE => 32
+      C_DATA_SIZE => 32,
+      C_M_AXIS_DATA_WIDTH => 32,
+      C_M_AXIS_ID_WIDTH => 7
     )
     PORT MAP (
       Config_Reset => '0',
+      Scan_Reset => '0',
+      Scan_Reset_Sel => '0',
       S_AXI_ACLK => S_AXI_ACLK,
       S_AXI_ARESETN => S_AXI_ARESETN,
       M_AXI_ACLK => '0',
       M_AXI_ARESETN => '0',
+      M_AXIS_ACLK => '0',
+      M_AXIS_ARESETN => '0',
       Interrupt => Interrupt,
       Debug_SYS_Rst => Debug_SYS_Rst,
       Trig_In_0 => '0',
@@ -1209,6 +1365,8 @@ BEGIN
       LMB_CE_31 => '0',
       LMB_UE_31 => '0',
       LMB_Wait_31 => '0',
+      M_AXIS_TREADY => '1',
+      TRACE_CLK => '0',
       Dbg_Clk_0 => Dbg_Clk_0,
       Dbg_TDI_0 => Dbg_TDI_0,
       Dbg_TDO_0 => Dbg_TDO_0,
@@ -1219,99 +1377,163 @@ BEGIN
       Dbg_Rst_0 => Dbg_Rst_0,
       Dbg_Trig_In_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_0 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_0 => '0',
       Dbg_TDO_1 => '0',
       Dbg_Trig_In_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_1 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_1 => '0',
       Dbg_TDO_2 => '0',
       Dbg_Trig_In_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_2 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_2 => '0',
       Dbg_TDO_3 => '0',
       Dbg_Trig_In_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_3 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_3 => '0',
       Dbg_TDO_4 => '0',
       Dbg_Trig_In_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_4 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_4 => '0',
       Dbg_TDO_5 => '0',
       Dbg_Trig_In_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_5 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_5 => '0',
       Dbg_TDO_6 => '0',
       Dbg_Trig_In_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_6 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_6 => '0',
       Dbg_TDO_7 => '0',
       Dbg_Trig_In_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_7 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_7 => '0',
       Dbg_TDO_8 => '0',
       Dbg_Trig_In_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_8 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_8 => '0',
       Dbg_TDO_9 => '0',
       Dbg_Trig_In_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_9 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_9 => '0',
       Dbg_TDO_10 => '0',
       Dbg_Trig_In_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_10 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_10 => '0',
       Dbg_TDO_11 => '0',
       Dbg_Trig_In_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_11 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_11 => '0',
       Dbg_TDO_12 => '0',
       Dbg_Trig_In_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_12 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_12 => '0',
       Dbg_TDO_13 => '0',
       Dbg_Trig_In_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_13 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_13 => '0',
       Dbg_TDO_14 => '0',
       Dbg_Trig_In_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_14 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_14 => '0',
       Dbg_TDO_15 => '0',
       Dbg_Trig_In_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_15 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_15 => '0',
       Dbg_TDO_16 => '0',
       Dbg_Trig_In_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_16 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_16 => '0',
       Dbg_TDO_17 => '0',
       Dbg_Trig_In_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_17 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_17 => '0',
       Dbg_TDO_18 => '0',
       Dbg_Trig_In_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_18 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_18 => '0',
       Dbg_TDO_19 => '0',
       Dbg_Trig_In_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_19 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_19 => '0',
       Dbg_TDO_20 => '0',
       Dbg_Trig_In_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_20 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_20 => '0',
       Dbg_TDO_21 => '0',
       Dbg_Trig_In_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_21 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_21 => '0',
       Dbg_TDO_22 => '0',
       Dbg_Trig_In_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_22 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_22 => '0',
       Dbg_TDO_23 => '0',
       Dbg_Trig_In_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_23 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_23 => '0',
       Dbg_TDO_24 => '0',
       Dbg_Trig_In_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_24 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_24 => '0',
       Dbg_TDO_25 => '0',
       Dbg_Trig_In_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_25 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_25 => '0',
       Dbg_TDO_26 => '0',
       Dbg_Trig_In_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_26 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_26 => '0',
       Dbg_TDO_27 => '0',
       Dbg_Trig_In_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_27 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_27 => '0',
       Dbg_TDO_28 => '0',
       Dbg_Trig_In_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_28 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_28 => '0',
       Dbg_TDO_29 => '0',
       Dbg_Trig_In_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_29 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_29 => '0',
       Dbg_TDO_30 => '0',
       Dbg_Trig_In_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_30 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_30 => '0',
       Dbg_TDO_31 => '0',
       Dbg_Trig_In_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
       Dbg_Trig_Ack_Out_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 8)),
+      Dbg_TrData_31 => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 36)),
+      Dbg_TrValid_31 => '0',
       bscan_ext_tdi => '0',
       bscan_ext_reset => '0',
       bscan_ext_shift => '0',

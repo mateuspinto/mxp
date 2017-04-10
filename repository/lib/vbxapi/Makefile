@@ -19,7 +19,7 @@ ifeq ($(HPS),true)
 TARGET = HPS_STANDALONE
 TARGET_OPTS = -DARM_ALT_STANDALONE -mfloat-abi=softfp -mfpu=neon
 TARGET_OPTS += -I$(QUARTUS_ROOTDIR)/../embedded/ip/altera/hps/altera_hps/hwlib/include/
-TARGET_OPTS += -I$(QUARTUS_ROOTDIR)/../embedded/ip/altera/hps/altera_hps/hwlib/include/soc_cv_av/
+TARGET_OPTS += -I$(QUARTUS_ROOTDIR)/../embedded/ip/altera/hps/altera_hps/hwlib/include/soc_cv_av
 CROSS_COMPILE = arm-altera-eabi-
 ifndef SYSTEM_HEADER
 $(error Please Specify the system.h file in the SYSTEM_HEADER variable)

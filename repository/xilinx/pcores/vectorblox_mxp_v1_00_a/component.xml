@@ -12081,6 +12081,11 @@
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.MASK_PARTITIONS">1</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>FIXED_POINT_SUPPORT</spirit:name>
+        <spirit:displayName>Fixed-point Support</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.FIXED_POINT_SUPPORT">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>MIN_MULTIPLIER_HW</spirit:name>
         <spirit:displayName>Multiplier Performance</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.MIN_MULTIPLIER_HW" spirit:maximum="2" spirit:rangeType="long">0</spirit:value>
@@ -12633,6 +12638,11 @@
 	</spirit:choice>
     <spirit:choice>
       <spirit:name>xippack_UserParameter_choiceref_mask_partitions</spirit:name>
+      <spirit:enumeration>0</spirit:enumeration>
+      <spirit:enumeration>1</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>xippack_UserParameter_choiceref_fixed_point_support</spirit:name>
       <spirit:enumeration>0</spirit:enumeration>
       <spirit:enumeration>1</spirit:enumeration>
     </spirit:choice>
@@ -13575,6 +13585,11 @@
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.MASK_PARTITIONS" spirit:choiceRef="xippack_UserParameter_choiceref_mask_partitions" spirit:order="10600" spirit:configGroups="1 UnGrouped">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
+      <spirit:name>FIXED_POINT_SUPPORT</spirit:name>
+      <spirit:displayName>Fixed-point Support</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.FIXED_POINT_SUPPORT" spirit:choiceRef="xippack_UserParameter_choiceref_fixed_point_support" spirit:order="10600" spirit:configGroups="1 UnGrouped">1</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
       <spirit:name>VECTOR_CUSTOM_INSTRUCTIONS</spirit:name>
       <spirit:displayName>Number of Vector Custom Instruction (VCI) Ports</spirit:displayName>
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS" spirit:choiceRef="choices_0_to_16" spirit:order="10700" spirit:configGroups="1 UnGrouped">0</spirit:value>
@@ -14351,9 +14366,12 @@
     <xilinx:coreExtensions>
       <xilinx:supportedFamilies>
         <xilinx:family xilinx:lifeCycle="Production">zynq</xilinx:family>
+        <xilinx:family xilinx:lifeCycle="Production">zynquplus</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Production">artix7</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Production">kintex7</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Production">virtex7</xilinx:family>
+        <xilinx:family xilinx:lifeCycle="Production">virtexu</xilinx:family>
+        <xilinx:family xilinx:lifeCycle="Production">virtexuplus</xilinx:family>
       </xilinx:supportedFamilies>
       <xilinx:taxonomies>
         <xilinx:taxonomy>/BaseIP</xilinx:taxonomy>
@@ -14363,7 +14381,7 @@
       <xilinx:vendorURL>http://www.vectorblox.com</xilinx:vendorURL>
       <xilinx:coreRevision>1</xilinx:coreRevision>
       <xilinx:licenseKeys>
-        <xilinx:licenseKey xilinx:description="VectorBlox MXP">ipvblox_mxp_1_0</xilinx:licenseKey>
+        <xilinx:licenseKey xilinx:description="VectorBlox MXP">ipvblox_mxp_2017</xilinx:licenseKey>
       </xilinx:licenseKeys>
       <xilinx:paymentRequired>true</xilinx:paymentRequired>
       <xilinx:coreCreationDateTime>2014-03-07T03:52:33Z</xilinx:coreCreationDateTime>

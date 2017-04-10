@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2016 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2017 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -50,7 +50,7 @@
 // IP VLNV: vectorblox.com:ip:axi_addr_remap:1.0
 // IP Revision: 1
 
-(* X_CORE_INFO = "axi_addr_remap,Vivado 2014.2" *)
+(* X_CORE_INFO = "axi_addr_remap,Vivado 2016.2" *)
 (* CHECK_LICENSE_TYPE = "system_axi_addr_remap_0_0,axi_addr_remap,{}" *)
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module system_axi_addr_remap_0_0 (

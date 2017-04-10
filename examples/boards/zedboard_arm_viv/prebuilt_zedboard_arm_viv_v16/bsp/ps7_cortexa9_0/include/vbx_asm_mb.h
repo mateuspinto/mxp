@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -101,24 +101,24 @@ extern "C" {
 // -------------------------------------
 
 #define VBX_INSTR_QUAD(W0, W1, W2, W3) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_putw((W1)); \
 		vbx_putw((W2)); \
 		vbx_putw((W3)); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_DOUBLE(W0, W1) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_putw((W1)); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_SINGLE(W0, RETURN_VAR) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_getw((RETURN_VAR)); \
-	}VBX_E
+	}while(0)
 
 #define VBX_ASM(MODIFIERS,VMODE,VINSTR,DEST,SRCA,SRCB) \
 	VBX_INSTR_QUAD((((VINSTR) << (VBX_OPCODE_SHIFT)) | (VMODE) | (MODIFIERS)), \

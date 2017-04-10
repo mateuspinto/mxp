@@ -1,6 +1,6 @@
 # +-----------------------------------
 # |
-# | Copyright (C) 2012-2016 VectorBlox Computing, Inc.
+# | Copyright (C) 2012-2017 VectorBlox Computing, Inc.
 # |
 # +-----------------------------------
 

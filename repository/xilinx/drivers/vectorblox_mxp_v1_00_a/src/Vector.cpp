@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,13 @@
  *
  */
 
+
+#include "vbx.h"
+
+/*
+If the typechecker is disabled, then we don't support
+Vector<T> at all
+*/
 
 #include "Vector.hpp"
 int vector_mask_obj::nested=0;

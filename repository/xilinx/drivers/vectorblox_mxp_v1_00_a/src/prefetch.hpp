@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ namespace VBX{
 		T* current_in;
 		T* last_in;
 	public:
-		Prefetcher(int num,size_t chunk_size,T* first_in,T* last_in,ssize_t chunk_increment=0)
+		Prefetcher(int num,size_t chunk_size,T* first_in,T* last_in,int chunk_increment=0)
 			:num_vecs(num+1),
 			 current_vec(0),
 			 chunk_size(chunk_size),

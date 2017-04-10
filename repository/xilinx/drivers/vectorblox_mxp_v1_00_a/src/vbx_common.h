@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,11 +60,7 @@ extern "C" {
  * @retval returns minimum of x and y
  */
 #define min(x,y) \
-	({\
-		typeof(x) __x__ = (x);\
-		typeof(y) __y__ = (y);\
-		(__x__<__y__)? __x__ : __y__;\
-	})
+	(((x)<(y))? (x) : (y))
 #endif // min()
 
 #ifndef max
@@ -76,11 +72,7 @@ extern "C" {
  * @retval returns maximum of x and y
  */
 #define max(x,y) \
-	({\
-		typeof(x) __x__ = (x);\
-		typeof(y) __y__ = (y);\
-		(__x__>__y__)? __x__ : __y__;\
-	})
+		(((x)>(y))? (x) : (y))
 #endif // max()
 
 

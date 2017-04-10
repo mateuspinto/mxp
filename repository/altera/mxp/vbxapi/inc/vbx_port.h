@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,9 +53,6 @@ extern "C" {
 
 
 #if VBX_ASSEMBLER
-
-// Why is this in the portability section?
-// Perhaps it should be moved to vbx_macros.
 
 /** Converts timestamp cycles into mxp cycles
  *
@@ -126,14 +123,14 @@ typedef alt_timestamp_type vbx_timestamp_t;
  * @param[in] LEN -- Number of bytes to flush from data cache
  */
 #define vbx_dcache_flush(PTR,LEN) \
-	VBX_S { \
+	do{ \
 		int __len__ = (LEN); \
 		if( __len__ > 4*ALT_CPU_DCACHE_SIZE ) { \
 			alt_dcache_flush_all(); \
 		} else { \
 			alt_dcache_flush(PTR,__len__); \
 		} \
-	} VBX_E
+	} while(0)
 
 /** Allow memory region to be cached
  *
@@ -165,12 +162,10 @@ typedef alt_timestamp_type vbx_timestamp_t;
 // Xilinx MicroBlaze portability library
 ///////////////////////////////////////////////////////////////////////////
 //in c++ these need to be declared ahead of time, bug in sdk (I think)
-void microblaze_flush_cache_ext_range (unsigned int,unsigned int);
+void microblaze_flush_cache_ext_range(u32, u32);
 void microblaze_flush_cache_ext();
 
 #include "xparameters.h"
-#include "xil_types.h"
-#include "xil_cache.h"
 #ifdef XPAR_XTMRCTR_NUM_INSTANCES
 #include "xtmrctr.h"
 #endif
@@ -178,42 +173,14 @@ void microblaze_flush_cache_ext();
 #define VBX_CPU_DCACHE_SIZE      XPAR_MICROBLAZE_DCACHE_BYTE_SIZE
 #define VBX_CPU_DCACHE_LINE_SIZE (4*(XPAR_MICROBLAZE_DCACHE_LINE_LEN))
 
-typedef u32 vbx_timestamp_t;
 
-void vbx_timestamp_init(XTmrCtr *inst_ptr, u32 freq);
-int vbx_timestamp_start();
-u32 vbx_timestamp_freq();
-u32 vbx_timestamp();
+typedef unsigned int vbx_timestamp_t;
 
-volatile void* vbx_uncached_malloc(size_t size);
-void vbx_uncached_free(volatile void *p);
-
-#define vbx_dcache_flush_all()         Xil_DCacheFlush()
-#define vbx_dcache_flush_line(PTR)     Xil_DCacheFlushRange((u32) (PTR), 1)
-#define vbx_dcache_flush(PTR,LEN) \
-	VBX_S { \
-		int __len__ = (LEN); \
-		if( __len__ > 4*VBX_CPU_DCACHE_SIZE ) { \
-			Xil_DCacheFlush(); \
-		} else { \
-			Xil_DCacheFlushRange((u32) (PTR),__len__); \
-		} \
-	} VBX_E
-
-void *vbx_remap_cached(volatile void *p, u32 len);
-volatile void *vbx_remap_uncached(void *p);
-volatile void *vbx_remap_uncached_flush(void *p, u32 len);
 
 #elif ARM_XIL_STANDALONE
 ///////////////////////////////////////////////////////////////////////////
 // Xilinx Zynq PS7 ARM Cortex-A9
 ///////////////////////////////////////////////////////////////////////////
-#include "xparameters.h"
-#include "xil_types.h"
-#include "xil_cache.h"
-#ifdef XPAR_XTMRCTR_NUM_INSTANCES
-#include "xtmrctr.h"
-#endif
 
 // Cortex-A9 on Zynq:
 // L1 dcache is 32KB, 4-way set-associative, write-back.
@@ -230,26 +197,7 @@ volatile void *vbx_remap_uncached_flush(void *p, u32 len);
 #if VBX_USE_A9_PMU_TIMER
 #include "xtime_l.h"
 typedef XTime vbx_timestamp_t;
-void vbx_timestamp_init(u32 freq);
-#else
-typedef u32 vbx_timestamp_t;
-void vbx_timestamp_init(XTmrCtr *inst_ptr, u32 freq);
 #endif
-
-int vbx_timestamp_start();
-u32 vbx_timestamp_freq();
-vbx_timestamp_t vbx_timestamp();
-
-volatile void* vbx_uncached_malloc(size_t size);
-void vbx_uncached_free(volatile void *p);
-
-#define vbx_dcache_flush_all()         Xil_DCacheFlush()
-#define vbx_dcache_flush_line(PTR)     Xil_DCacheFlushRange((u32) (PTR), 1)
-#define vbx_dcache_flush(PTR,LEN)      Xil_DCacheFlushRange((u32) (PTR), (LEN))
-
-void *vbx_remap_cached(volatile void *p, u32 len);
-volatile void *vbx_remap_uncached(void *p);
-volatile void *vbx_remap_uncached_flush(void *p, u32 len);
 
 #elif ARM_ALT_STANDALONE
 
@@ -259,7 +207,7 @@ volatile void *vbx_remap_uncached_flush(void *p, u32 len);
 
 #define VBX_CPU_DCACHE_LINE_SIZE ALT_CACHE_LINE_SIZE
 
-typedef uint64_t vbx_timestamp_t;
+	typedef uint64_t vbx_timestamp_t;
 
 #define vbx_timestamp_start() do{	  \
 		alt_globaltmr_init(); \
@@ -268,33 +216,33 @@ typedef uint64_t vbx_timestamp_t;
 
 #define vbx_timestamp()	alt_globaltmr_get64()
 
-static inline uint32_t vbx_timestamp_freq() {
-	uint32_t freq;
-	alt_clk_freq_get(ALT_CLK_MPU_PERIPH,&freq);
+	static inline uint32_t vbx_timestamp_freq() {
+		uint32_t freq;
+		alt_clk_freq_get(ALT_CLK_MPU_PERIPH,&freq);
 
-	return freq;
-}
+		return freq;
+	}
 
 
 
 #define vbx_uncached_malloc(size) vbx_remap_uncached(malloc(size));
 #define vbx_uncached_free(PTR)		free(PTR)
 
-static inline void vbx_dcache_flush_all(void){
+	static inline void vbx_dcache_flush_all(void){
 		alt_cache_l1_data_clean_all();
 		alt_cache_l2_clean_all();
-}
+	}
 
-static inline void vbx_dcache_flush_line(void* ptr){
-	size_t ptr_aligned= (size_t)(ptr) & (~(ALT_CACHE_LINE_SIZE - 1));
-	alt_cache_system_clean((void*)ptr_aligned,ALT_CACHE_LINE_SIZE);
-}
+	static inline void vbx_dcache_flush_line(void* ptr){
+		size_t ptr_aligned= (size_t)(ptr) & (~(ALT_CACHE_LINE_SIZE - 1));
+		alt_cache_system_clean((void*)ptr_aligned,ALT_CACHE_LINE_SIZE);
+	}
 
-static inline void  vbx_dcache_flush(void* ptr,size_t len) {	  \
-	size_t ptr_aligned= (size_t)(ptr) & (~(ALT_CACHE_LINE_SIZE - 1)); \
-	size_t len_aligned= ((len)+(ALT_CACHE_LINE_SIZE - 1)) & (~(ALT_CACHE_LINE_SIZE - 1));
-	alt_cache_system_clean((void*)ptr_aligned,len_aligned);
-}
+	static inline void  vbx_dcache_flush(void* ptr,size_t len) {	  \
+		size_t ptr_aligned= (size_t)(ptr) & (~(ALT_CACHE_LINE_SIZE - 1)); \
+		size_t len_aligned= ((len)+(ALT_CACHE_LINE_SIZE - 1)) & (~(ALT_CACHE_LINE_SIZE - 1));
+		alt_cache_system_clean((void*)ptr_aligned,len_aligned);
+	}
 
 #define vbx_remap_cached(PTR,LEN)			(typeof(PTR))((size_t)(PTR) & (~0x40000000))
 #define vbx_remap_uncached(PTR)				(typeof(PTR))((size_t)(PTR) | 0x40000000)
@@ -305,11 +253,134 @@ static inline void  vbx_dcache_flush(void* ptr,size_t len) {	  \
 	}
 
 #endif // __NIOS2__ / __MICROBLAZE__ / __ARM_ARCH_7A__
+#if ARM_XIL_STANDALONE || MB_STANDALONE
+
+#include "xil_cache.h"
+
+#define vbx_dcache_flush_all()         Xil_DCacheFlush()
+#define vbx_dcache_flush_line(PTR)     Xil_DCacheFlushRange((u32) (PTR), 1)
+#define vbx_dcache_flush(PTR,LEN)	  \
+	do { \
+		int __len__ = (LEN); \
+		if( __len__ > 4*VBX_CPU_DCACHE_SIZE ) { \
+			Xil_DCacheFlush(); \
+		} else { \
+			Xil_DCacheFlushRange((u32) (PTR),__len__); \
+		} \
+	} while(0)
+
+	static inline void *vbx_remap_cached(volatile void *p, u32 len)
+	{
+		return (void *) VBX_CACHED_ADDR(p);
+	}
+
+	static inline volatile void *vbx_remap_uncached(void *p)
+	{
+		Xil_DCacheFlushRange((u32) p, 1);
+		return (volatile void *) VBX_UNCACHED_ADDR(p);
+	}
+
+	static inline volatile void *vbx_remap_uncached_flush(void *p, u32 len)
+	{
+		vbx_dcache_flush(p, len);
+		return (volatile void *) VBX_UNCACHED_ADDR(p);
+	}
 
 
-#endif // VBX_ASSEMBLER
+static inline volatile void* vbx_uncached_malloc(size_t size)
+	{
+		void *p;
 
-///////////////////////////////////////////////////////////////////////////
+#if VBX_DEBUG_MALLOC
+		printf("uncached_malloc %d bytes\n", size);
+#endif
+		p = malloc(size);
+		if (!p) {
+#if VBX_DEBUG_MALLOC
+			VBX_PRINTF("ERROR: uncached_malloc failed.\n");
+			VBX_FATAL(__LINE__, __FILE__, -1);
+#endif
+			return NULL;
+		}
+		Xil_DCacheFlushRange((u32) p, size);
+		return (volatile void *) VBX_UNCACHED_ADDR(p);
+	}
+
+	static inline void vbx_uncached_free(volatile void *p)
+	{
+		free((void *) VBX_CACHED_ADDR(p));
+	}
+
+
+	extern unsigned int vbx_timestamp_tmrctr_freq;
+
+#if (__ARM_ARCH_7A__ && VBX_USE_A9_PMU_TIMER)
+
+	static inline void vbx_timestamp_init(u32 freq)
+	{
+		vbx_timestamp_tmrctr_freq = freq;
+	}
+
+	static inline int vbx_timestamp_start()
+	{
+		// Reset counter to 0.
+		XTime_SetTime((XTime) 0);
+		return 0;
+	}
+
+	static inline vbx_timestamp_t vbx_timestamp()
+	{
+		XTime v;
+
+		XTime_GetTime(&v);
+		return (vbx_timestamp_t) v;
+	}
+
+#else // !(__ARM_ARCH_7A__ && VBX_USE_A9_PMU_TIMER)
+	extern XTmrCtr *vbx_timestamp_tmrctr;
+	static inline void vbx_timestamp_init(XTmrCtr *inst_ptr, u32 freq)
+	{
+		vbx_timestamp_tmrctr = inst_ptr;
+		vbx_timestamp_tmrctr_freq = freq;
+
+		// XTmrCtr_SetOptions(vbx_timestamp_tmrctr, 0,
+		//                    XTC_CASCADE_MODE_OPTION);
+		XTmrCtr_SetResetValue(vbx_timestamp_tmrctr, 0, 0);
+	}
+
+	static inline int vbx_timestamp_start()
+	{
+		if (!vbx_timestamp_tmrctr) {
+			return -1;
+		}
+		XTmrCtr_Start(vbx_timestamp_tmrctr, 0);
+		return 0;
+	}
+
+	static inline 	vbx_timestamp_t vbx_timestamp()
+	{
+		u32 v;
+
+		if (!vbx_timestamp_tmrctr) {
+			return 0xffffffff;
+		}
+
+		v = XTmrCtr_GetValue(vbx_timestamp_tmrctr, 0);
+		return (vbx_timestamp_t) v;
+	}
+#endif // !(__ARM_ARCH_7A__ && VBX_USE_A9_PMU_TIMER)
+
+	static inline u32 vbx_timestamp_freq()
+	{
+		return vbx_timestamp_tmrctr_freq;
+	}
+
+#endif
+
+#endif
+	// VBX_ASSEMBLER
+
+	///////////////////////////////////////////////////////////////////////////
 #if VBX_SIMULATOR
 #include "vbxsim_port.h"
 #endif // VBX_SIMULATOR
@@ -332,12 +403,12 @@ static inline void  vbx_dcache_flush(void* ptr,size_t len) {	  \
 		return time;
 	}
 	static inline int64_t vbx_timestamp_freq(){return (uint64_t)1<<CLOCK_RES;}
-void* vbx_uncached_malloc( size_t size);
-void vbx_uncached_free(void* p);
+	void* vbx_uncached_malloc( size_t size);
+	void vbx_uncached_free(void* p);
 
-void *vbx_remap_cached(volatile void *p, uint32_t len);
-volatile void *vbx_remap_uncached(void *p);
-volatile void *vbx_remap_uncached_flush(void *p, uint32_t len);
+	void *vbx_remap_cached(volatile void *p, uint32_t len);
+	volatile void *vbx_remap_uncached(void *p);
+	volatile void *vbx_remap_uncached_flush(void *p, uint32_t len);
 
 #define vbx_dcache_flush_all()
 #define vbx_dcache_flush_line(PTR)
@@ -387,7 +458,7 @@ volatile void *vbx_remap_uncached_flush(void *p, uint32_t len);
 		unsigned int padding = VBX_PADDING();
 
 #if VBX_DEBUG_MALLOC
-		printf("shared_malloc %d bytes\n", num_bytes);
+		VBX_PRINTF("shared_malloc %d bytes\n", num_bytes);
 #endif
 		alloced_ptr = (void *)vbx_uncached_malloc(num_bytes+sizeof(void*)+2*padding);
 		if( alloced_ptr ) {

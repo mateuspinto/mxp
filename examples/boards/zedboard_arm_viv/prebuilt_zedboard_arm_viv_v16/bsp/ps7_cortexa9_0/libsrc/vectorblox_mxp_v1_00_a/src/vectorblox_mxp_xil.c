@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -209,6 +209,7 @@ int VectorBlox_MXP_Initialize(vbx_mxp_t* mxp, u16 device_id) {
 
 	mxp->mask_partitions = (short) (cfg->mask_partitions);
 	mxp->max_masked_vector_length = (int) (cfg->max_masked_waves * cfg->vector_lanes * 4);
+	mxp->fixed_point_support = (char) (cfg->fixed_point_support);
 	mxp->fxp_word_frac_bits = (char) (cfg->fxp_word_frac_bits);
 	mxp->fxp_half_frac_bits = (char) (cfg->fxp_half_frac_bits);
 	mxp->fxp_byte_frac_bits = (char) (cfg->fxp_byte_frac_bits);
@@ -219,9 +220,6 @@ int VectorBlox_MXP_Initialize(vbx_mxp_t* mxp, u16 device_id) {
 	// Assuming scratchpad is in a non-cacheable region of the MicroBlaze's
 	// address space.
 	mxp->sp = (vbx_void_t *) (cfg->baseaddr);
-	mxp->spstack = (vbx_void_t **) NULL;
-	mxp->spstack_top = (int) 0;
-	mxp->spstack_max = (int) 0;
 
 	_vbx_init(mxp);
 

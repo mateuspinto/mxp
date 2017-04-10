@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -285,9 +285,10 @@ int test_verify_array_byte( int8_t *scalar_out, int8_t *vector_out, int size )
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -298,9 +299,10 @@ int test_range_array_byte( int8_t *scalar_out, int8_t *vector_out, int size, int
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -393,9 +395,10 @@ int test_verify_array_half( int16_t *scalar_out, int16_t *vector_out, int size )
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -406,9 +409,10 @@ int test_range_array_half( int16_t *scalar_out, int16_t *vector_out, int size, i
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -501,9 +505,10 @@ int test_verify_array_word( int32_t *scalar_out, int32_t *vector_out, int size )
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, (int)scalar_out[i], (int)vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, (int)scalar_out[i], (int)vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -514,9 +519,10 @@ int test_range_array_word( int32_t *scalar_out, int32_t *vector_out, int size, i
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %d\nVector: %d\n", i, (int)scalar_out[i], (int)vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %d\nVector: %d (silencing error printout for now)\n", i, (int)scalar_out[i], (int)vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -609,9 +615,10 @@ int test_verify_array_ubyte( uint8_t *scalar_out, uint8_t *vector_out, int size 
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -622,9 +629,10 @@ int test_range_array_ubyte( uint8_t *scalar_out, uint8_t *vector_out, int size, 
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -717,9 +725,10 @@ int test_verify_array_uhalf( uint16_t *scalar_out, uint16_t *vector_out, int siz
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -730,9 +739,10 @@ int test_range_array_uhalf( uint16_t *scalar_out, uint16_t *vector_out, int size
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, scalar_out[i], vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, scalar_out[i], vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -825,9 +835,10 @@ int test_verify_array_uword( uint32_t *scalar_out, uint32_t *vector_out, int siz
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i] != scalar_out[i] ) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, (unsigned int)scalar_out[i], (unsigned int)vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, (unsigned int)scalar_out[i], (unsigned int)vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;
@@ -838,9 +849,10 @@ int test_range_array_uword( uint32_t *scalar_out, uint32_t *vector_out, int size
 	int errors = 0;
 	for( i = 0; i < size; i++ ) {
 		if( vector_out[i]+range < scalar_out[i] || vector_out[i]-range > scalar_out[i]) {
-			printf( "\nFail at sample %d.\nScalar: %u\nVector: %u\n", i, (unsigned int)scalar_out[i], (unsigned int)vector_out[i] );
+			if(!errors){
+				printf( "\nFail at sample %d.\nScalar: %u\nVector: %u (silencing error printout for now)\n", i, (unsigned int)scalar_out[i], (unsigned int)vector_out[i] );
+			}
 			errors += 1;
-			break;
 		}
 	}
 	return errors;

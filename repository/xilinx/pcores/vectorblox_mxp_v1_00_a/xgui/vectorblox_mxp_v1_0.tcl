@@ -29,6 +29,7 @@ proc init_gui { IPINST } {
     set MAX_MASKED_WAVES [ipgui::add_param $IPINST -parent $Page0 -name MAX_MASKED_WAVES -widget comboBox]
 
     set tabgroup0 [ipgui::add_group $IPINST -parent $Page0 -name {Fixed-Point Multiply Format} -layout vertical]
+    set FIXED_POINT_SUPPORT [ipgui::add_param $IPINST -parent $tabgroup0 -name FIXED_POINT_SUPPORT -widget comboBox]
     set MULFXP_WORD_FRACTION_BITS [ipgui::add_param $IPINST -parent $tabgroup0 -name MULFXP_WORD_FRACTION_BITS]
     set MULFXP_HALF_FRACTION_BITS [ipgui::add_param $IPINST -parent $tabgroup0 -name MULFXP_HALF_FRACTION_BITS]
     set MULFXP_BYTE_FRACTION_BITS [ipgui::add_param $IPINST -parent $tabgroup0 -name MULFXP_BYTE_FRACTION_BITS]
@@ -118,6 +119,10 @@ proc init_gui { IPINST } {
         "Changes the granularity of masked instructions. Currently only 1
         (enabled) and 0 (disabled) supported."] \
         $MASK_PARTITIONS
+    set_property tooltip [concat \
+        "Enable fixed-point support (VMULFXP, VADDFXP, VSUBFXP). Currently only 1
+        (enabled) and 0 (disabled) supported."] \
+        $FIXED_POINT_SUPPORT
     set_property tooltip [concat \
         "The number of waves supported by a masked vector instruction " \
         "(when the element size is one byte). " \
@@ -586,6 +591,10 @@ proc update_MODELPARAM_VALUE.C_INSTR_PORT_TYPE { MODELPARAM_VALUE.C_INSTR_PORT_T
 
 proc update_MODELPARAM_VALUE.MASK_PARTITIONS { MODELPARAM_VALUE.MASK_PARTITIONS PARAM_VALUE.MASK_PARTITIONS } {
     set_property value [get_property value ${PARAM_VALUE.MASK_PARTITIONS}] ${MODELPARAM_VALUE.MASK_PARTITIONS}
+}
+
+proc update_MODELPARAM_VALUE.FIXED_POINT_SUPPORT { MODELPARAM_VALUE.FIXED_POINT_SUPPORT PARAM_VALUE.FIXED_POINT_SUPPORT } {
+    set_property value [get_property value ${PARAM_VALUE.FIXED_POINT_SUPPORT}] ${MODELPARAM_VALUE.FIXED_POINT_SUPPORT}
 }
 
 proc update_MODELPARAM_VALUE.MAX_MASKED_WAVES { MODELPARAM_VALUE.MAX_MASKED_WAVES PARAM_VALUE.MAX_MASKED_WAVES } {

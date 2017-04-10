@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,15 +55,13 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdint.h>
-
+#include "vbx_extern.h"
 /**
  * @name Scratchpad Data Typedef
  *
  * Pointers to these datatypes should always be used for scratchpad accesses
  */
 /**@{*/
-
-#if defined( __GNUC__)
 typedef uint32_t vbx_uword_t; ///< 4-byte word, unsigned
 typedef uint16_t vbx_uhalf_t; ///< 2-byte half, unsigned
 typedef uint8_t vbx_ubyte_t;  ///< byte, unsigned
@@ -71,7 +69,7 @@ typedef int32_t vbx_word_t;   ///< 4-byte word
 typedef int16_t vbx_half_t;   ///< 2-byte half
 typedef int8_t vbx_byte_t;    ///< byte
 typedef void vbx_void_t;      ///< void, used for generic pointers
-#endif
+
 
 /*
  * If not compiling with gcc, it would have to be verified that values loaded into
@@ -89,7 +87,7 @@ typedef void vbx_void_t;      ///< void, used for generic pointers
  *
  */
 
-	typedef struct{} vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
+typedef struct { char _; } vbx_enum_t; ///< Enumerated type, used for type checking c/cpp
 /**@}*/
 
 
@@ -125,6 +123,7 @@ typedef struct {
 	int         max_masked_vector_length; ///<Maximum masked vector length
 	short       mask_partitions; ///<Partitioning/granularity of masked instructions
 	char        vector_custom_instructions; //Number of VCIs hooked up
+	char        fixed_point_support; ///Fixed-point instructions supported
 	char        fxp_word_frac_bits; ///< Num of fractional bit used with @ref vbx_word_t or @ref vbx_uword_t data types
 	char        fxp_half_frac_bits; ///< Num of fractional bit used with @ref vbx_half_t or @ref vbx_uhalf_t data types
 	char        fxp_byte_frac_bits; ///< Num of fractional bit used with vbx_byte_t or f vbx_ubyte_t data types
@@ -134,8 +133,8 @@ typedef struct {
 
 	/* MXP run-time state */
 	vbx_void_t  *sp; ///< Current location of scratchpad pointer
-#if VBX_STATIC_ALLOCATE_SP
-	vbx_void_t  *spstack[VBX_STATIC_SP_SIZE];
+#if VBX_STATIC_ALLOCATE_SP_STACK==1
+	vbx_void_t  *spstack[VBX_STATIC_SP_STACK_SIZE];
 #else
 	vbx_void_t  **spstack;
 #endif
@@ -167,6 +166,7 @@ enum {
 	VMULLO=VMUL, ///< Multiplies the two src operands, saves lower result to dst
 	VMULHI, ///< Multiplies the two src operands, saves upper result to dst
 	VMULFXP,///< Fix-point multiply, where the number of fractional bits is set at compile time
+	VSUBFXP,  ///< Saturating subtracts the two src operands, borrow flag generated
 	VSHL,  ///< Shifts src operand to left by given amount
 	VSHR,  ///< Shifts src operand to right by given amount
 	VROTL, ///< Rotates src operand to left by given amount
@@ -179,6 +179,7 @@ enum {
 	VCMV_FC=VCMV_GEZ,
 	VCMV_Z, ///< Moves src operand to dst if == 0
 	VCMV_NZ, ///< Moves src operand to dst if != 0
+	VADDFXP,  ///< Saturating adds the two src operands, carry flag generated
 	VABSDIFF, ///< Calculates the absolute difference between the two src operands
 	VCUSTOM0, ///<
 	VCUSTOM=VCUSTOM0, ///<
@@ -200,6 +201,10 @@ enum {
 	MAX_INSTR_VAL=VCUSTOM15
 } vinstr_t;
 
+
+#if VBX_USE_GLOBAL_MXP_PTR
+extern vbx_mxp_t* vbx_mxp_ptr;
+#endif
 
 #ifdef __cplusplus
 }

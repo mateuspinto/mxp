@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,7 @@ typedef struct {
 	u16  mask_partitions;
 	u32  scratchpad_kb;
 	u16  memory_width_bits;
+	u8   fixed_point_support;
 	u8   fxp_word_frac_bits;
 	u8   fxp_half_frac_bits;
 	u8   fxp_byte_frac_bits;

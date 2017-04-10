@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -146,23 +146,23 @@ int test_verify_array_uword( uint32_t *scalar_out, uint32_t *vector_out, int siz
 int test_range_array_uword( uint32_t *scalar_out, uint32_t *vector_out, int size, int range );
 
 #if VBX_SIMULATOR
-#define VBX_TEST_PASS()       VBX_S{ printf("\nTest passed!\n"); }VBX_E
-#define VBX_TEST_FAIL(errors) VBX_S{ printf("\nTest failed with %d errors.\n", \
-                                            (int)(errors));}VBX_E
+#define VBX_TEST_PASS()       do{ printf("\nTest passed!\n"); }while(0)
+#define VBX_TEST_FAIL(errors) do{ printf("\nTest failed with %d errors.\n", \
+                                            (int)(errors));}while(0)
 #else
-#define VBX_TEST_PASS()       VBX_S{ printf("\nTest passed!\n"); putchar(4); }VBX_E
-#define VBX_TEST_FAIL(errors) VBX_S{ printf("\nTest failed with %d errors.\n", \
-                                            (int)(errors)); putchar(4); }VBX_E
+#define VBX_TEST_PASS()       do{ printf("\nTest passed!\n"); putchar(4); }while(0)
+#define VBX_TEST_FAIL(errors) do{ printf("\nTest failed with %d errors.\n", \
+                                            (int)(errors)); putchar(4); }while(0)
 #endif
 
 #define VBX_TEST_END(errors) \
-	VBX_S{ \
+	do{ \
 		if (errors) { \
 			VBX_TEST_FAIL(errors); \
 		} else { \
 			VBX_TEST_PASS(); \
 		} \
-	}VBX_E
+	}while(0)
 
 // --------------------------------------------------------
 

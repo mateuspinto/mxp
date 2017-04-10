@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,7 +74,7 @@ namespace VBX{
 
 			//Bin_Op
 			template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim1>
-			INLINE static void assign(dest_t* dest,int dest_rows,ssize_t dest_inc2,int dest_mats,int dest_inc3,
+			INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
 			                          const bin_op <lhs_t,rhs_t,instr,btype,dim1,NO_ACC >& src,size_t vlen)
 			{
 				set_vl(vlen);
@@ -105,7 +105,7 @@ namespace VBX{
 			}
 			//bin op accumulate
 			template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim1>
-			INLINE static void assign(dest_t* dest,int dest_rows,ssize_t dest_inc2,int dest_mats,int dest_inc3,
+			INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
 			                          const bin_op <lhs_t,rhs_t,instr,btype,dim1,IS_ACC >& src,size_t vlen)
 			{
 				int src_len=get_length(src);
@@ -140,7 +140,7 @@ namespace VBX{
 
 			//Vector
 			template<typename T>
-			INLINE static void assign(dest_t* dest,int dest_rows, ssize_t dest_inc2,int dest_mats,int dest_inc3,
+			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          const Vector<T,dim>& src,size_t vlen)
 			{
 				typedef typename same_sign_as<dest_t,T>::type d_t;
@@ -155,7 +155,7 @@ namespace VBX{
 				vbx_func<is_masked,NO_ACC,dim>::func(VMOV,(d_t*)dest,src.data);
 			}
 			//enum
-			INLINE static void assign(dest_t* dest,int dest_rows, ssize_t dest_inc2,int dest_mats,int dest_inc3,
+			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          const enum_t& src,size_t vlen){
 				set_vl(vlen);
 				if(dim>=2){
@@ -168,7 +168,7 @@ namespace VBX{
 				vbx_func<is_masked,NO_ACC,dim>::func(VOR,dest,(vbx_word_t)0,(vbx_enum_t*)0);
 			}
 			//scalar
-			INLINE static void assign(dest_t* dest,int dest_rows, ssize_t dest_inc2,int dest_mats,int dest_inc3,
+			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          typename word_sized<dest_t>::type src,size_t vlen){
 				set_vl(vlen);
 				if(dim>=2){
@@ -189,8 +189,8 @@ namespace VBX{
 			INLINE static void cond_move(dest_t* data,
 			                             const  if_t& v_if,
 			                             const then_t& v_then,
-			                             size_t dest_mats,ssize_t dest_inc3,
-			                             size_t dest_rows,ssize_t dest_inc2,size_t vlen)
+			                             size_t dest_mats,int dest_inc3,
+			                             size_t dest_rows,int dest_inc2,size_t vlen)
 			{
 				typedef typename get_op_size<if_t>::type t1;
 				typedef typename get_op_size<then_t>::type t2;
@@ -224,8 +224,8 @@ namespace VBX{
 			INLINE static void cond_move(dest_t* data,
 			                             const Logical_vop<lhs_t,rhs_t,lop,negate> v_if,
 			                             const then_t& v_then,
-			                             size_t dest_mats,ssize_t dest_inc3,
-			                             size_t dest_rows,ssize_t dest_inc,size_t vlen)
+			                             size_t dest_mats,int dest_inc3,
+			                             size_t dest_rows,int dest_inc,size_t vlen)
 			{
 				typedef typename get_op_size<typeof(v_if)>::type t1;
 				typedef typename get_op_size<then_t>::type t2;

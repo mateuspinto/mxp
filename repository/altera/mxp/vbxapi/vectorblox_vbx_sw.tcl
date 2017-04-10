@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (C) 2012-2016 VectorBlox Computing, Inc.
+# Copyright (C) 2012-2017 VectorBlox Computing, Inc.
 #
 ###########################################################################
 
@@ -29,7 +29,6 @@ add_sw_property include_source inc/vbx_asm_enc32.h
 add_sw_property include_source inc/vbx_lib_common.h
 add_sw_property include_source inc/vbx_port.h
 add_sw_property include_source inc/vbx_asm_or_sim.h
-add_sw_property include_source inc/vbx_counters.h
 add_sw_property include_source inc/vbx_macros.h
 add_sw_property include_source inc/vbx_types.h
 add_sw_property include_source inc/vectorblox_mxp_nios.h
