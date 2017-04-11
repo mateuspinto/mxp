@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,26 @@
 
 #include "scalar_vec_fir.h"
 
+#define ACCUM_BITS 40
+
 // Scalar FIR filter byte
 void scalar_vec_fir_byte(int8_t *output, int8_t *input, const int8_t *const coeffs, const int32_t sample_size, const int32_t num_taps)
 {
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		int64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			int8_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		int8_t truncated_accum = accum;
+		if(((int64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0x7F ^ (accum >> (ACCUM_BITS-1));
 		}
 		output++;
 		input++;
@@ -58,9 +69,18 @@ void scalar_vec_fir_half(int16_t *output, int16_t *input, const int16_t *const c
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		int64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			int16_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		int16_t truncated_accum = accum;
+		if(((int64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0x7FFF ^ (accum >> (ACCUM_BITS-1));
 		}
 		output++;
 		input++;
@@ -73,9 +93,18 @@ void scalar_vec_fir_word(int32_t *output, int32_t *input, const int32_t *const c
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		int64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			int32_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		int32_t truncated_accum = accum;
+		if(((int64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0x7FFFFFFF ^ (accum >> (ACCUM_BITS-1));
 		}
 		output++;
 		input++;
@@ -87,9 +116,18 @@ void scalar_vec_fir_ubyte(uint8_t *output, uint8_t *input, const uint8_t *const 
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		uint64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			uint8_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		uint8_t truncated_accum = accum;
+		if(((uint64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0xFF;
 		}
 		output++;
 		input++;
@@ -102,9 +140,18 @@ void scalar_vec_fir_uhalf(uint16_t *output, uint16_t *input, const uint16_t *con
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		uint64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			uint16_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		uint16_t truncated_accum = accum;
+		if(((uint64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0xFFFF;
 		}
 		output++;
 		input++;
@@ -117,9 +164,18 @@ void scalar_vec_fir_uword(uint32_t *output, uint32_t *input, const uint32_t *con
 	int32_t i, j;
 
 	for (j = 0; j <= (sample_size - num_taps); j++) {
-		*output = 0;
+		uint64_t accum = 0;
 		for (i = 0; i < num_taps; i++) {
-			*output += input[i] * coeffs[i];
+			uint32_t mul_result = input[i] * coeffs[i];
+			accum += mul_result;
+		}
+		accum = accum << (64-ACCUM_BITS);
+		accum = accum >> (64-ACCUM_BITS);
+		uint32_t truncated_accum = accum;
+		if(((uint64_t)truncated_accum) == accum){
+			*output = accum;
+		} else {
+			*output = 0xFFFFFFFF;
 		}
 		output++;
 		input++;

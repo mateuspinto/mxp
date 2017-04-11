@@ -71,6 +71,14 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(OPT_FLAGS) $(CC_FLAGS)  $(INC_DIR_FLAGS) $(CPU_FLAGS) -MD  -o"$@" "$<"
 	@echo Finished building: $<
 	@echo ' '
+$(OBJ_DIR)/%.o: %.S
+	@echo Building file: $<
+	@echo Invoking: gcc compiler
+	@$(MKDIR) -p $(@D)
+	$(CC) $(OPT_FLAGS) $(CC_FLAGS)  $(INC_DIR_FLAGS) $(CPU_FLAGS) -MD  -o"$@" "$<"
+	@echo Finished building: $<
+	@echo ' '
+
 $(OBJ_DIR)/%.o: %.cpp
 	@echo Building file: $<
 	@echo Invoking: gcc compiler

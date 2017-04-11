@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@
  */
 void vbw_mtx_motest_scalar_byte(output_type *result, input_type *x, input_type *y, vbw_motest_t *m)
 {
-	scalar_mtx_motest_byte( result, x, y, m->search_height, m->search_width, m->block_height,
+	scalar_mtx_motest_byte( (uint32_t *)result, x, y, m->search_height, m->search_width, m->block_height,
 	                        m->block_width, m->image_width);
 	return;
 }

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,7 @@
 #include "fwd_declaration.hpp"
 #define INLINE inline __attribute__((always_inline))
 //#define INLINE __attribute__((noinline))
+#include "stdlib.h"
 extern "C" size_t __old_vl__;
 namespace VBX{
 #include "vinstr.hpp"
@@ -137,9 +138,9 @@ namespace VBX{
 		vinstr_t cmv;
 		T*	data;
 		size_t rows;
-		ssize_t increment2; //stored in bytes
+		int increment2; //stored in bytes
 		size_t mats;
-		ssize_t increment3; //stored in bytes
+		int increment3; //stored in bytes
 		Vector():dont_pop(true)
 		{}
 		INLINE Vector(int sz,int rows=0,int incr2=0/*elements*/,int mats=0,int incr3=0/*elements*/):
@@ -176,8 +177,8 @@ namespace VBX{
 			}
 			assert(data!=NULL);
 		}
-		INLINE Vector(T* sp_ptr,int sz,size_t rows=0,ssize_t increment2=0/*elements*/,
-		              size_t mats=0,ssize_t increment3=0/*elements*/):
+		INLINE Vector(T* sp_ptr,int sz,size_t rows=0,int increment2=0/*elements*/,
+		              size_t mats=0,int increment3=0/*elements*/):
 			dont_pop(true),size(sz),cmv(VCMV_NZ),data(sp_ptr)
 		{
 			if(dim>=2){
@@ -426,10 +427,10 @@ namespace VBX{
 		Vector<T,1> get_row(int row_sel) const {
 			return Vector<T,1>(data+row_sel*increment2/sizeof(T),size);
 		}
-		Vector<T,2> to2D(int vl,int rows,ssize_t increment2) const {
+		Vector<T,2> to2D(int vl,int rows,int increment2) const {
 			return Vector<T,2>(data,vl,rows,increment2);
 		}
-		Vector<T,3> to3D(int vl,int rows,ssize_t increment2,int mats,ssize_t increment3) const {
+		Vector<T,3> to3D(int vl,int rows,int increment2,int mats,int increment3) const {
 			return Vector<T,3>(data,vl,rows,increment2,mats,increment3);
 		}
 

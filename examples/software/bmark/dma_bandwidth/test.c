@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -89,10 +89,14 @@ int dma_bandwidth_test()
 
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 	int scratchpad_size = this_mxp->scratchpad_size;
-
+	//scratchpad_size=64*1024;
 	uint8_t *buf = vbx_shared_malloc(scratchpad_size);
 	vbx_ubyte_t *v_buf = vbx_sp_malloc(scratchpad_size);
 
+#define USE_PL_MEM 0
+#if USE_PL_MEM
+	buf= (uint8_t*)XPAR_MIG_7SERIES_0_BASEADDR;
+#endif
 	vbx_timestamp_t time_start, time_stop;
 
 	int i;
@@ -100,7 +104,12 @@ int dma_bandwidth_test()
 	int to_host;
 	int errors = 0;
 
+
 	vbx_mxp_print_params();
+	debug(scratchpad_size);
+	for(i=0;i<scratchpad_size;i++){
+		v_buf[i]=i;
+	}
 
 	// dma_alignment_bytes gives DMA master data bus width in bytes.
 	double bytes_per_sec = \
@@ -136,8 +145,9 @@ int dma_bandwidth_test()
 		}
 		printf("\n");
 	}
-
+#if ! USE_PL_MEM
 	vbx_shared_free(buf);
+#endif
 	vbx_sp_free();
 
 	return errors;

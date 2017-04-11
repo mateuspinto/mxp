@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,8 +51,6 @@
 extern "C" {
 #endif
 
-#include "vbx_types.h"
-
 
 #ifndef VBX_SKIP_ALL_CHECKS
 #define VBX_SKIP_ALL_CHECKS  1 /*(mxp_cpu->skip_all_checks)*/
@@ -61,10 +59,6 @@ extern "C" {
 #ifndef VBX_DEBUG_LEVEL
 //Set below 4 for running tests, should be higher for debugging
 #define VBX_DEBUG_LEVEL      3 /*(mxp_cpu->debug_level)*/
-#endif
-
-#ifndef VBX_SAFE_TO_CLOBBER_SOURCE
-#define VBX_SAFE_TO_CLOBBER_SOURCE  0   /* some algorithms operate faster if they can clobber source operand memory */
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,17 +73,19 @@ extern "C" {
 #define VBX_USE_A9_PMU_TIMER 1
 ///////////////////////////////////////////////////////////////////////////
 
+
+/////////////
 //If VBX_STATIC_ALLOCATE_SP_STACk is non-zero
 //then we statically allocate the sp_stack, otherwise
 //it dynamically grows.
-#define VBX_STATIC_ALLOCATE_SP_STACK 0
-//If VBX_STATIC_SP_STACK is non-zero than
-//VBX_STATIC_SP_STACK_SIZE controls how many
-//elements are in it.
+#define VBX_STATIC_ALLOCATE_SP_STACK 1
+
+//If VBX_STATIC_SP_STACK is non-zero than VBX_STATIC_SP_STACK_SIZE
+//controls how many elements are in it.
 #define VBX_STATIC_SP_STACK_SIZE 64
-#if VBX_USE_GLOBAL_MXP_PTR
-extern vbx_mxp_t* vbx_mxp_ptr;
-#endif
+
+//Sometimes we want to disable type checking on vbx() calls,
+//this is necessary if the compiler tends to run out of memory
 
 #ifdef __cplusplus
 }

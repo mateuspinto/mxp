@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -75,11 +75,11 @@
  *  @param[in]  N   number of words to reverse.
  */
 #define vec_rev_w(DST,SRC,N)	  \
-	VBX_S{ \
+	do{ \
 		vbx_set_vl( 1 ); \
 		vbx_set_2D( (unsigned int)(N), (int)-sizeof(vbx_word_t), sizeof(vbx_word_t), 0 ); \
 		vbxx_2D(VMOV, (vbx_word_t*)(DST)+(unsigned int)(N)-1, (vbx_word_t*)(SRC)); \
-	}VBX_E
+	}while(0)
 
 /** Reverses a vector of words allocated *in the scratchpad*.
  *  @pre  N must be >= 1
@@ -92,11 +92,11 @@
  *  @param[in]  N   number of words to reverse and rotate.
  */
 #define vec_rev_rot16_w(DST,SRC,N)	  \
-	VBX_S{ \
+	do{ \
 		vbx_set_vl( 1 ); \
 		vbx_set_2D( (unsigned int)(N), (int)-sizeof(vbx_word_t), 0, sizeof(vbx_word_t) ); \
 		vbxx_2D(VROTL, (vbx_uword_t*)(DST)+(unsigned int)(N)-1, 16, (vbx_uword_t*)(SRC) ); \
-	}VBX_E
+	}while(0)
 
 /** Swaps upper and lower bytes of a vector of halfs allocated *in the scratchpad*.
  *  @pre N must be >= 1
@@ -107,10 +107,10 @@
  *  @param[in]  N   number of halfs to rotate.
  */
 #define vec_rot8_h(DST,SRC,N)	  \
-	VBX_S{ \
+	do{ \
 		vbx_set_vl( N ); \
 		vbxx(VROTL, (vbx_uhalf_t *)DST, 8, (vbx_uhalf_t *)SRC ); \
-	}VBX_E
+	}while(0)
 
 
 /** Internal helper function to reverse and optionally rotate a vector of words *in the scratchpad*.

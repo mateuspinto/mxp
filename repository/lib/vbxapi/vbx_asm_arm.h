@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -154,7 +154,7 @@ extern "C" {
 #include "arm_neon.h"
 
 #define VBX_INSTR_QUAD(W0, W1, W2, W3) \
-	VBX_S{ \
+	do{ \
 		uint32x4_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (vbx_mxp_ptr->instr_p); \
 		__v__ = vdupq_n_u32(0); \
@@ -164,10 +164,10 @@ extern "C" {
 		__v__ = vsetq_lane_u32((uint32_t) (W3), __v__, 3); \
 		vst1q_u32((uint32_t *) __p__, __v__); \
 		VBX_AXI_INSTR_P_UPDATE(vbx_mxp_ptr->instr_p, __p__+4); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_DOUBLE(W0, W1) \
-	VBX_S{ \
+	do{ \
 		uint32x2_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (vbx_mxp_ptr->instr_p); \
 		__v__ = vdup_n_u32(0); \
@@ -175,39 +175,39 @@ extern "C" {
 		__v__ = vset_lane_u32((uint32_t) (W1), __v__, 1); \
 		vst1_u32((uint32_t *) __p__, __v__); \
 		VBX_AXI_INSTR_P_UPDATE(vbx_mxp_ptr->instr_p, __p__+4); \
-	}VBX_E
+	}while(0)
 
 #else // !USE_VST
 
 #define VBX_INSTR_QUAD(W0, W1, W2, W3) \
-	VBX_S{ \
+	do{ \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (vbx_mxp_ptr->instr_p); \
 		*__p__++ = (uint32_t) (W0); \
 		*__p__++ = (uint32_t) (W1); \
 		*__p__++ = (uint32_t) (W2); \
 		*__p__++ = (uint32_t) (W3); \
 		VBX_AXI_INSTR_P_UPDATE(vbx_mxp_ptr->instr_p, __p__); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_DOUBLE(W0, W1) \
-	VBX_S{
+	do{
 		volatile uint32_t *__p__ = (volatile uint32_t *) (vbx_mxp_ptr->instr_p); \
 		*__p__++ = (uint32_t) (W0); \
 		*__p__++ = (uint32_t) (W1); \
 		__p__ += 2; \
 		VBX_AXI_INSTR_P_UPDATE(vbx_mxp_ptr->instr_p, __p__); \
-	}VBX_E
+	}while(0)
 
 #endif // !USE_VST
 
 #define VBX_INSTR_SINGLE(W0, RETURN_VAR) \
-	VBX_S{ \
+	do{ \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (vbx_mxp_ptr->instr_p); \
 		*__p__++ = (uint32_t) (W0); \
 		(RETURN_VAR) = *__p__++; \
 		__p__ += 2; \
 		VBX_AXI_INSTR_P_UPDATE(vbx_mxp_ptr->instr_p, __p__); \
-	}VBX_E
+	}while(0)
 
 #else // !(VBX_USE_AXI_INSTR_PORT_ADDR_INCR && VBX_USE_GLOBAL_MXP_PTR)
 
@@ -220,7 +220,7 @@ extern "C" {
 #include "arm_neon.h"
 
 #define VBX_INSTR_QUAD(W0, W1, W2, W3) \
-	VBX_S{ \
+	do{ \
 		uint32x4_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (VBX_INSTR_PORT_ADDR); \
 		__v__ = vdupq_n_u32(0); \
@@ -229,41 +229,41 @@ extern "C" {
 		__v__ = vsetq_lane_u32((uint32_t) (W2), __v__, 2); \
 		__v__ = vsetq_lane_u32((uint32_t) (W3), __v__, 3); \
 		vst1q_u32((uint32_t *) __p__, __v__); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_DOUBLE(W0, W1) \
-	VBX_S{ \
+	do{ \
 		uint32x2_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (VBX_INSTR_PORT_ADDR); \
 		__v__ = vdup_n_u32(0); \
 		__v__ = vset_lane_u32((uint32_t) (W0), __v__, 0); \
 		__v__ = vset_lane_u32((uint32_t) (W1), __v__, 1); \
 		vst1_u32((uint32_t *) __p__, __v__); \
-	}VBX_E
+	}while(0)
 
 #else // !USE_VST
 
 #define VBX_INSTR_QUAD(W0, W1, W2, W3) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_putw((W1)); \
 		vbx_putw((W2)); \
 		vbx_putw((W3)); \
-	}VBX_E
+	}while(0)
 
 #define VBX_INSTR_DOUBLE(W0, W1) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_putw((W1)); \
-	}VBX_E
+	}while(0)
 
 #endif // !USE_VST
 
 #define VBX_INSTR_SINGLE(W0, RETURN_VAR) \
-	VBX_S{ \
+	do{ \
 		vbx_putw((W0)); \
 		vbx_getw((RETURN_VAR)); \
-	}VBX_E
+	}while(0)
 
 #endif // !(VBX_USE_AXI_INSTR_PORT_ADDR_INCR && VBX_USE_GLOBAL_MXP_PTR)
 

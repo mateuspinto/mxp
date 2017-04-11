@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,9 +42,6 @@ VBXCOPYRIGHT( test_rev )
 /*
  * Vector Reverse Testing - starting from SP or from MM
  */
-
-	// This doesn't seem to matter here
-#define VBX_SKIP_ALL_CHECKS 0
 
 #include <math.h>
 #include <stdlib.h>

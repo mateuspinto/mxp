@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -100,7 +100,7 @@ int main(void)
 	N=1024;
 	int PRINT_LENGTH = min(N, MAX_PRINT_LENGTH);
 
-	double scalar_time, vector_time;
+	double scalar_time;
 	int errors=0;
 
 	vbx_mxp_print_params();
@@ -134,7 +134,7 @@ int main(void)
 	scalar_time = test_scalar_power( scalar_out, scalar_in1, scalar_in2, N);
 	test_print_array_word( scalar_out, PRINT_LENGTH );
 
-	vector_time = test_vector_power( vector_out, vector_in1, vector_in2, N, scalar_time );
+	test_vector_power( vector_out, vector_in1, vector_in2, N, scalar_time );
 	test_print_array_word( vector_out, PRINT_LENGTH );
 	errors += test_verify_array_word( scalar_out, vector_out, N );
 

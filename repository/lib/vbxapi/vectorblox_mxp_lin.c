@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,7 @@ enum mxp_attr_t{
         MASK_PARTITIONS,
         SCRATCHPAD_KB,
         M_AXI_DATA_WIDTH,
+        FIXED_POINT_SUPPORT,
         MULFXP_WORD_FRACTION_BITS,
         MULFXP_HALF_FRACTION_BITS,
         MULFXP_BYTE_FRACTION_BITS,
@@ -137,6 +138,7 @@ int VectorBlox_MXP_Initialize(const char* mxp_dev,const char* cma_dev)
 	the_mxp.mask_partitions = get_attr_from_file(mxp_dev,"MASK_PARTITIONS");
 
 	the_mxp.max_masked_vector_length = get_attr_from_file(mxp_dev,"MAX_MASKED_WAVES")* the_mxp.vector_lanes * 4;
+	the_mxp.fixed_point_support = get_attr_from_file(mxp_dev,"FIXED_POINT_SUPPORT");
 	the_mxp.fxp_word_frac_bits = get_attr_from_file(mxp_dev,"MULFXP_WORD_FRACTION_BITS");
 	the_mxp.fxp_half_frac_bits = get_attr_from_file(mxp_dev,"MULFXP_HALF_FRACTION_BITS");
 	the_mxp.fxp_byte_frac_bits = get_attr_from_file(mxp_dev,"MULFXP_BYTE_FRACTION_BITS");

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -116,9 +116,9 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 	}
 
 
-	rotating_prefetcher_t input_dbl_buf=rotating_prefetcher(1,(chunk_size+num_taps)*sizeof(vbx_sp_t),
+	rotating_prefetcher_t input_dbl_buf=rotating_prefetcher(1,chunk_size*sizeof(vbx_sp_t),
 	                                                        input,
-	                                                        input+sample_size,chunk_size*sizeof(vbx_sp_t));
+	                                                        input+sample_size,(chunk_size-num_taps)*sizeof(vbx_sp_t));
 	vbx_sp_t *v_mul=NULL;
 	if(transpose){
 		v_mul = (vbx_sp_t *)vbx_sp_malloc(chunk_size*sizeof(vbx_sp_t));
@@ -130,7 +130,7 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 		return VBW_ERROR_SP_ALLOC_FAILED;
 	}
 	rp_fetch(&input_dbl_buf);
-	//if the entire sample ifts in the scratchpad, do that.
+	//if the entire sample fits in the scratchpad, do that.
 
 	if(chunk_size>sample_size){
 		//do in sp fir filter
@@ -153,7 +153,7 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 	// by one iteration.
 	int num_chunks=(sample_size + chunk_size-num_taps-1)/(chunk_size-num_taps);
 	for(int chunk=0;chunk<num_chunks;chunk++){
-		int current_chunksize=input_dbl_buf.chunk_size/sizeof(vbx_sp_t);
+	  int current_chunksize=input_dbl_buf.chunk_size/sizeof(vbx_sp_t);
 		rp_fetch(&input_dbl_buf);
 		v_in=(vbx_sp_t*)rp_get_buffer(&input_dbl_buf,0);
 
@@ -163,7 +163,7 @@ inline int vec_fir_tiler(vbx_mm_t *output, vbx_mm_t *input, vbx_mm_t *coeffs,  i
 			vec_fir_helper(v_out,v_in,v_coeffs,current_chunksize,num_taps);
 
 		}
-		vbx_dma_to_host(output+chunk*chunk_size,v_out,current_chunksize-num_taps);
+		vbx_dma_to_host(output+chunk*(chunk_size-num_taps),v_out,(current_chunksize-num_taps)*sizeof(vbx_sp_t));
 	}
 
 	vbx_sync();

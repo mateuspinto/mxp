@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,15 +55,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdint.h>
-
-//For some reason windows does not define ssize_t.
-//Should investigate this and figure out a better 
-//solution than doing it myself.
-#if defined(_WIN32) && !defined(_WIN64)
-typedef int32_t ssize_t;
-#elif defined(_WIN32) && defined(_WIN64)
-typedef int64_t ssize_t;
-#endif
+#include "vbx_extern.h"
 /**
  * @name Scratchpad Data Typedef
  *
@@ -131,6 +123,7 @@ typedef struct {
 	int         max_masked_vector_length; ///<Maximum masked vector length
 	short       mask_partitions; ///<Partitioning/granularity of masked instructions
 	char        vector_custom_instructions; //Number of VCIs hooked up
+	char        fixed_point_support; ///Fixed-point instructions supported
 	char        fxp_word_frac_bits; ///< Num of fractional bit used with @ref vbx_word_t or @ref vbx_uword_t data types
 	char        fxp_half_frac_bits; ///< Num of fractional bit used with @ref vbx_half_t or @ref vbx_uhalf_t data types
 	char        fxp_byte_frac_bits; ///< Num of fractional bit used with vbx_byte_t or f vbx_ubyte_t data types
@@ -140,8 +133,8 @@ typedef struct {
 
 	/* MXP run-time state */
 	vbx_void_t  *sp; ///< Current location of scratchpad pointer
-#if VBX_STATIC_ALLOCATE_SP
-	vbx_void_t  *spstack[VBX_STATIC_SP_SIZE];
+#if VBX_STATIC_ALLOCATE_SP_STACK==1
+	vbx_void_t  *spstack[VBX_STATIC_SP_STACK_SIZE];
 #else
 	vbx_void_t  **spstack;
 #endif
@@ -173,6 +166,7 @@ enum {
 	VMULLO=VMUL, ///< Multiplies the two src operands, saves lower result to dst
 	VMULHI, ///< Multiplies the two src operands, saves upper result to dst
 	VMULFXP,///< Fix-point multiply, where the number of fractional bits is set at compile time
+	VSUBFXP,  ///< Saturating subtracts the two src operands, borrow flag generated
 	VSHL,  ///< Shifts src operand to left by given amount
 	VSHR,  ///< Shifts src operand to right by given amount
 	VROTL, ///< Rotates src operand to left by given amount
@@ -185,6 +179,7 @@ enum {
 	VCMV_FC=VCMV_GEZ,
 	VCMV_Z, ///< Moves src operand to dst if == 0
 	VCMV_NZ, ///< Moves src operand to dst if != 0
+	VADDFXP,  ///< Saturating adds the two src operands, carry flag generated
 	VABSDIFF, ///< Calculates the absolute difference between the two src operands
 	VCUSTOM0, ///<
 	VCUSTOM=VCUSTOM0, ///<
@@ -206,6 +201,10 @@ enum {
 	MAX_INSTR_VAL=VCUSTOM15
 } vinstr_t;
 
+
+#if VBX_USE_GLOBAL_MXP_PTR
+extern vbx_mxp_t* vbx_mxp_ptr;
+#endif
 
 #ifdef __cplusplus
 }

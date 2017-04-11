@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2016 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,12 +39,6 @@
 #ifndef __VBX_COPYRIGHT_H
 #define __VBX_COPYRIGHT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <stdlib.h>
-#include <stdio.h>
 
 #define HEADER_SIZE	4096
 
@@ -62,22 +56,21 @@ extern "C" {
 #define COMPILER "gcc " __VERSION__
 #endif
 
-#define VBXCOPYRIGHT(fname) \
-char *VBXPROTOHEADER1(fname) () \
-{ \
-	char *buf = (char *)malloc( HEADER_SIZE ); \
-	snprintf( buf, HEADER_SIZE, \
-	          "Function " STRINGY(fname) \
-	          "\nCopyright (C) 2012-2016 VectorBlox Computing, Inc.\n" \
-	          "File " __FILE__ " compiled on " __TIME__ " " __DATE__ \
-	          " using " COMPILER \
-	          ".\n" ); \
-	return buf; \
-}
-
-
 #ifdef __cplusplus
-}
+#define extern_decl extern "C"
+#else
+#define extern_decl extern
 #endif
+
+#define VBXCOPYRIGHT(fname)	  \
+	extern_decl char	fname##_copyright[]; \
+	char	fname##_copyright[] =   "Function " STRINGY(fname) \
+	     "\nCopyright (C) 2012-2016 VectorBlox Computing, Inc.\n" \
+	     "File " __FILE__ " compiled on " __TIME__ " " __DATE__ \
+	     " using " COMPILER \
+	     ".\n" ;
+
+
+
 
 #endif // __VBX_COPYRIGHT_H
