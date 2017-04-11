@@ -232,7 +232,7 @@ p {
 <p>For 2D and 3D matrix instructions, discussed later, the enumerated value resets to 0 at the beginning of each new row. To produce totally unique enumerated elements across the entire matrix, additional instructions are required to add the row number or matrix number to each row or matrix.</p>
 <p>The <code>X</code> field is a <strong>datasize specifier</strong> of byte (<code>B</code>), halfword (<code>H</code>), or word (<code>W</code>). When a single letter is specified, the source and the destination operands all use the specified datasize. The two-character versions with a repeated letter (namely <code>BB</code>, <code>HH</code>, and <code>WW</code>) are equivalent to <code>B</code>, <code>H</code>, and <code>W</code>, respectively.</p>
 <p>When two different letters are used in the <strong>datasize specifier</strong>, a <strong>datasize conversion</strong> takes place. The first letter indicates the source datasize, while the second letter indicates the destination datasize. Before performing the requested operation, the processor will either expand the data (using sign-extension for signed, or zero-extension for unsigned) or truncate it to match the <em>larger</em> of the source and destination datasizes. For example, <code>VVBH</code> will take two source operands which are byte vectors, convert them to halfword input vectors on the fly, and compute a halfword vector result. This is convenient with addition, subtraction, and multiply instructions, as it eliminates the possibility of overflow/carry-out. It is also possible to go in the reverse direction, e.g. <code>VVHB</code>, which combines two halfword vectors and truncates the result into a byte vector. A datasize reduction such as this may be useful if the difference between vectors is guaranteed to be small. Note that both source operands, <code>srcA</code> and <code>srcB</code>, must have matching datasizes. Scalar and enumerated operands are not truncated to the input width when expanding (<code>BH</code>, <code>BW</code>, or <code>HW</code> datasize specifier), but rather used at the larger output width.</p>
-<p>There are two special cases to consider with <strong>datasize conversion</strong>. First, datasize conversion with the fixed-point multiply instruction, <code>VMULFXP</code>, produces an undefined result. To convert between fixed-point representations (byte/halfword/word) where the binary point is in a different position, use a shift operation (<code>VSHR</code> or <code>VSHL</code>) to move the binary point and a datasize conversion to expand or truncate the result. Second, datasize conversion with an accumulated vector instruction performs the requested operation at the original source datasize, not at the larger datasize. However, the destination datasize is used when accumulating the intermediate values and writing the final result.</p>
+<p>Fixed-point instructions (<code>VMULFXP</code>, <code>VADDFXP</code>, or <code>VSUBFXP</code>) should be handled carefully when dealing with <strong>datasize conversion</strong>. Datasize conversion with the does not shift the result to convert between (byte/halfword/word) fixed-point formats if they have different numbers of fractional bits. To upconvert between fixed-point representations (byte/halfword/word) where the binary point is in a different position, use a shift operation (<code>VSHR</code> or <code>VSHL</code>) to move the binary point and a datasize conversion to expand or truncate the result. A down-converting fixed-point instruction will saturate to the largest positive or negative number (zero for unsigned instructions) representable, versus non-fixed-point instructions that simply truncate.</p>
 <p>The <code>Y</code> field is an optional <strong>sign specifier</strong> of unsigned (<code>U</code>) or signed (<code>S</code>). If omitted, the default behaviour is always <em>signed</em>. Note that logical versus arithmetic right-shifting via the <code>VSHR</code> instruction is distinguished via this signed specifier. Also, note that some instructions <!---**(FIXME: imprecise)**-->, for example the bit-rotating instructions <code>VROTR</code> and <code>VROTL</code>, don’t make sense as signed operations and so behave as an <em>unsigned</em> operation no matter which <strong>sign specifier</strong> is used. <!---(**FIXME:** A signed `VROTR` makes sense if a
 datasize conversion takes place – is the sign specifier ignored during
 datasize conversion with these instructions?)--></p>
@@ -240,7 +240,7 @@ datasize conversion with these instructions?)--></p>
 <p>The <code>instr</code> is a constant symbol specifying the desired vector operation. The instructions must be one of:</p>
 <ul>
 <li><p>bitwise logical   <code>VAND</code>, <code>VOR</code>, <code>VXOR</code>, <code>VSHL</code>, <code>VSHR</code>, <code>VROTL</code>, <code>VROTR</code></p></li>
-<li><p>arithmetic   <code>VADD</code>, <code>VSUB</code>, <code>VADDC</code>, <code>VSUBB</code>, <code>VABSDIFF</code>, <code>VMUL</code>, <code>VMULLO</code>, <code>VMULHI</code>, <code>VMULFXP</code></p></li>
+<li><p>arithmetic   <code>VADD</code>, <code>VSUB</code>, <code>VADDC</code>, <code>VSUBB</code>, <code>VABSDIFF</code>, <code>VMUL</code>, <code>VMULLO</code>, <code>VMULHI</code>, <code>VMULFXP</code>, <code>VADDFXP</code>, <code>VSUBFXP</code></p></li>
 <li><p>move and conditional-move   <code>VMOV</code>, <code>VCMV_LEZ</code>, <code>VCMV_GTZ</code>, <code>VCMV_LTZ,</code> <code>VCMV_GEZ</code>, <code>VCMV_Z</code>, <code>VCMV_NZ</code></p></li>
 <li><p>custom   <code>VCUSTOMX</code>, for X from 0 to 15</p></li>
 </ul>
@@ -248,9 +248,9 @@ datasize conversion with these instructions?)--></p>
 <p>For the unconditional move instruction, <code>VMOV</code>, operand <code>srcB</code> is unused and should be specified as 0.</p>
 <p>The arithmetic instructions <code>ADDC</code> and <code>SUBB</code> are used for extended-precision operations where the carry/borrow flag from the <code>srcB</code> operand is added to the <code>srcA</code> operand.</p>
 <p>For multiplication, the result requires twice as many bits as the source operands. Hence, the operations <code>VMUL</code> or <code>VMULLO</code> produce the lower half of the product, while <code>VMULHI</code> produces the upper half of the product. Multiplication can also be used with a datasize-conversion operation from byte-to-halfword, or from halfword-to-word (see the section on <a href="#mode_type_and_datasize_specifier">datasize specifiers</a>). In this case, the <code>VMUL</code> or <code>VMULLO</code> instruction places the entire product in the destination.</p>
-<p>For instructions that undergo a datasize conversion, execution at the ALU is always performed at the widest datasize, unless an accumulated instruction is done in which case the source datasize is used. Expansion or up-conversion relies upon sign-extension (for signed) or zero-extension (for unsigned). Conversely, down-conversion relies upon truncation, with the upper bytes being discarded.</p>
+<p>For instructions that undergo a datasize conversion, execution at the ALU is always performed at the widest datasize. Expansion or up-conversion relies upon sign-extension (for signed) or zero-extension (for unsigned). Conversely, down-conversion relies upon truncation, with the upper bytes being discarded for all instructions except fixed-point instructions. The fixed-point instructions (<code>VMULFXP</code>, <code>VADDFXP</code>, and <code>VSUBFXP</code>) will saturate to the largest positive or negative number (zero for unsigned instructions) representable when down-converting.</p>
 <p>Many instructions can also generate a 1-bit flag result per element. Also, a few instructions alter their behaviour depending upon the flag setting. These are discussed in the section on <a href="#conditional_move_and_flags">conditional moves</a>.</p>
-<p>The fixed-point multiply operation <code>VMULFXP</code> will perform a multiply followed by a shift right to keep the correct number of fractional bits when multiplying fixed-point numbers. The fixed-point format, and therefore the amount of the right shift, is fixed and predetermined at system build time. Formats with no integer bits (Q0.8 for byte, Q0.16 for halfword, and Q0.32 for word) are not supported by <code>VMULFXP</code>; <code>VMULHI</code> performs the function a <code>VMULFXP</code> operation would for these formats and should be used instead. <code>VMULFXP</code> may overflow if the result is too large in magnitude to fit in the supported fixed-point format. In the case of overflow, the flag bit is set to 1 (see <a href="#updates_to_flag_state">updates to flag state</a>). Additionally, signed <code>VMULFXP</code> operations are sign preserving; the MSB of the result is set to the numerically correct sign even if the operation overflowed, so that the result can be saturated positive or negative if desired. The <code>VMULFXP</code> instruction produces an undefined result when used together with datasize conversion.</p>
+<p>The fixed-point multiply operation <code>VMULFXP</code> will perform a multiply followed by a shift right to keep the correct number of fractional bits when multiplying fixed-point numbers. It also performs a rounding by adding a carry-in one bit to the right of the LSB of the result before truncating. The fixed-point format, and therefore the amount of the right shift, is fixed and predetermined at system build time. Formats with no integer bits (Q0.8 for byte, Q0.16 for halfword, and Q0.32 for word) are not supported by <code>VMULFXP</code>; <code>VMULHI</code> performs the function a <code>VMULFXP</code> operation would for these formats and should be used instead. <code>VMULFXP</code> may overflow if the result is too large in magnitude to fit in the supported fixed-point format. In the case of overflow, the flag bit is set to 1 (see <a href="#updates_to_flag_state">updates to flag state</a>) and the result saturates to the largest magnitude number representable with the correct sign. <code>VADDFXP</code> and <code>VSUBFXP</code> act the same as <code>VADD</code> and <code>VSUB</code> except that they saturate to the largest magnitude representable number with the correct sign, or to zero in the case of an unsigned <code>VSUBFXP</code> that produces a negative result.</p>
 <p>For the conditional move instructions, <code>srcA</code> provides the value to move, while <code>srcB</code> provides the logical predicate. For each element of a conditional move, a logical true predicate value results in the value from <code>srcA</code> being written to <code>dest</code>. Further details concerning conditional moves and flags are discussed in the section on <a href="#conditional_move_and_flags">conditional moves</a>.</p>
 <p>Custom instructions (<code>VCUSTOM0-15</code>) are an experimental feature allowing system specific instructions through an external port to the MXP. MXP instances may have 0 to 16 custom operators attached. If a custom instruction is issued while there is no custom operator on the corresponding port, the result is undefined. Simple custom instructions function the same way as normal vector instructions, while more complex instructions can be built that allow for more than two inputs and multiple outputs but require extra setup. The number of custom instruction lanes may be equal to or fewer than the number of vector lanes; this can be queried by software reading the <code>vcustomX_lanes</code> parameter corresponding to the <code>VCUSTOMX</code> opcode being used. In the case the number of custom instruction lanes is fewer than the number of vector lanes, custom instructions will take correspondingly longer to execute. Consult your system documentation to find the custom instructions it has attached and their usage. Information for custom instruction creators can be found in the <em>VectorBlox MXP Custom Instruction Manual</em>.</p>
 <h3 id="specifying_1d_vector_length"><span class="header-section-number">2.1.4</span> Specifying 1D Vector Length</h3>
@@ -264,6 +264,7 @@ datasize conversion with these instructions?)--></p>
 <p>The <strong>accumulate</strong> operation will sum all of the elements of a vector. Hence, the result written to <code>dest</code> is a single element, not a vector of elements. The size of the result element is determined by the destination datasize specifier.</p>
 <p>When used with the <code>VABSDIFF</code> instruction, the <strong>accumulate</strong> operation computes the sum-of-absolute-differences in a single instruction as follows:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_acc( mode, VABSDIFF, dest, srcA, srcB );</code></pre>
+<p>Internally accumulation is done at 40 bits of precision, and if the accumulated result is larger in magnitude than can fit in the output data type, the output will be saturated to the largest magnitude number representable with the correct sign. See <a href="#updates_to_flag_state">updates to flag state</a> for more detail.</p>
 <h2 id="vbx_2d_3d_instructions"><span class="header-section-number">2.3</span> 2D and 3D Matrix Instructions</h2>
 <p>Vector instructions can operate on 1D vectors as well as 2D or 3D matrices. The 2D and 3D modes provide higher performance and increased code density.</p>
 <p>The following API calls are used to invoke 2D or 3D operations:</p>
@@ -308,12 +309,12 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 <tr class="odd">
 <td align="left">Unsigned</td>
 <td align="left">any <em>accumulate</em></td>
-<td align="left"><span class="math"><em>V</em></span> (subject to change)</td>
+<td align="left"><span class="math"><em>V</em> † </span></td>
 </tr>
 <tr class="even">
 <td align="left">Signed</td>
 <td align="left">any <em>accumulate</em></td>
-<td align="left"><span class="math"><em>V</em> † </span> (subject to change)</td>
+<td align="left"><span class="math"><em>V</em> † </span></td>
 </tr>
 <tr class="odd">
 <td align="left">Unsigned</td>
@@ -381,56 +382,61 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 <td align="left"><span class="math"><em>R</em></span></td>
 </tr>
 <tr class="even">
-<td align="left">Unsigned</td>
-<td align="left"><code>VMULFXP</code></td>
-<td align="left"><span class="math"><em>V</em></span> (subject to change)</td>
+<td align="left">Either</td>
+<td align="left"><code>VADDFXP</code></td>
+<td align="left"><span class="math"><em>V</em> † </span></td>
 </tr>
 <tr class="odd">
-<td align="left">Signed</td>
-<td align="left"><code>VMULFXP</code></td>
-<td align="left"><span class="math"><em>V</em> † </span> (subject to change)</td>
+<td align="left">Either</td>
+<td align="left"><code>VSUBFXP</code></td>
+<td align="left"><span class="math"><em>V</em> † </span></td>
 </tr>
 <tr class="even">
+<td align="left">Either</td>
+<td align="left"><code>VMULFXP</code></td>
+<td align="left"><span class="math"><em>V</em> † </span></td>
+</tr>
+<tr class="odd">
 <td align="left">Either</td>
 <td align="left"><code>VROTL</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>B</em></sub></span> (i.e., copy from source B)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Either</td>
 <td align="left"><code>VROTR</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>B</em></sub></span> (i.e., copy from source B)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Either</td>
 <td align="left"><code>VMOV</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> (i.e., copy from source A)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Either</td>
 <td align="left"><code>VCMV_*</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> (if predicate B is true, else unchanged)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Either</td>
 <td align="left"><code>VAND</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> &amp; <span class="math"><em>F</em><sub><em>B</em></sub></span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Either</td>
 <td align="left"><code>VXOR</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> <span class="math"> ⊕ </span> <span class="math"><em>F</em><sub><em>B</em></sub></span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Either</td>
 <td align="left"><code>VOR</code></td>
 <td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> <span class="math">∣</span> <span class="math"><em>F</em><sub><em>B</em></sub></span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Either</td>
 <td align="left"><code>VABSDIFF</code></td>
 <td align="left"><span class="math">0</span> (subject to change)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Either</td>
 <td align="left">any <code>vbx_dma_to_vector()</code></td>
 <td align="left"><span class="math">0</span></td>
@@ -438,11 +444,11 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 </tbody>
 </table>
 <blockquote>
-<p>Key: <span class="math"><em>C</em></span> carry-out <span class="math"><em>B</em></span> borrow <span class="math"><em>R</em></span> rounding bit is located one rank position lower than the LSB of the final result <span class="math"><em>V</em></span> overflow; for left-shift and multiply-low, set if any bits of significance are lost <span class="math"> † </span> sign preserving; sets the MSB to the sign of the internal full precision result <span class="math"><em>F</em><sub><em>A</em></sub></span> flag of source operand A <span class="math"><em>F</em><sub><em>B</em></sub></span> flag of source operand B</p>
+<p>Key: <span class="math"><em>C</em></span> carry-out <span class="math"><em>B</em></span> borrow <span class="math"><em>R</em></span> rounding bit is located one rank position lower than the LSB of the final result <span class="math"><em>V</em></span> overflow; for left-shift and multiply-low, set if any bits of significance are lost <span class="math"> † </span> saturating; on overflow the result is clamped to the min/max representable number <span class="math"><em>F</em><sub><em>A</em></sub></span> flag of source operand A <span class="math"><em>F</em><sub><em>B</em></sub></span> flag of source operand B</p>
 </blockquote>
-<p>Any operation which includes an <strong>accumulate</strong> will have its flag set to the accumulation overflow value. Accumulation, regardless of operand sizes, happens internally with 40 bits of precision. The overflow flag is set to 1 if the final 40-bit internal accumulator value has any bits of significance that do not fit in the 32-bit instruction result. Additionally, 32-bit signed accumulates are sign preserving: the MSB of the result is set to the MSB of the 40-bit internal accumulator. 16-bit and 8-bit signed accumulates are truncated from the 32-bit value (the sign preservation is lost), so when saturating a signed accumulate operation an output precision of 32-bits must be used. Because the 40-bit internal accumulator itself can overflow, when checking for accumulation overflow on 32-bit inputs it is recommended to break the accumulation in to chunks of size 256 or less (as 256 32-bit inputs cannot overflow a 40-bit accumulator) and check for overflow on each chunk.</p>
+<p>Any operation which includes an <strong>accumulate</strong> will have its flag set to the accumulation overflow value. Accumulation, regardless of operand sizes, happens internally with 40 bits of precision. The overflow flag is set to 1 if the final 40-bit internal accumulator value has any bits of significance that do not fit in the 32-bit instruction result. Additionally, accumulates are saturating and will be set to the largest magnitude representable number with the correct sign. Because the 40-bit internal accumulator itself can overflow, when checking for accumulation overflow on 32-bit inputs it is recommended to break the accumulation in to chunks of size 256 or less (as 256 32-bit inputs cannot overflow a 40-bit accumulator) and check for overflow on each chunk.</p>
 <p>Overflow under a left shift operation requires some explanation. An unsigned <code>VSHL</code> produces an overflow if any of the bits shifted out are set. Likewise, a signed <code>VSHL</code> produces an overflow if an originally positive value shifts out any set bits, or if an originally negative value shifts out any cleared bits.</p>
-<p>Operations which include a datasize conversion operate as follows. In an up-conversion (expansion), any vector source operands are first extended to the wider size before applying the operator. Scalar and enumerated operands are not truncated to the input width, but rather the wider of the two widths. In a down-conversion (truncation), the operation is done on the wider datasize and the final result is truncated. In both cases, the flag is derived from the wide result according to the operation performed.</p>
+<p>Operations which include a datasize conversion operate as follows. In an up-conversion (expansion), any vector source operands are first extended to the wider size before applying the operator. Scalar and enumerated operands are not truncated to the input width, but rather the wider of the two widths. In a down-conversion (truncation), the operation is done on the wider datasize and the final result is truncated for normal instructions and saturated for fixed-point instructions. The flag is derived from the wide result according to the operation performed.</p>
 <h3 id="operations-using-flag-state"><span class="header-section-number">2.4.2</span> Operations using Flag State</h3>
 <p>The flag is used by the following instructions:</p>
 <ul>
@@ -513,7 +519,7 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 <tr class="odd">
 <td align="left">Signed</td>
 <td align="left"><code>VCMV_LEZ</code></td>
-<td align="left">(<span class="math"><em>F</em></span> ^ <span class="math"><em>N</em></span>) <span class="math"> ⊕ </span> <span class="math"><em>Z</em></span></td>
+<td align="left">(<span class="math"><em>F</em></span> <span class="math"> ⊕ </span> <span class="math"><em>N</em></span>) <span class="math">∣</span> <span class="math"><em>Z</em></span></td>
 </tr>
 <tr class="even">
 <td align="left">Signed</td>
