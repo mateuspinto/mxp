@@ -42,8 +42,6 @@ int VectorBlox_MXP_Initialize()
 	the_mxp.init = 0;
 
 	the_mxp.sp = the_mxp.scratchpad_addr;
-
-	the_mxp.spstack = (vbx_void_t **) NULL;
 	the_mxp.spstack_top = (int) 0;
 	the_mxp.spstack_max = (int) 0;
 
