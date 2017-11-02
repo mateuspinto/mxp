@@ -24,7 +24,7 @@ This preview release is for evaluation only, and consists of:
 To get started immediately:
 
 - Ensure you have one of the [supported development
-  boards](./mxp_supported_boards.html).
+  boards](http://vectorblox.github.io/mxp/mxp_supported_boards.html).
 
 - Download the latest release zip file
   [Full](https://github.com/VectorBlox/mxp/archive/master.zip) /
