@@ -141,59 +141,54 @@ p {
 <td align="left">Maximum length of a masked vector instruction</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>short</code></td>
-<td align="left">mask_partitions</td>
-<td align="left">Number of mask partitions (0 if disabled)</td>
-</tr>
-<tr class="even">
 <td align="left"><code>char</code></td>
 <td align="left">vector_custom_instructions</td>
 <td align="left">The number of vector custom instructions attached</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>char</code></td>
 <td align="left">fxp_word_frac_bits</td>
 <td align="left">Number of fractional bits in word-wise fixed-point multiply</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>char</code></td>
 <td align="left">fxp_half_frac_bits</td>
 <td align="left">Number of fractional bits in halfword-wise fixed-point multiply</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>char</code></td>
 <td align="left">fxp_byte_frac_bits</td>
 <td align="left">Number of fractional bits in byte-wise fixed-point multiply</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><em>MXP flags</em></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>char</code></td>
 <td align="left">init</td>
 <td align="left">A flag confirming this structure was initialized</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><em>MXP run-time state</em></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>vbx_void_t *</code></td>
 <td align="left">sp</td>
 <td align="left">Next free location in the scratchpad</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>vbx_void_t **</code></td>
 <td align="left">spstack</td>
 <td align="left">Starting address of the stack of scratchpad pointers</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>int</code></td>
 <td align="left">spstack_top</td>
 <td align="left">Entry for the top-of-stack</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>int</code></td>
 <td align="left">spstack_max</td>
 <td align="left">Maximum number of words in the stack</td>
@@ -218,46 +213,49 @@ p {
 <ul>
 <li><p><code>dest</code> is always a pointer to the scratchpad.</p></li>
 <li><p><code>srcA</code> can be either a 32-bit scalar quantity (for scalar modes), or a pointer to the scratchpad (for vector modes).</p></li>
-<li><p><code>srcB</code> is always a pointer to the scratchpad (for vector modes), or it is ignored (for the <code>VMOV</code> instruction, or enumerated vector modes). When ignored, we recommend specifying a <code>srcB</code> value of 0.</p></li>
+<li><p><code>srcB</code> can be either a 32-bit scalar quantity (for scalar modes), a pointer to the scratchpad (for vector modes), or it is ignored (for the <code>VMOV</code> instruction, or enumerated vector modes). When ignored, we recommend specifying a <code>srcB</code> value of 0.</p></li>
 </ul>
 <p>See the section on <a href="#vbx_hazards">hazards</a> regarding the possibility of data race hazards with vector instructions, particularly when operands point to overlapping memory regions.</p>
 <h3 id="mode_type_and_datasize_specifier"><span class="header-section-number">2.1.2</span> Mode Type and Datasize Specifier</h3>
-<p>The <code>mode</code> is a 3 to 5 letter constant symbol where each letter has a meaning. The symbol can be generalized as a triplet <code>WXY</code> where:</p>
+<p>The <code>mode</code> is a 3 to 8 letter constant symbol where each letter has a meaning. The symbol can be generalized as a triplet <code>WXY</code> where:</p>
 <ul>
-<li><p><code>W</code> is one of <code>{ VV, SV, VE, SE }</code></p></li>
-<li><p><code>X</code> is one of <code>{ B, H, W, BB, BH, BW, HB, HH, HW, WB, WH, WW }</code></p></li>
-<li><p><code>Y</code> is one of <code>{ S, U }</code> or empty (defaults to <code>S</code>).</p></li>
+<li><p><code>W</code> is one of <code>{ VV, SV, VE, SE , VS }</code></p></li>
+<li><p><code>X</code> is a combination of <code>ZZZ</code> where <code>Z</code> is one of <code>{ W, H, B}</code></p></li>
+<li><p><code>Y</code> is a combination of <code>GGG</code> where <code>G</code> is one of <code>{S, U}</code></p></li>
 </ul>
-<p>The <code>W</code> field is a two-letter <strong>type specifier</strong> indicating vector (<code>V</code>), scalar (<code>S</code>), or enumerated (<code>E</code>) types. The first letter indicates the type for <code>srcA</code>, while the second letter indicates the type for <code>srcB</code>. Hence, <code>srcA</code> can only be a <strong>vector</strong> or <strong>scalar type</strong>, while <code>srcB</code> can only be a vector or <strong>enumerated type</strong>. The enumerated type produces a vector of constants for operand <code>srcB</code>, starting at 0 and incrementing by 1 for each vector element. Since enumerated types ignore the value specified in <code>srcB</code>, we recommend specifying a value of 0.</p>
-<p>For 2D and 3D matrix instructions, discussed later, the enumerated value resets to 0 at the beginning of each new row. To produce totally unique enumerated elements across the entire matrix, additional instructions are required to add the row number or matrix number to each row or matrix.</p>
-<p>The <code>X</code> field is a <strong>datasize specifier</strong> of byte (<code>B</code>), halfword (<code>H</code>), or word (<code>W</code>). When a single letter is specified, the source and the destination operands all use the specified datasize. The two-character versions with a repeated letter (namely <code>BB</code>, <code>HH</code>, and <code>WW</code>) are equivalent to <code>B</code>, <code>H</code>, and <code>W</code>, respectively.</p>
-<p>When two different letters are used in the <strong>datasize specifier</strong>, a <strong>datasize conversion</strong> takes place. The first letter indicates the source datasize, while the second letter indicates the destination datasize. Before performing the requested operation, the processor will either expand the data (using sign-extension for signed, or zero-extension for unsigned) or truncate it to match the <em>larger</em> of the source and destination datasizes. For example, <code>VVBH</code> will take two source operands which are byte vectors, convert them to halfword input vectors on the fly, and compute a halfword vector result. This is convenient with addition, subtraction, and multiply instructions, as it eliminates the possibility of overflow/carry-out. It is also possible to go in the reverse direction, e.g. <code>VVHB</code>, which combines two halfword vectors and truncates the result into a byte vector. A datasize reduction such as this may be useful if the difference between vectors is guaranteed to be small. Note that both source operands, <code>srcA</code> and <code>srcB</code>, must have matching datasizes. Scalar and enumerated operands are not truncated to the input width when expanding (<code>BH</code>, <code>BW</code>, or <code>HW</code> datasize specifier), but rather used at the larger output width.</p>
+<p>The <code>W</code> field is a two-letter <strong>type specifier</strong> indicating vector (<code>V</code>), scalar (<code>S</code>), or enumerated (<code>E</code>) types. The first letter indicates the type for <code>srcA</code>, while the second letter indicates the type for <code>srcB</code>. Hence, <code>srcA</code> can only be a <strong>vector</strong> or <strong>scalar type</strong>, while <code>srcB</code> can be a <strong>vector type</strong>, <strong>scalar type</strong>, or <strong>enumerated type</strong>. The enumerated type produces a vector of constants for operand <code>srcB</code>, starting at 0 and incrementing by 1 for each vector element. Since enumerated types ignore the value specified in <code>srcB</code>, we recommend specifying a value of 0.</p>
+<p>The type specifier <code>VS</code> is a pseudo-specifier in that it is not actually supported by hardware, but because certain instructions are commutative, or can be emulated with other instructions the <code>VS</code> specifier exists as a convienience.</p>
+<p>For 2D and 3D matrix instructions, discussed later, the enumerated value resets 0 at the beginning of each new row. To produce totally unique enumerated element across the entire matrix, additional instructions are required to add the row number or matrix number to each row or matrix.</p>
+<p>The <code>X</code> field is a triplet <strong>datasize specifier</strong> of byte (<code>B</code>), halfword (<code>H</code>), or word (<code>W</code>). The first letter specifies the destination size, the second specifies the size srcA, and the third letter specifies the size for srcB.</p>
+<p>The datasize specifier can be abreviated so that if only one letter is specifed all three datasizes are the same size. If only two letters are specified the first letter specifies the destination and the second letter specifies the size of both sources.</p>
+<p>The <code>Y</code> field is an triplet <strong>sign specifier</strong> of unsigned (<code>U</code>) or signed (<code>S</code>). The first indicates what the signedness of the operation, while the next two letters indicate whether srcA and srcB are zero <code>U</code> or sign <code>S</code> extended respectively during datasize conversion.</p>
+<p>Like the datasize specifier the sign specifier can also be abbreviated. When only two letters are specified the two source arguments share signedness. If only one letter is specified, the two sources and the operation all share the same signedness. If the sign specifier is omitted entirely, the two sources and the operation are interpreted as signed.</p>
+<p>Note that logical versus arithmetic right-shifting via the <code>VSHR</code> instruction is distinguished via the operation sign specifier.</p>
+<p>When dest/srcA/srcB do not have the same letters used in the <strong>datasize specifier</strong>, a <strong>datasize conversion</strong> takes place. Before performing the requested operation, the processor will expand the data (using sign-extension for signed, or zero-extension for unsigned) it to match the <em>larger</em> of the source and destination datasizes. For example, <code>VVHB</code> will take two source operands which are byte vectors, convert them to halfword input vectors on the fly, and compute a halfword vector result. This is convenient with addition, subtraction, and multiply instructions, as it eliminates the possibility of overflow/carry-out. It is also possible to go in the reverse direction, e.g. <code>VVBH</code>, which combines two halfword vectors and truncates the result into a byte vector. A datasize reduction such as this may be useful if the difference between vectors is guaranteed to be small.</p>
 <p>Fixed-point instructions (<code>VMULFXP</code>, <code>VADDFXP</code>, or <code>VSUBFXP</code>) should be handled carefully when dealing with <strong>datasize conversion</strong>. Datasize conversion with the does not shift the result to convert between (byte/halfword/word) fixed-point formats if they have different numbers of fractional bits. To upconvert between fixed-point representations (byte/halfword/word) where the binary point is in a different position, use a shift operation (<code>VSHR</code> or <code>VSHL</code>) to move the binary point and a datasize conversion to expand or truncate the result. A down-converting fixed-point instruction will saturate to the largest positive or negative number (zero for unsigned instructions) representable, versus non-fixed-point instructions that simply truncate.</p>
-<p>The <code>Y</code> field is an optional <strong>sign specifier</strong> of unsigned (<code>U</code>) or signed (<code>S</code>). If omitted, the default behaviour is always <em>signed</em>. Note that logical versus arithmetic right-shifting via the <code>VSHR</code> instruction is distinguished via this signed specifier. Also, note that some instructions <!---**(FIXME: imprecise)**-->, for example the bit-rotating instructions <code>VROTR</code> and <code>VROTL</code>, don’t make sense as signed operations and so behave as an <em>unsigned</em> operation no matter which <strong>sign specifier</strong> is used. <!---(**FIXME:** A signed `VROTR` makes sense if a
-datasize conversion takes place – is the sign specifier ignored during
-datasize conversion with these instructions?)--></p>
 <h3 id="instruction_specifier"><span class="header-section-number">2.1.3</span> Instruction Specifier</h3>
 <p>The <code>instr</code> is a constant symbol specifying the desired vector operation. The instructions must be one of:</p>
 <ul>
-<li><p>bitwise logical   <code>VAND</code>, <code>VOR</code>, <code>VXOR</code>, <code>VSHL</code>, <code>VSHR</code>, <code>VROTL</code>, <code>VROTR</code></p></li>
+<li><p>bitwise logical   <code>VAND</code>, <code>VOR</code>, <code>VXOR</code>, <code>VSHL</code>, <code>VSHR</code></p></li>
 <li><p>arithmetic   <code>VADD</code>, <code>VSUB</code>, <code>VADDC</code>, <code>VSUBB</code>, <code>VABSDIFF</code>, <code>VMUL</code>, <code>VMULLO</code>, <code>VMULHI</code>, <code>VMULFXP</code>, <code>VADDFXP</code>, <code>VSUBFXP</code></p></li>
-<li><p>move and conditional-move   <code>VMOV</code>, <code>VCMV_LEZ</code>, <code>VCMV_GTZ</code>, <code>VCMV_LTZ,</code> <code>VCMV_GEZ</code>, <code>VCMV_Z</code>, <code>VCMV_NZ</code></p></li>
+<li><p>move and conditional-move   <code>VMOV</code>, <code>VCMV_LEZ</code>, <code>VCMV_GTZ</code>, <code>VCMV_LTZ,</code> <code>VCMV_GEZ</code>, <code>VCMV_Z</code>, <code>VCMV_NZ</code>,<code>VSLT</code>,<code>VSGT</code></p></li>
 <li><p>custom   <code>VCUSTOMX</code>, for X from 0 to 15</p></li>
 </ul>
-<p>For the shift and rotate instructions, <code>srcA</code> specifies the amount of the shift/rotate, while <code>srcB</code> specifies the value to be shifted/rotated. The sign specifier distinguishes arithmetic from logical shifts.</p>
+<p>For the shift instructions, <code>srcA</code> specifies the value to be shifted, while <code>srcB</code> specifies the number of bits to shift the value by. The operationsign specifier distinguishes arithmetic from logical shifts.</p>
 <p>For the unconditional move instruction, <code>VMOV</code>, operand <code>srcB</code> is unused and should be specified as 0.</p>
 <p>The arithmetic instructions <code>ADDC</code> and <code>SUBB</code> are used for extended-precision operations where the carry/borrow flag from the <code>srcB</code> operand is added to the <code>srcA</code> operand.</p>
 <p>For multiplication, the result requires twice as many bits as the source operands. Hence, the operations <code>VMUL</code> or <code>VMULLO</code> produce the lower half of the product, while <code>VMULHI</code> produces the upper half of the product. Multiplication can also be used with a datasize-conversion operation from byte-to-halfword, or from halfword-to-word (see the section on <a href="#mode_type_and_datasize_specifier">datasize specifiers</a>). In this case, the <code>VMUL</code> or <code>VMULLO</code> instruction places the entire product in the destination.</p>
 <p>For instructions that undergo a datasize conversion, execution at the ALU is always performed at the widest datasize. Expansion or up-conversion relies upon sign-extension (for signed) or zero-extension (for unsigned). Conversely, down-conversion relies upon truncation, with the upper bytes being discarded for all instructions except fixed-point instructions. The fixed-point instructions (<code>VMULFXP</code>, <code>VADDFXP</code>, and <code>VSUBFXP</code>) will saturate to the largest positive or negative number (zero for unsigned instructions) representable when down-converting.</p>
-<p>Many instructions can also generate a 1-bit flag result per element. Also, a few instructions alter their behaviour depending upon the flag setting. These are discussed in the section on <a href="#conditional_move_and_flags">conditional moves</a>.</p>
+<p>Many instructions can also generate a 1-bit flag result per element. Also, a few instructions alter their behaviour depending upon the flag setting. These are discussed in the section on  <a href="#conditional_move_and_flags">conditional moves</a>.</p>
 <p>The fixed-point multiply operation <code>VMULFXP</code> will perform a multiply followed by a shift right to keep the correct number of fractional bits when multiplying fixed-point numbers. It also performs a rounding by adding a carry-in one bit to the right of the LSB of the result before truncating. The fixed-point format, and therefore the amount of the right shift, is fixed and predetermined at system build time. Formats with no integer bits (Q0.8 for byte, Q0.16 for halfword, and Q0.32 for word) are not supported by <code>VMULFXP</code>; <code>VMULHI</code> performs the function a <code>VMULFXP</code> operation would for these formats and should be used instead. <code>VMULFXP</code> may overflow if the result is too large in magnitude to fit in the supported fixed-point format. In the case of overflow, the flag bit is set to 1 (see <a href="#updates_to_flag_state">updates to flag state</a>) and the result saturates to the largest magnitude number representable with the correct sign. <code>VADDFXP</code> and <code>VSUBFXP</code> act the same as <code>VADD</code> and <code>VSUB</code> except that they saturate to the largest magnitude representable number with the correct sign, or to zero in the case of an unsigned <code>VSUBFXP</code> that produces a negative result.</p>
-<p>For the conditional move instructions, <code>srcA</code> provides the value to move, while <code>srcB</code> provides the logical predicate. For each element of a conditional move, a logical true predicate value results in the value from <code>srcA</code> being written to <code>dest</code>. Further details concerning conditional moves and flags are discussed in the section on <a href="#conditional_move_and_flags">conditional moves</a>.</p>
-<p>Custom instructions (<code>VCUSTOM0-15</code>) are an experimental feature allowing system specific instructions through an external port to the MXP. MXP instances may have 0 to 16 custom operators attached. If a custom instruction is issued while there is no custom operator on the corresponding port, the result is undefined. Simple custom instructions function the same way as normal vector instructions, while more complex instructions can be built that allow for more than two inputs and multiple outputs but require extra setup. The number of custom instruction lanes may be equal to or fewer than the number of vector lanes; this can be queried by software reading the <code>vcustomX_lanes</code> parameter corresponding to the <code>VCUSTOMX</code> opcode being used. In the case the number of custom instruction lanes is fewer than the number of vector lanes, custom instructions will take correspondingly longer to execute. Consult your system documentation to find the custom instructions it has attached and their usage. Information for custom instruction creators can be found in the <em>VectorBlox MXP Custom Instruction Manual</em>.</p>
-<h3 id="specifying_1d_vector_length"><span class="header-section-number">2.1.4</span> Specifying 1D Vector Length</h3>
-<p>Before invoking any 1D vector instruction, the programmer must first specify the dimensions of the data to the MXP. This is done by setting the <em>vector length register</em> using:</p>
+<p>For the conditional move instructions, <code>srcA</code> provides the value to move, while <code>srcB</code> provides the logical predicate. For each element of a conditional move, a logical true predicate value results in the value from <code>srcA</code> being written to <code>dest</code>. Further details concerning conditional moves and flags are discussed in the section on  <a href="#conditional_move_and_flags">conditional moves</a>.</p>
+<p>The instructions set less than <code>VSLT</code> and set greater than <code>VSGT</code> instrutions produce a 1 in the destination if srcA is less than srcB for <code>VSLT</code> or if srcA is greater than srcb in the case of <code>VSGT</code>. Otherwise it sets the destination to zero.</p>
+<p>Custom instructions (<code>VCUSTOM0-15</code>) are an advanced feature allowing system specific instructions through an external port to the MXP. MXP instances may have 0 to 16 custom operators attached. If a custom instruction is issued while there is no custom operator on the corresponding port, the result is undefined. Simple custom instructions function the same way as normal vector instructions, while more complex instructions can be built that allow for more than two inputs and multiple outputs but require extra setup. The number of custom instruction lanes may be equal to or fewer than the number of vector lanes; this can be queried by software reading the <code>vcustomX_lanes</code> parameter corresponding to the <code>VCUSTOMX</code> opcode being used. In the case the number of custom instruction lanes is fewer than the number of vector lanes, custom instructions will take correspondingly longer to execute. Consult your system documentation to find the custom instructions it has attached and their usage. Information for custom instruction creators can be found in the <em>VectorBlox MXP Custom Instruction Manual</em>.</p>
+<h3 id="specifying_1d_vector_length"><span class="header-section-number">2.1.4</span> Specifying Vector Length</h3>
+<p>Before invoking any vector instruction, the programmer must first specify the dimensions of the data to the MXP. This is done by setting the <em>vector length register</em> using:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl );</code></pre>
 <p>The <em>unsigned</em> integer argument <code>vl</code> specifies the number of <strong>vector elements</strong> in the operation. Hence, a setting of <code>vl = 10</code> will operate on 10 bytes, 10 halfwords, or 10 words, depending upon the datasize specifier. The number of <strong>vector elements</strong> can be set from 1 to the full vector scratchpad size (in bytes), inclusive. Setting a vector length of 0, or greater than the scratchpad size, results in undefined behaviour.</p>
-<p>The MXP will always remember the latest vector length that was set. While this is convenient, it can also be problematic if called functions or third party libraries change the value as a side effect. To reduce such unpleasant side effects, the VBXware library always saves and restores the vector length register (as well as the 2D and 3D dimension registers).</p>
+<p>The MXP will always remember the latest vector length that was set. While this is convenient, it can also be problematic if called functions or third party libraries change the value as a side effect. To reduce such unpleasant side effects, library functions should always save restores the vector length register (as well as the 2D and 3D dimension registers discussed later).</p>
 <h2 id="accumulated_vector_instructions"><span class="header-section-number">2.2</span> Accumulated Vector Instructions</h2>
 <p>All basic MXP instructions can be compounded with an <strong>accumulate</strong> operation. This accumulation does not require any additional run-time. To use it, replace the <code>vbx()</code> macro with the <code>vbx_acc()</code> macro. The arguments for this macros are exactly the same as before:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_acc( mode, instr, dest, srcA, srcB );</code></pre>
@@ -267,27 +265,20 @@ datasize conversion with these instructions?)--></p>
 <p>Internally accumulation is done at 40 bits of precision, and if the accumulated result is larger in magnitude than can fit in the output data type, the output will be saturated to the largest magnitude number representable with the correct sign. See <a href="#updates_to_flag_state">updates to flag state</a> for more detail.</p>
 <h2 id="vbx_2d_3d_instructions"><span class="header-section-number">2.3</span> 2D and 3D Matrix Instructions</h2>
 <p>Vector instructions can operate on 1D vectors as well as 2D or 3D matrices. The 2D and 3D modes provide higher performance and increased code density.</p>
-<p>The following API calls are used to invoke 2D or 3D operations:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_2D()
-
-vbx_acc_2D()
-
-vbx_3D()
-
-vbx_acc_3D()</code></pre>
-<p>To use them, simply replace the 1D vector operation <code>vbx()</code> with <code>vbx_2D()</code> or <code>vbx_3D()</code>, for example. The arguments for these macros are exactly the same as before.</p>
-<h3 id="specifying_2d_3d_sizes"><span class="header-section-number">2.3.1</span> Specifying 2D and 3D Matrix Sizes</h3>
-<p>Before invoking a 2D matrix instruction, the programmer must set the current <em>2D matrix size registers</em> using two calls:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl );
+<p>The <code>vbx_set_vl</code> function actually accepts up to three arguments:</p>
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl ,numRows=<span class="dv">1</span>,numMats=<span class="dv">1</span>);</code></pre>
+<p>When <code>numMats</code> or both <code>numMats</code> and <code>numRows</code> are not specified they default to 1.</p>
+<p>Before invoking a 2D matrix instruction, the programmer must set the current <em>2D matrix size and stride registers</em> using two calls:</p>
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl ,nRows);
 vbx_set_2D( numRows, incDest2, incSrcA2, incSrcB2 );</code></pre>
 <p>Likewise, before invoking a 3D matrix instruction, the programmer must set the current <em>3D matrix size registers</em> using three calls:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl );
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl,numRows,numMats );
 vbx_set_2D( numRows, incDest2, incSrcA2, incSrcB2 );
 vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 <p>These functions are further described in the section on <a href="#specifying_vector_and_matrix_sizes">vector length and matrix size</a>.</p>
-<p>For both 2D and 3D operations, the increment amounts for the sources and destination are specified in units of bytes, not elements. This differs from the <code>vbx_set_vl()</code> function which specifies the vector length in units of elements.</p>
-<p>The MXP will always remember the latest vector length and matrix dimensions that were set. While this is convenient, it can also be problematic if called functions or third party libraries change the values as a side effect. To reduce such unpleasant side effects, the VBXware library always saves and restores these registers.</p>
-<h3 id="accumulating_2d_3d"><span class="header-section-number">2.3.2</span> Accumulating 2D and 3D Matrices</h3>
+<p>For both 2D and 3D operations, the increment amounts for the sources and destination are specified in units of bytes, not elements. This differs from the <code>vbx_set_vl()</code> function which specifies the number of elements per row, the number of rows per matrix and the number of matrices.</p>
+<p>The MXP will always remember the latest vector length and matrix dimensions that were set. While this is convenient, it can also be problematic if called functions or third party libraries change the values as a side effect. To reduce such unpleasant side effects, libraries should always save and restore these registers.</p>
+<h3 id="accumulating_2d_3d"><span class="header-section-number">2.3.1</span> Accumulating 2D and 3D Matrices</h3>
 <p>When using the <em>accumulate</em> compound operation with 2D matrix operations, the MXP will write one result element per row. This produces a vector of result elements equal in length to <code>numRows</code>. The size of each result element is determined by the destination datasize specifier.</p>
 <p>Likewise, 3D matrix operations will write one vector of result elements per submatrix, producing a matrix of result elements of width <code>numRows</code> and of height <code>numMats</code>.</p>
 <h2 id="conditional_move_and_flags"><span class="header-section-number">2.4</span> Conditional Move and Flags</h2>
@@ -398,18 +389,18 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 </tr>
 <tr class="odd">
 <td align="left">Either</td>
-<td align="left"><code>VROTL</code></td>
-<td align="left"><span class="math"><em>F</em><sub><em>B</em></sub></span> (i.e., copy from source B)</td>
+<td align="left"><code>VSLT</code></td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
 <td align="left">Either</td>
-<td align="left"><code>VROTR</code></td>
-<td align="left"><span class="math"><em>F</em><sub><em>B</em></sub></span> (i.e., copy from source B)</td>
+<td align="left"><code>VSGT</code></td>
+<td align="left">0</td>
 </tr>
 <tr class="odd">
 <td align="left">Either</td>
 <td align="left"><code>VMOV</code></td>
-<td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span> (i.e., copy from source A)</td>
+<td align="left"><span class="math"><em>F</em><sub><em>A</em></sub></span></td>
 </tr>
 <tr class="even">
 <td align="left">Either</td>
@@ -444,7 +435,14 @@ vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
 </tbody>
 </table>
 <blockquote>
-<p>Key: <span class="math"><em>C</em></span> carry-out <span class="math"><em>B</em></span> borrow <span class="math"><em>R</em></span> rounding bit is located one rank position lower than the LSB of the final result <span class="math"><em>V</em></span> overflow; for left-shift and multiply-low, set if any bits of significance are lost <span class="math"> † </span> saturating; on overflow the result is clamped to the min/max representable number <span class="math"><em>F</em><sub><em>A</em></sub></span> flag of source operand A <span class="math"><em>F</em><sub><em>B</em></sub></span> flag of source operand B</p>
+<p><strong>Key</strong>:</p>
+<p><span class="math"><em>C</em></span> carry-out</p>
+<p><span class="math"><em>B</em></span> borrow</p>
+<p><span class="math"><em>R</em></span> rounding bit is located one rank position lower than the LSB of the final result</p>
+<p><span class="math"><em>V</em></span> overflow; for left-shift and multiply-low, set if any bits of significance are lost</p>
+<p><span class="math"> † </span> saturating; on overflow the result is clamped to the min/max representable number</p>
+<p><span class="math"><em>F</em><sub><em>A</em></sub></span> flag of source operand A</p>
+<p><span class="math"><em>F</em><sub><em>B</em></sub></span> flag of source operand B</p>
 </blockquote>
 <p>Any operation which includes an <strong>accumulate</strong> will have its flag set to the accumulation overflow value. Accumulation, regardless of operand sizes, happens internally with 40 bits of precision. The overflow flag is set to 1 if the final 40-bit internal accumulator value has any bits of significance that do not fit in the 32-bit instruction result. Additionally, accumulates are saturating and will be set to the largest magnitude representable number with the correct sign. Because the 40-bit internal accumulator itself can overflow, when checking for accumulation overflow on 32-bit inputs it is recommended to break the accumulation in to chunks of size 256 or less (as 256 32-bit inputs cannot overflow a 40-bit accumulator) and check for overflow on each chunk.</p>
 <p>Overflow under a left shift operation requires some explanation. An unsigned <code>VSHL</code> produces an overflow if any of the bits shifted out are set. Likewise, a signed <code>VSHL</code> produces an overflow if an originally positive value shifts out any set bits, or if an originally negative value shifts out any cleared bits.</p>
@@ -668,15 +666,7 @@ vbx_get_mask_status( &amp;mask_status );
 <p>Vectorblox additionally provides the following c++ functions that simplify programming by inferring type data from the operands used:</p>
 <pre class="sourceCode c"><code class="sourceCode c">    vbxx(instr,dest,srcA,srcB);
 
-    vbxx_acc(instr,dest,srcA,srcB);
-
-    vbxx_2D(instr,dest,srcA,srcB);
-
-    vbxx_acc_2D(instr,dest,srcA,srcB);
-
-    vbxx_3D(instr,dest,srcA,srcB);
-
-    vbxx_acc_3D(instr,dest,srcA,srcB);</code></pre>
+    vbxx_acc(instr,dest,srcA,srcB);</code></pre>
 <h3 id="example"><span class="header-section-number">2.6.1</span> Example</h3>
 <pre class="sourceCode c"><code class="sourceCode c"> <span class="co">//This function adds two vectors in the c manner</span>
  <span class="dt">void</span> add_c(){
@@ -696,23 +686,25 @@ vbx_get_mask_status( &amp;mask_status );
      vbxx(VADD,vc,va,vb);
  }</code></pre>
 <p>These c++ functions provide the same functionality as their C equivalents, but without the need to provide a mode parameter. Another thing to note is that the move instruction no longer needs the srcB parameter, it is just <code>vbxx(VMOV,dest,srcA)</code></p>
+<p>The sign of the operation is determined by the sign of the destination.</p>
 <h1 id="vbx_api"><span class="header-section-number">3</span> VBX API Library</h1>
 <p>The VBX API consists of a number of basic calls which are described in this section. However, it is important to note that many of these API calls require initialization. This initialization is done by a call to the <code>_vbx_init()</code> function, which is normally called automatically as part of the pre-initialization process before <code>main()</code> is started. (Calling this function more than once is not encouraged, as it may lead to an inconsistent state.)</p>
 <h2 id="specifying_vector_and_matrix_sizes"><span class="header-section-number">3.1</span> Specifying Vector and Matrix Sizes</h2>
 <p>The APIs to set or retrieve vector and matrix sizes are:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl );
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl, numRows, numMats );
 
-vbx_set_2D( numRows, incDest2, incSrcA2, incSrcB2 );
+vbx_set_2D( incDest2, incSrcA2, incSrcB2 );
 
-vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );
+vbx_set_3D( incDest3, incSrcA3, incSrcB3 );
 
-vbx_get_vl( &amp;vl );
+vbx_get_vl( &amp;vl, &amp;numRows, &amp;numMats );
 
-vbx_get_2D( &amp;numRows, &amp;incDest2, &amp;incSrcA2, &amp;incSrcB2 );
+vbx_get_2D( &amp;incDest2, &amp;incSrcA2, &amp;incSrcB2 );
 
-vbx_get_3D( &amp;numMats, &amp;incDest3, &amp;incSrcA3, &amp;incSrcB3 );</code></pre>
+vbx_get_3D( &amp;incDest3, &amp;incSrcA3, &amp;incSrcB3 );</code></pre>
 <p>Notes:</p>
 <ul>
+<li><p>For normal vector (i.e., 1D) operations the <code>vbx_set_vl()</code> function can be called as <code>vbx_set_vl( vl )</code> which will automatically set <code>numRows</code> and <code>numMats</code> to both be one. For 2D operations the <code>vbx_set_vl()</code> function can be called as <code>vbx_set_vl( vl, numRows )</code> which will automatically set <code>numMats</code> to be one.</p></li>
 <li><p>For normal vector (i.e., 1D) operations, the <em>unsigned</em> <code>vl</code> parameter to the <code>vbx_set_vl()</code> function specifies the length of a vector in units of elements.</p></li>
 <li><p>For 2D and 3D operations, the <em>signed</em> parameters <code>incDest2</code>, <code>incDest3</code>, <code>incSrcA2</code>, <code>incSrcA3</code>, <code>incSrcB2</code>, and <code>incSrcB3</code> are specified in units of bytes, not elements. These represent the stride, or distance in bytes, between one row to the next row (2D), or between one matrix to the next matrix (3D).</p></li>
 </ul>
@@ -730,9 +722,9 @@ vbx( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
 }</code></pre>
 <p>2D Matrix VBX code:</p>
 <pre class="sourceCode c"><code class="sourceCode c">    vbx_half_t *vdest, *vsrc1, *vsrc2;
-    vbx_set_vl( vl );
-    vbx_set_2D( numRows, iD2, iA2, iB2 );
-    vbx_2D( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
+    vbx_set_vl( vl, numRows );
+    vbx_set_2D( iD2, iA2, iB2 );
+    vbx( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
 <p>Equivalent C code:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_half_t *dest, *srcA, *srcB;
 <span class="kw">for</span>( r = <span class="dv">0</span>; r &lt; numRows; r++ ) {
@@ -745,10 +737,10 @@ vbx( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
 }</code></pre>
 <p>3D Matrix VBX code:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_half_t *vdest, *vsrc1, *vsrc2;
-vbx_set_vl( vl );
-vbx_set_2D( numRows, iD2, iA2, iB2 );
-vbx_set_3D( numMats, iD3, iA3, iB3 );
-vbx_3D( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
+vbx_set_vl( vl, numRows, numMats );
+vbx_set_2D( iD2, iA2, iB2 );
+vbx_set_3D( iD3, iA3, iB3 );
+vbx( VVH, VADD, vdest, vsrc1, vsrc2 );</code></pre>
 <p>Equivalent C code:</p>
 <pre class="sourceCode c"><code class="sourceCode c">vbx_half_t *dest, *srcA, *srcB;
 <span class="kw">for</span>( m = <span class="dv">0</span>; m &lt; numMats; m++ ) {
@@ -942,7 +934,7 @@ vbx_shared_free( ptr );</code></pre>
 <h3 id="logical-operators"><span class="header-section-number">4.3.2</span> Logical Operators</h3>
 <p>In addition to the above arithmetic operator the logical operators <code>||</code> or <code>&amp;&amp;</code> and <code>!</code> are defined. Which allow combining comparison operators. <code>||</code> and <code>&amp;&amp;</code> usually take 3 instructions to to resolve, but <code>!</code> can usually be resolved without any additional instructions.</p>
 <h2 id="type-conversion"><span class="header-section-number">4.4</span> Type Conversion</h2>
-<p>When using one of the above operators care must be made to ensure that types of the 2 Vector operands match. For instance a <code>Vector&lt;vbx_word_t&gt;</code> cannot be added to a <code>Vector&lt;vbx_uword_t&gt;</code> without first casting it to one of the operands to the type of the other using the <code>.cast&lt;TYPE&gt;()</code> member function.</p>
+<p>When using one of the above operators care must be made to ensure that types of the two Vector operands match. For instance a <code>Vector&lt;vbx_word_t&gt;</code> cannot be added to a <code>Vector&lt;vbx_uword_t&gt;</code> without first casting it to one of the operands to the type of the other using the <code>.cast&lt;TYPE&gt;()</code> member function.</p>
 <p>An Operation inherits the type of it operands, so a the expression <code>va+ENUM</code> would be a binary operator with the same type as <code>va</code>. Binary operators can also be cast using the same member function. so if <code>vb</code> is a <code>Vector&lt;vbx_word_t&gt;</code> and <code>vc</code> is a <code>Vector&lt;vbx_half_t&gt;</code> the following expression is valid <code>vb + (vc * 3).cast&lt;vbx_word_t&gt;()</code> but the expression <code>vb + (vc * 3)</code> is not valid because the type of <code>vb</code> does not match the type of the binary operation <code>vc * 3</code>.</p>
 <p>It is important to note that a the destination of an expression (The Vector that the expression is being assigned to) does not have to match. So using the same vectors <code>vb</code> and <code>vc</code> the statement <code>vb = vc - 5</code> is valid.</p>
 <h2 id="assignment"><span class="header-section-number">4.5</span> Assignment</h2>
@@ -1264,7 +1256,6 @@ vbx_timestamp_t vbx_timestamp();</code></pre>
 <li><p>Vector Addition</p></li>
 <li><p>Vector Copy</p></li>
 <li><p>Vector Exponentiation</p></li>
-<li><p>Vector Reversal</p></li>
 </ul>
 <p>For further information on this the VBXware library, see the documentation.</p>
 <h2 id="vbx_templates"><span class="header-section-number">7.2</span> VBXware Templates</h2>

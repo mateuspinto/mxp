@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>VectorBlox MXP Programming Guide for Xilinx</title>
+  <title>VectorBlox MXP Programming Guide for Intel</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -66,14 +66,11 @@ p {
 </div>
 <div class="span9">
 <div id="header">
-<h1 class="title">VectorBlox MXP Programming Guide for Xilinx</h1>
+<h1 class="title">VectorBlox MXP Programming Guide for Intel</h1>
 </div>
 <h1 id="vectorblox_mxp"><span class="header-section-number">1</span> VectorBlox MXP</h1>
 <div class="figure">
-<img src="images/microblaze-mxp.png" alt="VectorBlox MXP System with MicroBlaze" /><p class="caption">VectorBlox MXP System with MicroBlaze</p>
-</div>
-<div class="figure">
-<img src="images/zynq-mxp.png" alt="VectorBlox MXP System with ARM Cortex-A9 in Zynq-7000 FPGAs" /><p class="caption">VectorBlox MXP System with ARM Cortex-A9 in Zynq-7000 FPGAs</p>
+<img src="images/nios-mxp.png" alt="VectorBlox MXP System with Nios II" /><p class="caption">VectorBlox MXP System with Nios II</p>
 </div>
 <h2 id="architecture_overview"><span class="header-section-number">1.1</span> Architecture Overview</h2>
 <p>The VectorBlox MXP matrix processor is an extremely high-performance processor capable of speedups in excess of 1000<span class="math"> × </span> faster than MicroBlaze or Nios II/f. The design of the processor was inspired by the vector processors used in scientific supercomputers made by Cray, Fujitsu and NEC. However, the MXP is not a simple clone of one of these processors. It has been redesigned from the ground up to perform well on embedded applications which operate primarily on various integer widths and fixed-point data types. It has also been designed from the start to map exceptionally well into modern FPGAs in a way that exploits their hard RAM blocks and hard multiplier or DSP blocks.</p>
@@ -179,183 +176,112 @@ p {
     <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <p>This example could possibly run into some caching issues, information on how to avoid these issues, as well as using dynamic allocation can be found in the <a href="#data_sharing">data-sharing section</a>.</p>
-<h1 id="scalar_cpu_programming"><span class="header-section-number">3</span> MicroBlaze and ARM Programming</h1>
-<p>The MicroBlaze host processor has the following properties:</p>
+<h1 id="nios_ii_programming"><span class="header-section-number">3</span> Nios II Programming</h1>
+<p>The Nios II/f host processor has the following properties:</p>
 <ul>
-<li><p>3- or 5-stage pipeline, roughly 1 instruction per clock cycle</p></li>
+<li><p>6-stage pipeline, roughly 1 instruction per clock cycle</p></li>
 <li><p>single-issue, in-order execution</p></li>
-<li><p>4GB address space</p></li>
-<li><p>optional direct-mapped, non-coherent caches</p></li>
+<li><p>dynamic branch prediction</p></li>
+<li><p>direct-mapped, non-coherent instruction and data caches</p></li>
+<li><p>2GB address space (without MMU), bit-31 cache bypass</p></li>
+<li><p>hardware support for multiply (1 cycle operation)</p></li>
+<li><p>hardware support for divide (from 4 to 66 cycles per operation)</p></li>
+<li><p>barrel shifter</p></li>
+<li><p>optional Memory Management Unit (MMU) or Memory Protection Unit (MPU)</p></li>
 </ul>
-<p>VectorBlox typically configures the MicroBlaze in its demonstration systems as follows:</p>
+<p>VectorBlox typically configures the Nios II/f in its demonstration systems as follows:</p>
 <ul>
-<li><p>5-stage pipeline</p></li>
-<li><p>8KB instruction cache with 8-word cache lines</p></li>
-<li><p>4KB write-back data cache with 8-word cache lines</p></li>
-<li><p>no MMU</p></li>
-<li><p>hardware multiplier (one cycle latency)</p></li>
-<li><p>hardware barrel shifter</p></li>
-<li><p>support for pattern compare instructions</p></li>
-<li><p>branch target cache with 256 entries</p></li>
+<li><p>8KB instruction cache, burst transfers enabled</p></li>
+<li><p>4KB data cache, 32-byte line size, burst transfers enabled</p></li>
+<li><p>no MMU or MPU</p></li>
 </ul>
-<p>Xilinx Zynq-7000 FPGAs contain two ARM Cortex-A9 CPUs with the following properties:</p>
+<h2 id="nios_ii_caching"><span class="header-section-number">3.1</span> Nios II Caching</h2>
+<p>The Nios II does not provide any mechanism for hardware cache coherence. Hence, programmers must manually flush the instruction or data cache when necessary. Flushing consists of writing back a data cache line (if dirty), and then invalidating the cache line.</p>
+<p>Altera provides two ways to flush the data cache:</p>
 <ul>
-<li><p>variable-length pipeline</p></li>
-<li><p>up to two instructions issued per cycle</p></li>
-<li><p>support for out-of-order execution</p></li>
-<li><p>branch prediction using a 4096-entry global branch history buffer (GHB) and a 512-entry branch target address cache (BTAC)</p></li>
-<li><p>4GB address space</p></li>
-<li><p>memory management unit for address translation and access protection</p></li>
-<li><p>NEON Media Processing Engine supporting the ARM v7 advanced SIMD and vector floating-point v3 (VFPv3) instruction sets</p></li>
-<li><p>32KB L1 instruction and data caches, 4-way set-associative, write-back, 32-byte cache line size</p></li>
-<li><p>512KB L2 cache shared by both Cortex-A9 cores, 8-way set-associative, write-through or write-back, 32-byte cache line size</p></li>
+<li><p><code>#include &lt;sys/cache.h&gt;</code> required header file.</p></li>
+<li><p><code>void alt_dcache_flush_all(void)</code> flushes the entire data cache.</p></li>
+<li><p><code>void alt_dcache_flush(void *start, alt_u32 len)</code> flushes the specified memory region from the data cache.</p></li>
 </ul>
-<h2 id="caching"><span class="header-section-number">3.1</span> Caching</h2>
-<p>MicroBlaze does not provide any mechanism for hardware cache coherence. Hence, programmers must manually flush the instruction or data cache when necessary (e.g. when data needs to be shared with another bus master). Flushing consists of writing back a data cache line (if dirty), and then invalidating the cache line.</p>
-<p>The ARM Cortex-A9 MPCore subsystem in the Zynq-7000 FPGAs incorporates two Cortex-A9 CPU cores and a Snoop Control Unit (SCU). The SCU manages data cache coherency between the two Cortex-A9 CPUs and provides an Accelerator Coherency Port (ACP) AXI Slave to simplify sharing of data with other bus masters (such as DMA engines) as long as they don't have their own caches. Reads over the ACP are first looked up in the CPU caches and writes over the ACP will invalidate any affected cache lines in the CPU caches, so the programmer does not have to perform explicit data cache flushing to share data with ACP-connected bus masters. However, if a bus master needs to move a large amount of data that does not need to be frequently accessed by the Cortex-A9 CPUs, it may not be efficient to use the ACP. VectorBlox does not currently support connection of the MXP DMA engine to the ACP, so the programmer will still need to properly manage the caches when sharing data withe MXP.</p>
-<p>Xilinx’s Standalone BSP provides two functions to flush the data cache:</p>
+<p>You can replace <code>dcache</code> with <code>icache</code> to flush the instruction cache.</p>
+<p>Note that <code>alt_dcache_flush()</code> must walk through the entire memory region of <code>len</code> bytes (incrementing by the cache line size in the inner loop). For a sufficiently large memory region, it will be faster to just flush the entire cache and start over.</p>
+<blockquote>
+<p>For example, a typical 8KB data cache with 32b line size contains 256 cache lines. Invalidating an 8MB memory region will require flushing each cache line 1024 times. Since it takes roughly 20 clock cycles to refill a flushed cache line, it is better to flush the entire cache and start over.</p>
+</blockquote>
+<p>On a Nios II/f processor, setting address bit 31 will bypass the cache.</p>
+<blockquote>
+<p>Nios II/s and II/e have no data cache and force this bit to 0.</p>
+</blockquote>
+<p>The functions below convert a pointer between cached and uncached mode by toggling this bit:</p>
 <ul>
-<li><p><code>#include &quot;xil_cache.h&quot;</code> (required header file)</p></li>
-<li><p><code>Xil_DCacheFlush()</code> flushes the entire data cache.</p></li>
-<li><p><code>Xil_DCacheFlushRange(Addr, Len)</code> flushes the specified memory region from the data cache.</p></li>
+<li><p><code>#include &lt;sys/cache.h&gt;</code> required header file.</p></li>
+<li><p><code>void *alt_remap_cached (volatile void *ptr, alt_u32 len)</code> returns a cached pointer.</p></li>
+<li><p><code>volatile void *alt_remap_uncached (void *ptr, alt_u32 len)</code> returns an uncached pointer. When mapping to uncached, the memory region will also be flushed.</p></li>
 </ul>
-<p>Similarly, the instruction cache can be invalidated with</p>
+<p>To allocate/deallocate uncached memory:</p>
 <ul>
-<li><p><code>Xil_ICacheInvalidate()</code>, or</p></li>
-<li><p><code>Xil_ICacheInvalidateRange(Addr, Len)</code></p></li>
+<li><p><code>#include &lt;sys/cache.h&gt;</code> required header file.</p></li>
+<li><p><code>volatile void *alt_uncached_malloc (size_t size)</code> allocates memory, returns uncached pointer.</p></li>
+<li><p><code>void alt_uncached_free (volatile void *ptr)</code> unallocates an uncached region.</p></li>
 </ul>
-<p>Note that <code>Xil_DCacheFlushRange()</code> must walk through the entire memory region of <code>Len</code> bytes (incrementing by the cache line size in the inner loop). For a sufficiently large memory region, it will be faster to just flush the entire data cache and start over.</p>
-<h2 id="vbx_portability_library"><span class="header-section-number">3.2</span> VBX Portability Library</h2>
-<p>To simplify the porting of MXP programs between different scalar host CPUs (e.g. MicroBlaze and ARM Cortex-A9), VectorBlox provides a common cache management and timestamp timer API.</p>
-<p>The functions in the portability library are listed below. More details can be found in the <em>VectorBlox MXP Programming Reference</em>.</p>
-<pre class="sourceCode c"><code class="sourceCode c">    vbx_timestamp_start()
-    vbx_timestamp_freq()
-    vbx_timestamp()
-    vbx_uncached_malloc()
-    vbx_uncached_free()
-    vbx_dcache_flush_all()
-    vbx_dcache_flush(PTR,len) or vbx_dcache_flush_line(PTR)
-    vbx_remap_cached(PTR,len)
-    vbx_remap_uncached(PTR) or vbx_remap_uncached_flush(PTR,len)</code></pre>
-<p>The cache management calls assume that memory accesses can bypass the data cache by setting address bit 31 to 1. The section on <a href="#uncached_access">uncached access to cached memory regions</a> describes how this can be accomplished on MicroBlaze and ARM Cortex-A9 systems.</p>
+<h2 id="nios_vbx_portability_library"><span class="header-section-number">3.2</span> VBX Portability Library</h2>
+<p>Rather than write Nios-specific code, VectorBlox provides a cache-management API that closely matches the Nios API. This helps a VectorBlox MXP program to be more easily ported to other scalar CPU hosts.</p>
+<p>The functions in the portability library are given in table. More details can be found in the <em>VectorBlox MXP Programming Reference</em>.</p>
 <ul>
-<li><p><code>vbx_dcache_flush(PTR,len)</code> considers the length of data being flushed. If it is too large, it will flush the entire data cache instead. Xilinx’s version loops over the entire length of the data.</p></li>
+<li><p><code>vbx_dcache_flush(PTR,len)</code> considers the length of data being flushed. If it is too large, it will flush the entire data cache instead. Altera’s version loops over the entire length of the data.</p></li>
 <li><p><code>vbx_remap_uncached(PTR)</code> remaps and flushes only a single cache line</p></li>
 <li><p><code>vbx_remap_uncached_flush(PTR,len)</code> remaps and flushes a region, but the region is flushed using <code>vbx_dcache_flush(PTR,len)</code></p></li>
 </ul>
-<p>The functions below convert a pointer between cached and uncached mode by toggling bit 31:</p>
-<ul>
-<li><p><code>void *vbx_remap_cached(volatile void *ptr, u32 len)</code> returns a cached pointer.</p></li>
-<li><p><code>volatile void *vbx_remap_uncached_flush(void *ptr, u32 len)</code> returns an uncached pointer. When mapping to uncached, the memory region will also be flushed.</p></li>
-</ul>
-<p>The functions below allocate and deallocate uncached memory:</p>
-<ul>
-<li><p><code>volatile void *vbx_uncached_malloc (size_t size)</code> allocates memory, returns an uncached pointer.</p></li>
-<li><p><code>void vbx_uncached_free(volatile void *ptr)</code> unallocates an uncached region.</p></li>
-</ul>
-<h2 id="mxp_initialization_with_bsp"><span class="header-section-number">3.3</span> MXP Initialization with a Standalone BSP</h2>
-<h3 id="vbx_timestamp-initialization"><span class="header-section-number">3.3.1</span> vbx_timestamp Initialization</h3>
-<p>In order to use the <code>vbx_timestamp*()</code> functions, the system must provide some sort of hardware timer.</p>
-<p>On MicroBlaze-based systems, the <code>vbx_timestamp</code> functions require an an axi_timer instance. The axi_timer instance must be registered with Xilinx’s TmrCtr driver, as well as with the <code>vbx_timestamp</code> functions. Initialization can be done as follows (replace <code>TMRCTR_0</code> with the canonical instance ID of the timer instance you wish to use):</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &quot;xparameters.h&quot;</span>
-<span class="ot">#include &quot;xil_types.h&quot;</span>
-<span class="ot">#include &quot;vbx.h&quot;</span>
-<span class="ot">#include &quot;xtmrctr.h&quot;</span>
-
-XTmrCtr vbx_tmr_inst;
-
-<span class="dt">void</span> my_vbx_tmr_init()
-{
-    <span class="dt">int</span> status;
-    u16 tmrctr_dev_id  = XPAR_TMRCTR_0_DEVICE_ID;
-    u32 tmrctr_freq_hz = XPAR_TMRCTR_0_CLOCK_FREQ_HZ;
-
-    status = XTmrCtr_Initialize(&amp;vbx_tmr_inst, tmrctr_dev_id);
-    <span class="kw">if</span> (status != XST_SUCCESS) {
-        VBX_PRINTF(<span class="st">&quot;ERROR: XTmrCtr_Initialize failed.</span><span class="ch">\n</span><span class="st">&quot;</span>);
-        VBX_FATAL(__LINE__, __FILE__, -<span class="dv">1</span>);
-    }
-    vbx_timestamp_init(&amp;vbx_tmr_inst, tmrctr_freq_hz);
-}</code></pre>
-<p>On ARM-based systems, the <code>vbx_timestamp</code> functions make use of the Cortex-A9's PMU timer. The PMU timer's frequency must be registered with the <code>vbx_timestamp</code> functions as in this example (the PMU timer runs at half the CPU frequency):</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &quot;xparameters.h&quot;</span>
-<span class="ot">#include &quot;xil_types.h&quot;</span>
-<span class="ot">#include &quot;vbx.h&quot;</span>
-
-<span class="dt">void</span> my_vbx_tmr_init()
-{
-    u32 tmrctr_freq_hz = XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ/<span class="dv">2</span>;
-    vbx_timestamp_init(tmrctr_freq_hz);
-}</code></pre>
-<h3 id="mapping-instruction-port-to-device-memory-arm-systems-only"><span class="header-section-number">3.3.2</span> Mapping Instruction Port to Device Memory (ARM systems only)</h3>
-<p>On ARM systems, the MMU should be configured to set the memory type of the the MXP's AXI Instruction Slave port to &quot;Device memory&quot;, so that writes to the instruction port bypass the data caches and are posted (do not wait for acknowledgement from the final destination).</p>
-<p>The following shows how this can be done using <code>Xil_SetTlbAttributes()</code> from the standalone BSP:</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &quot;xil_mmu.h&quot;</span>
-
-<span class="kw">extern</span> u32 MMUTable;
-
-<span class="dt">int</span> vbx_zynq_set_instr_port_device_memory()
-{
-    <span class="co">// Change memory attributes of 1MB region starting at base address of</span>
-    <span class="co">// AXI instruction port.</span>
-    <span class="co">// shareable device:</span>
-    <span class="co">//   S=b0 TEX=b000 AP=b11, C=b0, B=b1 =&gt; 0xC06</span>
-    Xil_SetTlbAttributes(XPAR_VECTORBLOX_MXP_ARM_0_S_AXI_INSTR_BASEADDR,
-                         <span class="bn">0xc06</span>);
-    <span class="kw">return</span> XST_SUCCESS;
-}</code></pre>
-<h3 id="uncached_access"><span class="header-section-number">3.3.3</span> Support for Uncached Access to Cached Memory Region</h3>
-<p>The VBX API library provides some functions to simplify sharing of data between the host CPU and the MXP without requiring the application programmer to explicitly flush data cache lines. These functions include <code>vbx_shared_malloc()</code>, <code>vbx_shared_free()</code>, <code>vbx_remap_uncached()</code>, and <code>vbx_remap_cached()</code>.</p>
-<p>The library assumes that the host CPU can access a cached memory region in an uncached manner (i.e. bypassing the data cache) simply by setting the most significant bit of the address to 1.</p>
-<p>MicroBlaze does not have a built-in mechanism to bypass the data cache this way, but the same functionality can be added by adding some bus connections and placing some restrictions on the MicroBlaze’s address map. Details can be found in the <em>VectorBlox MXP Quickstart for Xilinx Vivado Toolchain</em> that is distributed with the hardware IP core.</p>
-<p>On an ARM-based system, the translation table in the CPU's Memory Management Unit (MMU) can be used to alias the physical address range of a shared memory to two logical address ranges that differ only in address bit 31. The memory attributes of the lower address range are set to &quot;normal cacheable&quot;, whereas the attributes of the upper address range are set to &quot;strongly-ordered&quot; to make the region non-cacheable.</p>
-<p>For example, on the ZedBoard, the physical address range of the DDR3 DRAM is 0x0-0x1fff_ffff (512MB) and the virtual address range 0x0-0x1fff_ffff is mapped to this physical range and the memory attribute set to cacheable. The virtual address range 0x8000_0000 to 0x9fff_ffff (512 MB) can also be mapped to the same physical address range but with the memory attribute set to strongly-ordered, allowing uncached access to DRAM.</p>
-<p>The <code>vbx_zynq_remap_ddr_uncached()</code> function in <code>software/lib/vbxtest/vbx_test.c</code> illustrates how this can be done:</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &quot;xpseudo_asm.h&quot;</span>
-<span class="ot">#include &quot;xil_mmu.h&quot;</span>
-
-<span class="kw">extern</span> u32 MMUTable;
-
-<span class="co">// Map (virtual) address range 0x8000_0000 to 0x9fff_ffff (512 MB) to</span>
-<span class="co">// DDR physical address range 0x0-0x1fff_ffff and set memory attributes to</span>
-<span class="co">// strongly-ordered.</span>
-<span class="co">// Based in Xil_SetTlbAttributes() in xil_mmu.c.</span>
-<span class="dt">int</span> vbx_zynq_remap_ddr_uncached()
-{
-    u32 addr;
-    <span class="co">// Section descriptor bits 19:0 for</span>
-    <span class="co">// strongly-ordered:</span>
-    <span class="co">//   S=b0 TEX=b000 AP=b11, C=b0, B=b0 =&gt; 0xC02</span>
-    <span class="co">// (Short-descriptor translation table format, FigB3-4, p. B3-1325 of</span>
-    <span class="co">// ARM Architecture Reference Manual DDI0406C.b)</span>
-    u32 attrib = <span class="bn">0xc02</span>;
-    u32 *ptr;
-    u32 section;
-
-    mtcp(XREG_CP15_INVAL_UTLB_UNLOCKED, <span class="dv">0</span>);
-    dsb();
-
-    <span class="co">// One descriptor per 1 MB region; iterate over 512 descriptors covering</span>
-    <span class="co">// 512MB in range 0x8000_0000 to 0x9fff_ffff.</span>
-    <span class="kw">for</span> (addr = <span class="bn">0x80000000</span>; addr &lt; <span class="bn">0xa0000000</span>; addr += <span class="bn">0x100000</span>) {
-        <span class="co">// Index into translation table</span>
-        section = addr / <span class="bn">0x100000</span>;
-        ptr = &amp;MMUTable + section;
-        <span class="co">// Map to physical addresses in range 0x0 to 0x1fff_ffff,</span>
-        <span class="co">// i.e. clear bit 31.</span>
-        *ptr = (addr &amp; <span class="bn">0x7FF00000</span>) | attrib;
-    }
-    dsb();
-
-    mtcp(XREG_CP15_INVAL_UTLB_UNLOCKED, <span class="dv">0</span>);
-    <span class="co">/* Invalidate all branch predictors */</span>
-    mtcp(XREG_CP15_INVAL_BRANCH_ARRAY, <span class="dv">0</span>);
-
-    dsb(); <span class="co">/* ensure completion of the BP and TLB invalidation */</span>
-    isb(); <span class="co">/* synchronize context on this processor */</span>
-
-    <span class="kw">return</span> XST_SUCCESS;
-}</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Altera Library</th>
+<th align="left">VBX Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>alt_timestamp_type</code></td>
+<td align="left"><code>vbx_timestamp_t</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>alt_timestamp_start()</code></td>
+<td align="left"><code>vbx_timestamp_start()</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>alt_timestamp_freq()</code></td>
+<td align="left"><code>vbx_timestamp_freq()</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>alt_timestamp()</code></td>
+<td align="left"><code>vbx_timestamp()</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>alt_uncached_malloc()</code></td>
+<td align="left"><code>vbx_uncached_malloc()</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>alt_uncached_free()</code></td>
+<td align="left"><code>vbx_uncached_free()</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>alt_dcache_flush_all()</code></td>
+<td align="left"><code>vbx_dcache_flush_all()</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>alt_dcache_flush(PTR,len)</code></td>
+<td align="left"><code>vbx_dcache_flush(PTR,len)</code> or <code>vbx_dcache_flush_line(PTR)</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>alt_remap_cached(PTR,len)</code></td>
+<td align="left"><code>vbx_remap_cached(PTR,len)</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>alt_remap_uncached(PTR,len)</code></td>
+<td align="left"><code>vbx_remap_uncached(PTR)</code> or <code>vbx_remap_uncached_flush(PTR)</code></td>
+</tr>
+</tbody>
+</table>
 <h1 id="data_sharing"><span class="header-section-number">4</span> Data Sharing</h1>
 <p>The code in the following subsections are variations of the vector addition code given earlier (<a href="#simple">simple example</a>) using the VBX Portability Library.</p>
 <p>The original code has no caching issues because the data is statically allocated in the data segment, so it is initialized into the data segment and untouched by the processor. However, the new code uses the processor to dynamically allocate and initialize the data, hence a copy of the data may be residing in the cache.</p>

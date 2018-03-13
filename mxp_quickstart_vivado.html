@@ -56,13 +56,13 @@ p {
 <h2 id="prerequisites"><span class="header-section-number">2.1</span> Prerequisites</h2>
 <p>Before you begin, make sure you have:</p>
 <ul>
-<li><p>Vivado, version 2013.4 or greater is required. All example projects were created with version 2014.2.</p></li>
+<li><p>Xilinx Vivado toolchain. All example projects were tested with version 2017.4, but other version should work.</p></li>
 <li><p>One of the development boards for which we provide pre-built bitstreams, if you wish to follow the examples in this document. Currently pre-built systems are only available for the Avnet ZedBoard.</p></li>
-<li><p>A VectorBlox MXP release, provided as a zip or tar.gz file. (Hardware developement only)</p></li>
+<li><p>A VectorBlox MXP release available from <a href="https://github.com/VectorBlox/mxp">github</a></p></li>
 </ul>
 <h2 id="installation"><span class="header-section-number">2.2</span> Installation</h2>
 <h3 id="licensing"><span class="header-section-number">2.2.1</span> Licensing</h3>
-<p>If you have a release with encrypted RTL, a FLEXlm license file will be sent to you separately from <strong>ip_license_mgt@xilinx.com</strong>. It should be installed in the same place you installed your Vivado license.</p>
+<p>A FLEXlm license file will be sent to you if requested from <strong>ip_license_mgt@xilinx.com</strong>. It should be installed in the same place you installed your Vivado license.</p>
 <h3 id="vivado-toolchain"><span class="header-section-number">2.2.2</span> Vivado Toolchain</h3>
 <ul>
 <li><p>Download and install the Vivado Design Suite according to Xilinx’s instructions.</p>
@@ -306,32 +306,75 @@ or
 <ol start="9" style="list-style-type: decimal">
 <li><strong>View execution output.</strong> You should see output in the serial terminal emulator you opened in an earlier step. The executable may use stdin or stdout for printf, scanf, and similar functions.</li>
 </ol>
-<h2 id="using-the-mxp-with-linux-beta"><span class="header-section-number">4.3</span> Using the MXP with Linux (Beta)</h2>
-<p>Currently it is only possible to run on ARM on the ZYNQ chips, but it should possible with a little effort to make it work under microblaze as well.</p>
-<h3 id="building-and-booting-linux"><span class="header-section-number">4.3.1</span> Building and Booting linux</h3>
-<p>Use the instructions at http://www.wiki.xilinx.com/Getting+Started with the following caveats</p>
-<ol style="list-style-type: decimal">
-<li><p>Use git://github.com/VectorBlox/linux-xlnx.git instead of git://github.com/Xilinx/linux-xlnx.git (checkout the mxp branch)</p></li>
-<li><p>When generating the device-tree, make sure that the vectorblox drivers (located in repository/xilinx/drivers ) are in the repository in addition to the device tree generator downloaded from xilinx.</p></li>
-</ol>
-<h4 id="non-volatile-root-filesystem"><span class="header-section-number">4.3.1.1</span> Non-volatile Root Filesystem</h4>
-<p>To use another partition as a rootfs rather than using a ramfs, follow these instructions.</p>
-<ol style="list-style-type: decimal">
-<li><p>Create A SD card with a small boot partition (FAT32) and a large root partition (EXT4)</p></li>
-<li><p>Create a rootfs</p>
-<p>We suggest using the rootfs from linaro <a href="https://releases.linaro.org/12.11/ubuntu/precise-images/ubuntu-desktop/linaro-precise-ubuntu-desktop-20121124-560.tar.gz">(link)</a> but any rootfs should work.</p>
-<p>Move that rootfs into the correct partition on the SD card. If you are using the suggested rootfs, use the following command: <code>sudo tar --strip-components=3 -C /media/rootfs -xzpf linaro-precise-ubuntu-desktop-20121124-560.tar.gz binary/boot/filesystem.dir</code></p></li>
-<li><p>Editing the Device-Tree</p>
-<p>Edit the device tree by adding <code>root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait devtmpfs.mount=0</code> to bootargs.</p></li>
-<li><p>During u-boot, press any key to stop autoboot, then run the following commands from the u-boot prompt</p>
-<pre><code>&gt; load mmc 0 ${kernel_load_address} ${kernel_image}
-&gt; load mmc 0 ${devicetree_load_address} ${devicetree_image}
-&gt; bootm ${kernel_load_address} - ${devicetree_load_address}</code></pre>
-<p><em>note: the ${variable} are pre-initialized by u-boot</em></p>
-<p>Those commands can be automated by editing include/configs/zynq-common.h in the u-boot repository. Search for <code>sdboot=</code> to find where to edit.</p></li>
-</ol>
-<h3 id="using-the-vectorblox-api-from-linux-hosted-processes"><span class="header-section-number">4.3.2</span> Using the VectorBlox API from Linux Hosted Processes</h3>
-<p>To use the MXP from processes hosted by Linux, it is necessary to use the VectorBlox API (libvbxapi.a). The Vectorblox API is released in source form in vectorblox/repository/lib/vbxapi. To cross-compile the library, run <code>make LINUX=true</code>. Another option is to compile the source onto the newly created linux system and use it's native gcc to compile it there. To compile there, use the command <code>make LINUX=true Native=true</code></p>
+<!--
+Using the MXP with Linux (Beta)
+-------------------------------
+
+Currently it is only possible to run on ARM on the ZYNQ chips, but it should
+possible with a little effort to make it work under microblaze as well.
+
+### Building and Booting linux
+
+Use the instructions at
+http://www.wiki.xilinx.com/Getting+Started with the following caveats
+
+  1. Use git://github.com/VectorBlox/linux-xlnx.git instead of
+  git://github.com/Xilinx/linux-xlnx.git (checkout the mxp branch)
+
+  2. When generating the device-tree, make sure that the vectorblox drivers
+  (located in repository/xilinx/drivers ) are in the repository in addition
+  to the device tree generator downloaded from xilinx.
+
+#### Non-volatile Root Filesystem
+
+To use another partition as a rootfs rather than using a ramfs, follow these
+instructions.
+
+1. Create A SD card with a small boot partition (FAT32)
+   and a large root partition (EXT4)
+
+2. Create a rootfs
+
+    We suggest using the rootfs from linaro [(link)](
+    https://releases.linaro.org/12.11/ubuntu/precise-images/ubuntu-desktop/linaro-precise-ubuntu-desktop-20121124-560.tar.gz)
+    but any rootfs should work.
+
+    Move that rootfs into the correct partition on the SD card. If you are using
+    the suggested rootfs, use the following command:
+    `sudo tar --strip-components=3 -C /media/rootfs -xzpf
+    linaro-precise-ubuntu-desktop-20121124-560.tar.gz binary/boot/filesystem.dir`
+
+3. Editing the Device-Tree
+
+    Edit the device tree by adding `root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
+    devtmpfs.mount=0` to bootargs.
+
+
+4. During u-boot, press any key to stop autoboot, then run the following commands
+    from the u-boot prompt
+
+    ```
+    > load mmc 0 ${kernel_load_address} ${kernel_image}
+    > load mmc 0 ${devicetree_load_address} ${devicetree_image}
+    > bootm ${kernel_load_address} - ${devicetree_load_address}
+    ```
+    *note: the ${variable} are pre-initialized by u-boot*
+
+    Those commands can be automated by editing include/configs/zynq-common.h in
+    the u-boot repository. Search for `sdboot=` to find where to edit.
+
+
+### Using the VectorBlox API from Linux Hosted Processes
+
+To use the MXP from processes hosted by Linux, it is necessary to use the
+VectorBlox API (libvbxapi.a). The Vectorblox API is released in source form
+in vectorblox/repository/lib/vbxapi. To cross-compile the library, run
+`make LINUX=true`. Another option is to compile the source onto the newly created
+linux system and use it's native gcc to compile it there. To compile there, use the
+command `make LINUX=true Native=true`
+
+-->
+
 <h1 id="creating_your_own_standalone_bsp"><span class="header-section-number">5</span> Creating your own Standalone BSP</h1>
 <h2 id="from_the_gui"><span class="header-section-number">5.1</span> From the GUI</h2>
 <ul>
@@ -341,35 +384,58 @@ or
 <p>You must now add the location of the <code>drivers</code> and <code>sw_services</code> directories (i.e. their common parent directory) to the software repository list. Click <strong>New…</strong> next to either <strong>Local Repositories</strong> or <strong>Global Repositories</strong>, and add the repository location. Click <strong>OK</strong> to close the Preferences dialog box.</p></li>
 <li><p>From the <strong>File</strong> menu, select <strong>New</strong> <span class="math"> → </span> <strong>Board Support Package</strong>.</p></li>
 <li><p>Give your BSP a project name, and under <strong>Board Support Package OS</strong>, select <strong>standalone</strong>. Click <strong>Finish</strong>.</p></li>
-<li><p>In the <strong>Board Support Package Settings</strong> dialog box, click on <strong>Overview</strong> in the left panel, and look at the <strong>Supported Libraries</strong> section. You should see an entry for <strong>vbxware</strong>, the VBXWare Library, as in the figure below.</p>
-<div class="figure">
-<img src="images/xsdk_bsp_libraries.png" />
-</div>
-<p>If you do not see the VBXWare library listed, the likely reason is that the VectorBlox <strong>sw_services</strong> directory is not in the SDK repository search path.</p>
-<p>You can check the box next to <strong>vbxware</strong> if you wish to include the VBXWare library in your BSP. However, <strong>do not</strong> check this box if you wish to compile and run the VectorBlox-supplied test programs because the Makefiles for these programs compile the VBXWare library separately from the BSP.</p></li>
-<li><p>In the same dialog box, click on <strong>drivers</strong> in the left panel. Check that the vectorblox_mxp driver is assigned to the vectorblox_mxp component. See below.</p>
+<li><p>In the <strong>Board Support Package Settings</strong> dialog box, click on <strong>drivers</strong> in the left panel. Check that the vectorblox_mxp driver is assigned to the vectorblox_mxp component. See below.</p>
 <div class="figure">
 <img src="images/xsdk_driver_assignment.png" />
 </div>
 <p>If the vectorblox_mxp driver is not available as an option, the likely reason is that the VectorBlox <strong>drivers</strong> directory is not in the SDK repository search path.</p></li>
 <li><p>Click <strong>OK</strong> to close the BSP Settings dialog box and compile the standalone BSP library <code>libxil.a</code>.</p></li>
 </ul>
-<h1 id="compiling_with_a_different_bsp"><span class="header-section-number">6</span> Compiling the Test Programs with a different Standalone BSP</h1>
-<p>To compile the programs in <code>TOPDIR/software/bmark</code> with a different standalone BSP, there are some additional steps you must take:</p>
-<ul>
-<li><p>Open the file <code>TOPDIR/software/common/xil_vars.mk</code> for editing.</p>
-<ul>
-<li><p>Change the <code>PROJ_ROOT</code> variable to point to the root of your project directory.</p></li>
-<li><p>Change the <code>BSP_ROOT_DIR</code> variable to point to the root of BSP directory. Ensure that <code>BSP_INC_DIR</code> and <code>BSP_LIB_DIR</code> point to the correct <code>include</code> and <code>lib</code> subdirectories.</p></li>
-<li><p>Change the <code>LD_SCRIPT</code> variable to point to the linker script you wish to use. In your linker script, use a stack size of 8 MB and a heap size of 64 MB if you want to be able to run all of the test programs.</p></li>
-</ul></li>
-<li><p>Create a file called <strong>bsp_vars.mk</strong> in <code>$(BSP_ROOT_DIR)</code> that defines the variables <code>CPU_FLAGS</code>, <code>PROCESSOR_TYPE</code>, and <code>PROCESSOR_INSTANCE</code>. <code>CPU_FLAGS</code> contains the compiler flags specific to the CPU configuration for your system. For example, on a MicroBlaze-based system, this might look like:</p>
-<pre><code>CPU_FLAGS := -mlittle-endian -mxl-barrel-shift \\
-  -mxl-pattern-compare -mcpu=v8.50.c -mno-xl-soft-mul</code></pre>
-<p>On an ARM-based system this would typically be empty, i.e.</p>
-<pre><code>CPU_FLAGS :=</code></pre>
-<p><code>PROCESSOR_TYPE</code> should be set to either <code>microblaze</code> or <code>cortexa9</code>; it determines which compiler and linker to use. <code>PROCESSOR_INSTANCE</code> should be the name of the CPU instance, usually <code>microblaze_0</code> or <code>ps7_cortexa9_0</code>. It is used to construct the <code>BSP_INC_DIR</code> and <code>BSP_LIB_DIR</code> variables (the paths to the BSP <code>include</code> and <code>lib</code> subdirectories).</p></li>
-</ul>
+<!-- This section doesn't work to well anymore because of all the crap that has been stuck -->
+<!-- in bsp_vars.mk maybe we can cleen it up a bit in tthe future -->
+<!--
+
+Compiling the Test Programs with a different Standalone BSP {#compiling_with_a_different_bsp}
+===========================================================
+
+To compile the programs in `TOPDIR/software/bmark` with a different
+standalone BSP, there are some additional steps you must take:
+
+-   Open the file `TOPDIR/software/common/xil_vars.mk` for
+    editing.
+
+    -   Change the `PROJ_ROOT` variable to point to the root of your
+        project directory.
+
+    -   Change the `BSP_ROOT_DIR` variable to point to the root of BSP
+        directory. Ensure that `BSP_INC_DIR` and `BSP_LIB_DIR` point to
+        the correct `include` and `lib` subdirectories.
+
+    -   Change the `LD_SCRIPT` variable to point to the linker script
+        you wish to use. In your linker script, use a stack size of 8 MB
+        and a heap size of 64 MB if you want to be able to run all of
+        the test programs.
+
+-   Create a file called **bsp_vars.mk** in `$(BSP_ROOT_DIR)` that
+    defines the variables `CPU_FLAGS`, `PROCESSOR_TYPE`, and
+    `PROCESSOR_INSTANCE`. `CPU_FLAGS` contains the compiler flags
+    specific to the CPU configuration for your system.
+    For example, on a MicroBlaze-based system, this might look like:
+
+        CPU_FLAGS := -MMD -MP -mlittle-endian -mno-xl-soft-mul -mxl-barrel-shift -mxl-pattern-compare -mcpu=v10.0
+        PROCESSOR_INSTANCE := microblaze_0
+        PROCESSOR_TYPE := microblaze
+        CMACRO_DEFS := -DUSE_ZYNQ_UART
+
+    On an ARM-based system it would look like this
+
+        CPU_FLAGS := -MMD -MP -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard
+        CPU_FLAGS += -Wl,-build-id=none -specs=$(dir $(lastword $(MAKEFILE_LIST)))/app/Xilinx.spec
+        CROSS_COMPILER=arm-none-eabi-
+        PROCESSOR_INSTANCE := ps7_cortexa9_0
+        PROCESSOR_TYPE := cortexa9
+        CMACRO_DEFS := -DUSE_ZYNQ_UART
+-->
 </div>
 </div>
 </div>

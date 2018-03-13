@@ -31,15 +31,23 @@
 </ul>
 <p>To get started immediately:</p>
 <ul>
-<li><p>Ensure you have one of the <a href="./mxp_supported_boards.html">supported development boards</a>.</p></li>
+<li><p>Ensure you have one of the <a href="http://vectorblox.github.io/mxp/mxp_supported_boards.html">supported development boards</a>.</p></li>
 <li><p>Download the latest release zip file <a href="https://github.com/VectorBlox/mxp/archive/master.zip">Full</a> / <a href="https://github.com/VectorBlox/mxp/archive/simulator_only.zip">Simulator Only</a>).</p></li>
-<li><p>Follow the VectorBlox MXP Hardware &amp; Software Quickstart for <a href="http://vectorblox.github.io/mxp/mxp_quickstart_altera.html">Quartus</a> / <a href="http://vectorblox.github.io/mxp/mxp_quickstart_ise.html">ISE</a> / <a href="http://vectorblox.github.io/mxp/mxp_quickstart_vivado.html">Vivado</a> / <a href="http://vectorblox.github.io/mxp/mxp_quickstart_simulator.html">Simulator</a></p></li>
+<li><p>Follow the VectorBlox MXP Hardware &amp; Software Quickstart for <a href="http://vectorblox.github.io/mxp/mxp_quickstart_altera.html">Quartus</a> / <a href="http://vectorblox.github.io/mxp/mxp_quickstart_vivado.html">Vivado</a> / <a href="http://vectorblox.github.io/mxp/mxp_quickstart_simulator.html">Simulator</a></p></li>
 </ul>
 <p>For further VectorBlox MXP documentation, refer to the following:</p>
 <ul>
 <li><p>VectorBlox MXP Programming Guide for <a href="http://vectorblox.github.io/mxp/mxp_guide_altera.html">Altera</a> /<a href="http://vectorblox.github.io/mxp/mxp_guide_xilinx.html">Xilinx</a></p></li>
 <li><p><a href="http://vectorblox.github.io/mxp/mxp_reference.html">VectorBlox MXP Programming Reference</a></p></li>
 </ul>
+<h3 id="api-changes-march-2018">API Changes March 2018</h3>
+<p>There are several breaking changes to the API since between the 2017 and 2018 releases. Below is an overview of the changes, please see the Programming Reference (link above) for more details on the current API.</p>
+<ul>
+<li><p>Vector Shifts are srca &gt;&gt; srcb rather than srcb&gt;&gt; srca. This leads to some issues with shifting by scalar values which can be resolved by mapping shifting by scalar values to VMUL, and VMULH for shifting left and right respectively.</p></li>
+<li><p>All vector instructions are 3 dimensional, to do 1 or 2 dimensional instructions set nmats and/or nrows to 1. Because of this the <code>vbx_set_vl</code>,<code>vbx_set_2D</code>, and <code>vbx_set_3D</code> have changed. They now all accept 3 arguments.</p></li>
+<li><p>Destination, source A and source B all have independant sizes and signedness.</p></li>
+</ul>
+<h3 id="contact-information">Contact information</h3>
 <p>For further information please email us at <script type="text/javascript">
 <!--
 h='&#118;&#x65;&#x63;&#116;&#x6f;&#114;&#98;&#108;&#x6f;&#120;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#x69;&#110;&#102;&#x6f;';e=n+a+h;
