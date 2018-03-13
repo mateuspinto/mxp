@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,8 @@ VBXCOPYRIGHT( vbx_test )
 #include <math.h>
 
 #include "vbx_test.h"
-
+#include "vbx.h"
+#include "vectorblox_mxp.h"
 ///////////////////////////////////////////////////////////////////////////
 // Based on: http://www.cs.tut.fi/~jkorpela/c/eng.html
 // Return a string representing value in engineering notation.
@@ -862,6 +863,7 @@ int test_range_array_uword( uint32_t *scalar_out, uint32_t *vector_out, int size
 #if __NIOS2__
 int vbx_test_init()
 {
+	vbx_timestamp_start();
 	return 0;
 }
 #elif VBX_SIMULATOR==1
@@ -869,7 +871,7 @@ int vbx_test_init()
 {
 	//initialize with 4 lanes,and 64kb of sp memory
 	//word,half,byte fraction bits 16,15,4 respectively
-	vbxsim_init(4,64,256,16,15,4);
+	vbxsim_init(4,256,256,16,15,4);
 	return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -977,8 +979,6 @@ int vbx_zynq_set_instr_port_device_memory()
 ///////////////////////////////////////////////////////////////////////////
 int vbx_test_init()
 {
-	int status;
-
 #if (ARM_XIL_STANDALONE && VBX_USE_A9_PMU_TIMER)
 	u32 tmrctr_freq_hz = XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ/2;
 #else
@@ -1009,7 +1009,7 @@ int vbx_test_init()
 #if (ARM_XIL_STANDALONE && VBX_USE_A9_PMU_TIMER)
 	vbx_timestamp_init(tmrctr_freq_hz);
 #else
-	status = XTmrCtr_Initialize(&vbx_test_tmr_inst, tmrctr_dev_id);
+	int status = XTmrCtr_Initialize(&vbx_test_tmr_inst, tmrctr_dev_id);
 	if (status != XST_SUCCESS) {
 		VBX_PRINTF("ERROR: XTmrCtr_Initialize failed.\n");
 		VBX_FATAL(__LINE__, __FILE__, -1);
@@ -1096,6 +1096,14 @@ static void mmu_init(void)
 int vbx_test_init()
 {
 	mmu_init();
+	VectorBlox_MXP_Initialize();
+	return 0;
+}
+#endif
+
+#if ORCA_STANDALONE
+int vbx_test_init()
+{
 	VectorBlox_MXP_Initialize();
 	return 0;
 }

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -197,6 +197,7 @@ void VBX_FATAL(int line, const char* fname, int err){
 		VBX_PRINTF("Exiting.\n\x04");
 	}
 #endif
+	(void)line;(void)fname;
 	exit(err);
 }
 
@@ -224,6 +225,14 @@ vbx_void_t *vbx_sp_get()
 {
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 	return this_mxp ? this_mxp->sp : NULL;
+}
+
+void vbx_sp_set(vbx_void_t * sp)
+{
+	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
+	if(this_mxp){
+		this_mxp->sp =sp;
+	}
 }
 
 

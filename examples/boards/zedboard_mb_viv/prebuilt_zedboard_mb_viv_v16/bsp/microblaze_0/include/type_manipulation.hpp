@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -95,12 +95,9 @@ public:
 };
 
 //convert integer type to a word sized version with the same signedness
-template<typename T,bool> struct _word_sized;
-template<typename T> struct _word_sized<T,true>{typedef vbx_word_t type;};
-template<typename T> struct _word_sized<T,false>{typedef vbx_uword_t type;};
 template<typename T> struct word_sized
 {
-	typedef typename _word_sized<T, type_sign<T>::is_signed>::type type;
+	typedef typename choose_type<type_sign<T>::is_signed,vbx_uword_t, vbx_word_t>::type type;
 };
 
 
@@ -140,21 +137,15 @@ bool use_signed()
 		return is_signed<U>();
 	}
 }
-template<typename T,typename U,bool use_signed>
-struct _same_sign;
-template<typename T,typename U>
-struct _same_sign<T,U,true>{
-	typedef typename signed_conv<T>::type type;
-};
-template<typename T,typename U>
-struct _same_sign<T,U,false>{
-	typedef typename unsigned_conv<T>::type type;
-};
-//convert T into a type with the same with as T and
+
+//convert T into a type with the same width as T and
 //same signedness as U
 template<typename T,typename U>
 struct same_sign_as{
-	typedef typename _same_sign<T,U,type_sign<U>::is_signed>::type type;
+	typedef typename signed_conv<T>::type stype;
+	typedef typename unsigned_conv<T>::type utype;
+	typedef typename choose_type<type_sign<U>::is_signed?0:1,stype,utype>::type type;
+
 };
 
 

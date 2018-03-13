@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -101,11 +101,11 @@ void vector_fast9_masked(uint8_t *dst, uint8_t *src, int height, int width, int 
 #endif
 
 		//Move rows up
-		vbx_set_vl(support_vl);
+		vbx_set_vl(support_vl,1,1);
 		vbx(VVBU, VMOV, v_src, v_src+max_vl, NULL);
 
 		max_vl = next_max_vl;
-		vbx_set_vl(max_vl);
+		vbx_set_vl(max_vl,1,1);
 		vbx(VVBU, VMOV, v_src+support_vl, v_next_src, NULL);
 
 		//If not at end, dma next rows in
@@ -126,7 +126,7 @@ void vector_fast9_masked(uint8_t *dst, uint8_t *src, int height, int width, int 
 		//if either is greater than threshold, don't exit -- 0 is exit
 		vbx(SVBU, VCMV_LTZ, v_exit, 1, v_t0); // threshold - abs(p0 - p1) < 0
 		vbx(SVBU, VCMV_LTZ, v_exit, 1, v_t1); // threshold - abs(p0 - p9) < 0
-		vbx_setup_mask(VCMV_GTZ, v_exit);
+		vbx(VVBU, VSET_MSK_GTZ, v_exit, v_exit, v_exit);
 		if(sync0){
 			vbx_sync();
 			vbx_get_mask_status(&mask_status);
@@ -192,11 +192,11 @@ void vector_fast9_masked(uint8_t *dst, uint8_t *src, int height, int width, int 
 			}
 		}
 		vbx_masked(SVBU, VMOV, v_exit, 0, 0);
-		vbx_masked(SVB, VADD, v_d_count, -1, v_d_count);
-		vbx_masked(SVB, VADD, v_b_count, -1, v_b_count);
-		vbx_masked(SVB, VCMV_GTZ, v_exit, 1, v_d_count);
-		vbx_masked(SVB, VCMV_GTZ, v_exit, 1, v_b_count);
-		vbx_setup_mask_masked(VCMV_GTZ, v_exit);
+		vbx_masked(SVB, VADD, (vbx_byte_t*)v_d_count, -1, (vbx_byte_t*)v_d_count);
+		vbx_masked(SVB, VADD, (vbx_byte_t*)v_b_count, -1, (vbx_byte_t*)v_b_count);
+		vbx_masked(SVB, VCMV_GTZ, (vbx_byte_t*)v_exit, 1, (vbx_byte_t*)v_d_count);
+		vbx_masked(SVB, VCMV_GTZ, (vbx_byte_t*)v_exit, 1, (vbx_byte_t*)v_b_count);
+		vbx_masked(VVBU, VSET_MSK_GTZ, v_exit, v_exit, v_exit);
 		if(sync1){
 			vbx_sync();
 			vbx_get_mask_status(&mask_status);
@@ -334,11 +334,11 @@ void vector_fast9(uint8_t *dst, uint8_t *src, int height, int width, int pitch, 
 #endif
 
 		//Move rows up
-		vbx_set_vl(support_vl);
+		vbx_set_vl(support_vl,1,1);
 		vbx(VVBU, VMOV, v_src, v_src+max_vl, NULL);
 
 		max_vl = next_max_vl;
-		vbx_set_vl(max_vl);
+		vbx_set_vl(max_vl,1,1);
 		vbx(VVBU, VMOV, v_src+support_vl, v_next_src, NULL);
 
 		//If not at end, dma next rows in
@@ -361,7 +361,7 @@ void vector_fast9(uint8_t *dst, uint8_t *src, int height, int width, int pitch, 
 			//if either is greater than threshold, don't exit -- 0 is exit
 			vbx(SVBU, VCMV_LTZ, v_exit, 1, v_t0); // threshold - abs(p0 - p1) < 0
 			vbx(SVBU, VCMV_LTZ, v_exit, 1, v_t1); // threshold - abs(p0 - p9) < 0
-			vbx_acc(VVBWU, VMOV, v_exit, v_exit, 0);
+			vbx_acc(VVBWU, VMOV, (vbx_uword_t*)v_exit, v_exit, 0);
 			vbx_sync();
 			if(v_exit_w[0] == 0){
 				continue;
@@ -434,11 +434,11 @@ void vector_fast9(uint8_t *dst, uint8_t *src, int height, int width, int pitch, 
 		}
 		if(sync1){
 			vbx(SVBU, VMOV, v_exit, 0, 0);
-			vbx(SVB, VADD, v_d_count, -1, v_d_count);
-			vbx(SVB, VADD, v_b_count, -1, v_b_count);
-			vbx(SVB, VCMV_GTZ, v_exit, 1, v_d_count);
-			vbx(SVB, VCMV_GTZ, v_exit, 1, v_b_count);
-			vbx_acc(VVBWU, VMOV, v_exit, v_exit, 0);
+			vbx(SVB, VADD, (vbx_byte_t*)v_d_count, -1, (vbx_byte_t*)v_d_count);
+			vbx(SVB, VADD, (vbx_byte_t*)v_b_count, -1, (vbx_byte_t*)v_b_count);
+			vbx(SVB, VCMV_GTZ, (vbx_byte_t*)v_exit, 1, (vbx_byte_t*)v_d_count);
+			vbx(SVB, VCMV_GTZ, (vbx_byte_t*)v_exit, 1, (vbx_byte_t*)v_b_count);
+			vbx_acc(VVBWU, VMOV, (vbx_uword_t*)v_exit, v_exit, 0);
 			vbx_sync();
 			if(v_exit_w[0] == 0){
 				continue;

@@ -904,8 +904,4 @@
                 <sectionName>.stack</sectionName>
                 <regionName>sdram</regionName>
         </LinkerSection>
-        <SoftwarePackageInfo>
-                <name>vectorblox_vbxware_package</name>
-                <version>default</version>
-        </SoftwarePackageInfo>
 </sch:Settings>

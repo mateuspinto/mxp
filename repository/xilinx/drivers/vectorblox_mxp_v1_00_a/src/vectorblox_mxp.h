@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,14 +46,16 @@
 
 #ifndef __VECTORBLOX_MXP_H
 #define __VECTORBLOX_MXP_H
-
+#include "vbx.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #if defined(__NIOS2__)
 #include "vectorblox_mxp_nios.h"
-#else
+#elif ORCA_STANDALONE
+#include "vectorblox_mxp_orca.h"
+#elif (ARM_XIL_STANDALONE || MB_STANDALONE)
 #include "vectorblox_mxp_xil.h"
 #endif
 

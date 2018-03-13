@@ -1,0 +1,2 @@
+# This file is automatically written.  Do not modify.
+proc gen_USERPARAMETER_PIPELINE_STAGES_VALUE {FXP_BITS } {expr 1+(($FXP_BITS+32)/2)}

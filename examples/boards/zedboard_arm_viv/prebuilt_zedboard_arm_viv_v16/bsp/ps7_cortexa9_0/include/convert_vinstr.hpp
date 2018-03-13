@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,8 +62,8 @@ template<> struct invert_cmv<VCMV_GEZ>{static const vinstr_t instr=VCMV_LTZ;};
 template<> struct invert_cmv<VCMV_Z>{static const vinstr_t instr=VCMV_NZ;};
 template<> struct invert_cmv<VCMV_NZ>{static const vinstr_t instr=VCMV_Z;};
 
-template<typename T>
-inline vinstr_t get_cmv(const VBX::Vector<T>& v ){
+template<typename T,int dim>
+inline vinstr_t get_cmv(const VBX::Vector<T,dim>& v ){
 	return v.cmv;
 }
 template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim,acc_choice acc>

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -142,6 +142,13 @@ int main(void)
 	VBX_T(test_print_array)( vector_out, PRINT_LENGTH );
 
 	errors += VBX_T(test_verify_array)( scalar_out, vector_out, N );
+
+	vbx_shared_free(vector_in1);
+	vbx_shared_free(vector_in2);
+	vbx_shared_free(vector_out);
+	free(scalar_in1);
+	free(scalar_in2);
+	free(scalar_out);
 
 	VBX_TEST_END(errors);
 	return 0;

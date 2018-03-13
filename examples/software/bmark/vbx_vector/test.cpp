@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -264,6 +264,29 @@ int masked_test(int len)
 	}
 	return errors;
 }
+
+
+int extra_test()
+{
+	int errors = 0;
+	{
+		Vector<vbx_half_t,2> one(4,4,4);
+		Vector<vbx_half_t,2> two(2,2,2);
+		one = 0;
+		two = 0;
+		one[ 1 upto 3,1 upto 3] = 2;
+		two +=one[ 1 upto 3,1 upto 3];
+		vbx_sync();
+		for(int i=0;i<4;++i){
+			if(two.data[i] != 2){
+				errors+=1;
+				break;
+			}
+		}
+	}
+
+	return errors;
+}
 int main()
 {
 	int errors=0;
@@ -319,6 +342,9 @@ int main()
 		errors+=test_all_Bstar(100);
 		errors+=cmv_test(100);
 		errors+=masked_test(10);
+	}
+	if(1){
+		errors+=extra_test();
 	}
 	VBX_TEST_END(errors);
 	return errors;

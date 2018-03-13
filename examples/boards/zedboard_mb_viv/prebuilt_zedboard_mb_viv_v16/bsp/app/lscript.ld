@@ -17,11 +17,11 @@ _HEAP_SIZE = DEFINED(_HEAP_SIZE) ? _HEAP_SIZE : 0x800;
 
 MEMORY
 {
-   lmb_bram_if_cntlr_1_lmb_bram_if_cntlr_0 : ORIGIN = 0x20000050, LENGTH = 0x3FB0
+   lmb_bram_if_cntlr_1_Mem_lmb_bram_if_cntlr_0_Mem : ORIGIN = 0x20000050, LENGTH = 0x3FB0
    ps7_ddr_0_HP0_AXI_BASENAME : ORIGIN = 0x100000, LENGTH = 0x1FF00000
    ps7_ram_0_HP0_AXI_BASENAME : ORIGIN = 0x0, LENGTH = 0x40000
-   vectorblox_mxp_0_S_AXI_BASEADDR : ORIGIN = 0x70000000, LENGTH = 0x10000
-   ps7_qspi_linear_0_S_AXI_BASEADDR : ORIGIN = 0xFC000000, LENGTH = 0x1000000
+   vectorblox_mxp_0_SCRATCHPAD : ORIGIN = 0x70000000, LENGTH = 0x10000
+   ps7_qspi_linear_0 : ORIGIN = 0xFC000000, LENGTH = 0x1000000
 }
 
 /* Specify the default entry point to the program */

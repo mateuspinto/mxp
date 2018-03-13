@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,6 +77,8 @@ extern "C" {
 #include "vbx_asm_mb.h"
 #elif defined(__arm__)
 #include "vbx_asm_arm.h"
+#elif ORCA_STANDALONE
+#include "vbx_asm_orca.h"
 #endif
 #endif
 
@@ -115,8 +117,7 @@ extern "C" {
 #define vbxsim_reset_stats() ((void)0)
 #define vbxsim_print_stats() ((void)0)
 #define vbxsim_print_stats_extended() ((void)0)
-#define vbxsim_disable_warnings() ((void)0)
-#define vbxsim_enable_warnings() ((void)0)
+#define vbxsim_acc_overflow_debug_level(...) ((void)0)
 
 #endif
 #endif //__VBX_ASM_OR_SIM_H

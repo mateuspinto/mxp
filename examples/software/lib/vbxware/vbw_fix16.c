@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,7 @@
  */
 
 #include "vbw_fix16.h"
-static const fxp_t min_fxp = 0x80000000;
+//static const fxp_t min_fxp = 0x80000000;
 
 /**
  * It now uses newtons method of successive aproximation, this is
@@ -148,7 +148,7 @@ void vbw_fix16_sqrt( vbx_word_t* v_out, vbx_word_t* v_x, int length)
   max_iter = 16; //1<<30 and >>2 every iter, so max iter = 30/2 + 1
   for(i=0; i<max_iter; i++){
     vbx(VVW, VSUB, v_t_sub, (vbx_word_t*)v_bit, v_num);
-    vbx(SVWU, VSHR, v_t_bit, 2, v_bit);
+    vbx(VSWU, VSHR, v_t_bit, v_bit, 2);
     vbx(VVW, VCMV_GTZ, (vbx_word_t*)v_bit, (vbx_word_t*)v_t_bit, v_t_sub);
   }
 
@@ -182,13 +182,13 @@ void vbw_fix16_sqrt( vbx_word_t* v_out, vbx_word_t* v_x, int length)
     //else v_num stays
     vbx(VVW, VCMV_LTZ, (vbx_word_t*)v_t_num, v_num, v_t_sub);
 
-    vbx(SVW, VSHR, (vbx_word_t*)v_t_result, 1, v_result);
+    vbx(VSW, VSHR, (vbx_word_t*)v_t_result, (vbx_word_t*)v_result, 1);
     vbx(VVW, VADD, (vbx_word_t*)v_t_add, (vbx_word_t*)v_bit, (vbx_word_t*)v_t_result);
     //if (v_num - (v_result + bit) >= 0) v_result = v_result >> 1 + bit
     //else  v_result >> 1
     vbx(VVW, VCMV_GEZ, (vbx_word_t*)v_t_result, (vbx_word_t*)v_t_add, v_t_sub);
 
-    vbx(SVW, VSHR, (vbx_word_t*)v_t_bit, 2, (vbx_word_t*)v_bit);
+    vbx(VSW, VSHR, (vbx_word_t*)v_t_bit, (vbx_word_t*)v_bit, 2);
 
     vbx(VVW, VCMV_GTZ, v_num, (vbx_word_t*)v_t_num, (vbx_word_t*)v_bit);
     vbx(VVW, VCMV_GTZ, v_result, (vbx_word_t*)v_t_result, (vbx_word_t*)v_bit);
@@ -221,12 +221,12 @@ void vbw_fix16_sqrt( vbx_word_t* v_out, vbx_word_t* v_x, int length)
   */
   vbx(SVW, VSUB, v_t_sub, 65535, v_num);
   vbx(VVWU, VSUB, v_if_num, (vbx_uword_t*)v_num, (vbx_uword_t*)v_result);
-  vbx(SVWU, VSHL, v_if_num, 16, v_if_num);
+  vbx(VSWU, VSHL, v_if_num, v_if_num, 16);
   vbx(SVWU, VADD, v_if_num, (-1*(0x8000)), v_if_num);
 
-  vbx(SVWU, VSHL, v_t_result, 16, (vbx_uword_t*)v_result);
+  vbx(VSWU, VSHL, v_t_result, (vbx_uword_t*)v_result, 16);
   vbx(SVWU, VADD, v_t_add, (0x8000), v_t_result);
-  vbx(SVWU, VSHL, v_else_num, 16, (vbx_uword_t*)v_num);
+  vbx(VSWU, VSHL, v_else_num, (vbx_uword_t*)v_num, 16);
 
   vbx(VVWU, VCMV_LTZ, (vbx_uword_t*)v_num, v_if_num, (vbx_uword_t*)v_t_sub);
   vbx(VVWU, VCMV_GEZ, (vbx_uword_t*)v_num, v_else_num, (vbx_uword_t*)v_t_sub);
@@ -244,11 +244,11 @@ void vbw_fix16_sqrt( vbx_word_t* v_out, vbx_word_t* v_x, int length)
     vbx(VVW, VCMV_GEZ, (vbx_word_t*)v_t_num, v_t_sub, v_t_sub);
     vbx(VVW, VCMV_LTZ, (vbx_word_t*)v_t_num, v_num, v_t_sub);
 
-    vbx(SVWU, VSHR, v_t_result, 1, (vbx_uword_t*)v_result);
+    vbx(VSWU, VSHR, v_t_result, (vbx_uword_t*)v_result, 1);
     vbx(VVWU, VADD, v_t_add, v_bit, v_t_result);
     vbx(VVW, VCMV_GEZ, (vbx_word_t*)v_t_result, (vbx_word_t*)v_t_add, v_t_sub);
 
-    vbx(SVWU, VSHR, v_t_bit, 2, v_bit);
+    vbx(VSWU, VSHR, v_t_bit, v_bit, 2);
 
     vbx(VVWU, VCMV_NZ, (vbx_uword_t*)v_num, v_t_num, v_bit);
     vbx(VVWU, VCMV_NZ, (vbx_uword_t*)v_result, v_t_result, v_bit);

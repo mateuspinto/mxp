@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,8 +48,9 @@
 #define VBX_OP_DMA_TO_VECTOR 1
 #define VBX_OP_SET_VL        2
 
-// opcode extension flag; use acc since it's not used by other opcodes
-#define VBX_OP_EXT          (1 << MASKED_BIT)
+// opcode extension flag; use acc | masked since it's not used by other opcodes
+#define VBX_OP_EXT           ((1 << MASKED_BIT) | (1 << ACCUM_BIT))
+#define VBX_PARAM_ADDR_SHIFT 6
 // extended opcodes
 #define VBX_OP_GET_PARAM     0
 #define VBX_OP_SET_PARAM     1
@@ -80,7 +81,7 @@ __attribute__((always_inline)) inline static void _vbx_dma_to_vector( vbx_void_t
 
 __attribute__((always_inline)) static inline void VBX_DMA_SET_2D(uint32_t ROWS,uint32_t EXT_INCR,uint32_t INT_INCR)
 {
-	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_VECTOR) << (VBX_OPCODE_SHIFT)) | VBX_MODE_SV | MOD_2D),
+	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_VECTOR) << (VBX_OPCODE_SHIFT)) | VBX_MODE_SE),
 	               (INT_INCR),
 	               (ROWS),
 	               ((ROWS)*(INT_INCR)));
@@ -94,7 +95,7 @@ __attribute__((always_inline)) inline static void _vbx_dma_to_host_2D( void* EXT
                           uint32_t EXT_INCR, uint32_t INT_INCR)
 {
 	VBX_DMA_SET_2D(ROWS, EXT_INCR, INT_INCR);
-	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_HOST) << (VBX_OPCODE_SHIFT)) | MOD_2D),
+	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_HOST) << (VBX_OPCODE_SHIFT)) | MOD_ACC),
 	               (VBX_DMA_ADDR(EXT,EXT_INCR*ROWS)),
 	               (INT),
 	               (ROW_LEN));
@@ -103,7 +104,7 @@ __attribute__((always_inline)) inline static void _vbx_dma_to_vector_2D(void* IN
                            uint32_t INT_INCR,uint32_t EXT_INCR)
 {
 	VBX_DMA_SET_2D(ROWS, EXT_INCR, INT_INCR);
-	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_VECTOR) << (VBX_OPCODE_SHIFT)) | MOD_2D),
+	VBX_INSTR_QUAD((((VBX_OP_DMA_TO_VECTOR) << (VBX_OPCODE_SHIFT)) | MOD_ACC),
 	               (VBX_DMA_ADDR(EXT,ROW_LEN)),
 	               (INT),
 	               (ROW_LEN));
@@ -111,7 +112,7 @@ __attribute__((always_inline)) inline static void _vbx_dma_to_vector_2D(void* IN
 
 
 #define VBX_GET(ADDRESS_REG, RETURN_REG)  \
-	VBX_INSTR_SINGLE((((VBX_OP_GET_PARAM) << (VBX_OPCODE_SHIFT)) | (VBX_OP_EXT) | ((ADDRESS_REG) << SIGNED_BIT)), \
+	VBX_INSTR_SINGLE((((VBX_OP_GET_PARAM) << (VBX_OPCODE_SHIFT)) | (VBX_OP_EXT) | ((ADDRESS_REG) << VBX_PARAM_ADDR_SHIFT)), \
 	                 RETURN_REG)
 
 #define VBX_GET_MASK(RETURN_REG)  \
@@ -119,17 +120,14 @@ __attribute__((always_inline)) inline static void _vbx_dma_to_vector_2D(void* IN
 	                 RETURN_REG)
 
 #define VBX_SET(ADDRESS_REG, VALUE_REG)	\
-	VBX_INSTR_DOUBLE((((VBX_OP_SET_PARAM) << (VBX_OPCODE_SHIFT)) | (VBX_OP_EXT) | ((ADDRESS_REG) << SIGNED_BIT)), \
+	VBX_INSTR_DOUBLE((((VBX_OP_SET_PARAM) << (VBX_OPCODE_SHIFT)) | (VBX_OP_EXT) | ((ADDRESS_REG) << VBX_PARAM_ADDR_SHIFT)), \
 	                 (VALUE_REG))
 
-#define VBX_SET_VL(MODIFIERS,LENGTHA,LENGTHB) \
+#define VBX_SET_VL(MODIFIERS,LENGTHA,LENGTHB,LENGTHC)	  \
 	VBX_INSTR_QUAD((((VBX_OP_SET_VL) << (VBX_OPCODE_SHIFT)) | (MODIFIERS)), \
 	               (LENGTHA), \
 	               (LENGTHB), \
-	               (0))
-
-#define VBX_SET_VL3D(MODIFIERS,LENGTHA,LENGTHB) \
-	 VBX_SET_VL(((MODIFIERS) | (MOD_3D)), (LENGTHA), (LENGTHB))
+	               (LENGTHC))
 
 
 void vbx_set_reg( int REGADDR, int  VALUE )

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -89,98 +89,6 @@ namespace VBX{
 			template <typename T,typename U>
 			static void func(vinstr_t vinstr,T dest,U srcA){
 				vbxx(vinstr,dest,srcA);
-			}
-		};
-		//2D
-		template<>
-		struct vbx_func<IS_MASK,NO_ACC,2>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				assert("Masked 2D operations not permitted"&&0);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				assert("Masked 2D operations not permitted"&&0);
-			}
-		};
-		template<>
-		struct vbx_func<IS_MASK,IS_ACC,2>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				assert("Masked 2D operations not permitted"&&0);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				assert("Masked 2D operations not permitted"&&0);
-			}
-		};
-
-		template<>
-		struct vbx_func<NO_MASK,IS_ACC,2>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				vbxx_acc_2D(vinstr,dest,srcA,srcB);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				vbxx_acc_2D(vinstr,dest,srcA);
-			}
-		};
-		template<>
-		struct vbx_func<NO_MASK,NO_ACC,2>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				vbxx_2D(vinstr,dest,srcA,srcB);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				vbxx_2D(vinstr,dest,srcA);
-			}
-		};
-		//3D
-		template<>
-		struct vbx_func<IS_MASK,NO_ACC,3>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				assert("Masked 3D operations not permitted"&&0);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				assert("Masked 3D operations not permitted"&&0);
-			}
-		};
-		template<>
-		struct vbx_func<IS_MASK,IS_ACC,3>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				assert("Masked 3D operations not permitted"&&0);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				assert("Masked 3D operations not permitted"&&0);
-			}
-		};
-
-		template<>
-		struct vbx_func<NO_MASK,IS_ACC,3>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				vbxx_acc_3D(vinstr,dest,srcA,srcB);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				vbxx_acc_3D(vinstr,dest,srcA);
-			}
-		};
-		template<>
-		struct vbx_func<NO_MASK,NO_ACC,3>{
-			template <typename T,typename U,typename V>
-			static void func(vinstr_t vinstr,T dest,U srcA,V srcB){
-				vbxx_3D(vinstr,dest,srcA,srcB);
-			}
-			template <typename T,typename U>
-			static void func(vinstr_t vinstr,T dest,U srcA){
-				vbxx_3D(vinstr,dest,srcA);
 			}
 		};
 

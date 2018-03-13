@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -79,6 +79,8 @@ extern "C" {
 #  endif
 #elif defined(__microblaze__)
 #  define MB_STANDALONE 1
+#elif defined(__riscv)
+#  define ORCA_STANDALONE 1
 #endif
 
 #ifndef ARM_XIL_STANDALONE
@@ -99,22 +101,26 @@ extern "C" {
 #ifndef VBX_SIMULATOR
 #define VBX_SIMULATOR 0
 #endif
-
+#ifndef ORCA_STANDALONE
+#define ORCA_STANDALONE 0
+#endif
 #if (ARM_XIL_STANDALONE +	  \
      ARM_LINUX +	  \
      ARM_ALT_STANDALONE +	  \
      MB_STANDALONE +	  \
      NIOS_STANDALONE + \
+     ORCA_STANDALONE + \
      VBX_SIMULATOR) == 0
-#error Must define one of ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE, VBX_SIMULATOR
+#error Must define one of ORCA_STANDALONE ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE, VBX_SIMULATOR
 #endif
 #if (ARM_XIL_STANDALONE +	  \
      ARM_LINUX +	  \
      ARM_ALT_STANDALONE +	  \
      MB_STANDALONE +	  \
      NIOS_STANDALONE +	  \
+     ORCA_STANDALONE + \
      VBX_SIMULATOR ) > 1
-#error May only define one of ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE,VBX_SIMULATOR
+#error May only define one of ORCA_STANDALONE ARM_XIL_STANDALONE, ARM_LINUX, ARM_ALT_STANDALONE, MB_STANDALONE, NIOS_STANDALONE,VBX_SIMULATOR
 #endif
 
 #include <assert.h>

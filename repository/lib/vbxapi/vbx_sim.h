@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,408 +59,482 @@ extern "C" {
 #if !VBX_SIMULATOR
 #error "Something went wrong, this file should not be included if VBX_SIMULATOR is not defined"
 #endif
-// -------------------------------------
-// Vector API: Valid Mode Settings
+	// -------------------------------------
+	// Vector API: Valid Mode Settings
 
 #define MOD_NONE       1
 #define MOD_ACC        2
-#define MOD_2D         3
-#define MOD_ACC_2D     4
+#define MOD_MASKED     4
+#define MOD_2D         8
+#define MOD_3D         0x10
 
-// ----------------------
-// Primary modes
+	// ----------------------
+	// Primary modes
 
-typedef enum {
-    V_SEBBS ,
-    V_SEBBU,
-    V_SVBBS,
-    V_SVBBU,
-    V_VEBBS,
-    V_VEBBU,
-    V_VVBBS,
-    V_VVBBU,
+	typedef enum {
+		V_SEBBBSSS,
+		V_SEBBBUUU,
+		V_SEHHHSSS,
+		V_SEHHHUUU,
+		V_SEWWWSSS,
+		V_SEWWWUUU,
+		V_SVBBBSSS,
+		V_SVBBBSUS,
+		V_SVBBBSUU,
+		V_SVBBBUSS,
+		V_SVBBBUUS,
+		V_SVBBBUUU,
+		V_SVBHHSSS,
+		V_SVBHHSUS,
+		V_SVBHHSUU,
+		V_SVBHHUSS,
+		V_SVBHHUUS,
+		V_SVBHHUUU,
+		V_SVBWWSSS,
+		V_SVBWWSUS,
+		V_SVBWWSUU,
+		V_SVBWWUSS,
+		V_SVBWWUUS,
+		V_SVBWWUUU,
+		V_SVHBBSSS,
+		V_SVHBBSUS,
+		V_SVHBBSUU,
+		V_SVHBBUSS,
+		V_SVHBBUUS,
+		V_SVHBBUUU,
+		V_SVHHHSSS,
+		V_SVHHHSUS,
+		V_SVHHHSUU,
+		V_SVHHHUSS,
+		V_SVHHHUUS,
+		V_SVHHHUUU,
+		V_SVHWWSSS,
+		V_SVHWWSUS,
+		V_SVHWWSUU,
+		V_SVHWWUSS,
+		V_SVHWWUUS,
+		V_SVHWWUUU,
+		V_SVWBBSSS,
+		V_SVWBBSUS,
+		V_SVWBBSUU,
+		V_SVWBBUSS,
+		V_SVWBBUUS,
+		V_SVWBBUUU,
+		V_SVWHHSSS,
+		V_SVWHHSUS,
+		V_SVWHHSUU,
+		V_SVWHHUSS,
+		V_SVWHHUUS,
+		V_SVWHHUUU,
+		V_SVWWWSSS,
+		V_SVWWWSUS,
+		V_SVWWWSUU,
+		V_SVWWWUSS,
+		V_SVWWWUUS,
+		V_SVWWWUUU,
+		V_VEBBBSSS,
+		V_VEBBBSUU,
+		V_VEBBBUSS,
+		V_VEBBBUUU,
+		V_VEBHHSSS,
+		V_VEBHHSUU,
+		V_VEBHHUSS,
+		V_VEBHHUUU,
+		V_VEBWWSSS,
+		V_VEBWWSUU,
+		V_VEBWWUSS,
+		V_VEBWWUUU,
+		V_VEHBBSSS,
+		V_VEHBBSUU,
+		V_VEHBBUSS,
+		V_VEHBBUUU,
+		V_VEHHHSSS,
+		V_VEHHHSUU,
+		V_VEHHHUSS,
+		V_VEHHHUUU,
+		V_VEHWWSSS,
+		V_VEHWWSUU,
+		V_VEHWWUSS,
+		V_VEHWWUUU,
+		V_VEWBBSSS,
+		V_VEWBBSUU,
+		V_VEWBBUSS,
+		V_VEWBBUUU,
+		V_VEWHHSSS,
+		V_VEWHHSUU,
+		V_VEWHHUSS,
+		V_VEWHHUUU,
+		V_VEWWWSSS,
+		V_VEWWWSUU,
+		V_VEWWWUSS,
+		V_VEWWWUUU,
+		V_VVBBBSSS,
+		V_VVBBBSSU,
+		V_VVBBBSUS,
+		V_VVBBBSUU,
+		V_VVBBBUSS,
+		V_VVBBBUSU,
+		V_VVBBBUUS,
+		V_VVBBBUUU,
+		V_VVBBHSSS,
+		V_VVBBHSSU,
+		V_VVBBHSUS,
+		V_VVBBHSUU,
+		V_VVBBHUSS,
+		V_VVBBHUSU,
+		V_VVBBHUUS,
+		V_VVBBHUUU,
+		V_VVBBWSSS,
+		V_VVBBWSSU,
+		V_VVBBWSUS,
+		V_VVBBWSUU,
+		V_VVBBWUSS,
+		V_VVBBWUSU,
+		V_VVBBWUUS,
+		V_VVBBWUUU,
+		V_VVBHBSSS,
+		V_VVBHBSSU,
+		V_VVBHBSUS,
+		V_VVBHBSUU,
+		V_VVBHBUSS,
+		V_VVBHBUSU,
+		V_VVBHBUUS,
+		V_VVBHBUUU,
+		V_VVBHHSSS,
+		V_VVBHHSSU,
+		V_VVBHHSUS,
+		V_VVBHHSUU,
+		V_VVBHHUSS,
+		V_VVBHHUSU,
+		V_VVBHHUUS,
+		V_VVBHHUUU,
+		V_VVBHWSSS,
+		V_VVBHWSSU,
+		V_VVBHWSUS,
+		V_VVBHWSUU,
+		V_VVBHWUSS,
+		V_VVBHWUSU,
+		V_VVBHWUUS,
+		V_VVBHWUUU,
+		V_VVBWBSSS,
+		V_VVBWBSSU,
+		V_VVBWBSUS,
+		V_VVBWBSUU,
+		V_VVBWBUSS,
+		V_VVBWBUSU,
+		V_VVBWBUUS,
+		V_VVBWBUUU,
+		V_VVBWHSSS,
+		V_VVBWHSSU,
+		V_VVBWHSUS,
+		V_VVBWHSUU,
+		V_VVBWHUSS,
+		V_VVBWHUSU,
+		V_VVBWHUUS,
+		V_VVBWHUUU,
+		V_VVBWWSSS,
+		V_VVBWWSSU,
+		V_VVBWWSUS,
+		V_VVBWWSUU,
+		V_VVBWWUSS,
+		V_VVBWWUSU,
+		V_VVBWWUUS,
+		V_VVBWWUUU,
+		V_VVHBBSSS,
+		V_VVHBBSSU,
+		V_VVHBBSUS,
+		V_VVHBBSUU,
+		V_VVHBBUSS,
+		V_VVHBBUSU,
+		V_VVHBBUUS,
+		V_VVHBBUUU,
+		V_VVHBHSSS,
+		V_VVHBHSSU,
+		V_VVHBHSUS,
+		V_VVHBHSUU,
+		V_VVHBHUSS,
+		V_VVHBHUSU,
+		V_VVHBHUUS,
+		V_VVHBHUUU,
+		V_VVHBWSSS,
+		V_VVHBWSSU,
+		V_VVHBWSUS,
+		V_VVHBWSUU,
+		V_VVHBWUSS,
+		V_VVHBWUSU,
+		V_VVHBWUUS,
+		V_VVHBWUUU,
+		V_VVHHBSSS,
+		V_VVHHBSSU,
+		V_VVHHBSUS,
+		V_VVHHBSUU,
+		V_VVHHBUSS,
+		V_VVHHBUSU,
+		V_VVHHBUUS,
+		V_VVHHBUUU,
+		V_VVHHHSSS,
+		V_VVHHHSSU,
+		V_VVHHHSUS,
+		V_VVHHHSUU,
+		V_VVHHHUSS,
+		V_VVHHHUSU,
+		V_VVHHHUUS,
+		V_VVHHHUUU,
+		V_VVHHWSSS,
+		V_VVHHWSSU,
+		V_VVHHWSUS,
+		V_VVHHWSUU,
+		V_VVHHWUSS,
+		V_VVHHWUSU,
+		V_VVHHWUUS,
+		V_VVHHWUUU,
+		V_VVHWBSSS,
+		V_VVHWBSSU,
+		V_VVHWBSUS,
+		V_VVHWBSUU,
+		V_VVHWBUSS,
+		V_VVHWBUSU,
+		V_VVHWBUUS,
+		V_VVHWBUUU,
+		V_VVHWHSSS,
+		V_VVHWHSSU,
+		V_VVHWHSUS,
+		V_VVHWHSUU,
+		V_VVHWHUSS,
+		V_VVHWHUSU,
+		V_VVHWHUUS,
+		V_VVHWHUUU,
+		V_VVHWWSSS,
+		V_VVHWWSSU,
+		V_VVHWWSUS,
+		V_VVHWWSUU,
+		V_VVHWWUSS,
+		V_VVHWWUSU,
+		V_VVHWWUUS,
+		V_VVHWWUUU,
+		V_VVWBBSSS,
+		V_VVWBBSSU,
+		V_VVWBBSUS,
+		V_VVWBBSUU,
+		V_VVWBBUSS,
+		V_VVWBBUSU,
+		V_VVWBBUUS,
+		V_VVWBBUUU,
+		V_VVWBHSSS,
+		V_VVWBHSSU,
+		V_VVWBHSUS,
+		V_VVWBHSUU,
+		V_VVWBHUSS,
+		V_VVWBHUSU,
+		V_VVWBHUUS,
+		V_VVWBHUUU,
+		V_VVWBWSSS,
+		V_VVWBWSSU,
+		V_VVWBWSUS,
+		V_VVWBWSUU,
+		V_VVWBWUSS,
+		V_VVWBWUSU,
+		V_VVWBWUUS,
+		V_VVWBWUUU,
+		V_VVWHBSSS,
+		V_VVWHBSSU,
+		V_VVWHBSUS,
+		V_VVWHBSUU,
+		V_VVWHBUSS,
+		V_VVWHBUSU,
+		V_VVWHBUUS,
+		V_VVWHBUUU,
+		V_VVWHHSSS,
+		V_VVWHHSSU,
+		V_VVWHHSUS,
+		V_VVWHHSUU,
+		V_VVWHHUSS,
+		V_VVWHHUSU,
+		V_VVWHHUUS,
+		V_VVWHHUUU,
+		V_VVWHWSSS,
+		V_VVWHWSSU,
+		V_VVWHWSUS,
+		V_VVWHWSUU,
+		V_VVWHWUSS,
+		V_VVWHWUSU,
+		V_VVWHWUUS,
+		V_VVWHWUUU,
+		V_VVWWBSSS,
+		V_VVWWBSSU,
+		V_VVWWBSUS,
+		V_VVWWBSUU,
+		V_VVWWBUSS,
+		V_VVWWBUSU,
+		V_VVWWBUUS,
+		V_VVWWBUUU,
+		V_VVWWHSSS,
+		V_VVWWHSSU,
+		V_VVWWHSUS,
+		V_VVWWHSUU,
+		V_VVWWHUSS,
+		V_VVWWHUSU,
+		V_VVWWHUUS,
+		V_VVWWHUUU,
+		V_VVWWWSSS,
+		V_VVWWWSSU,
+		V_VVWWWSUS,
+		V_VVWWWSUU,
+		V_VVWWWUSS,
+		V_VVWWWUSU,
+		V_VVWWWUUS,
+		V_VVWWWUUU,
+	}vbxsim_vmode_t;
 
-    V_SEBHS,
-    V_SEBHU,
-    V_SVBHS,
-    V_SVBHU,
-    V_VEBHS,
-    V_VEBHU,
-    V_VVBHS,
-    V_VVBHU,
-
-    V_SEBWS,
-    V_SEBWU,
-    V_SVBWS,
-    V_SVBWU,
-    V_VEBWS,
-    V_VEBWU,
-    V_VVBWS,
-    V_VVBWU,
-
-    V_SEHBS,
-    V_SEHBU,
-    V_SVHBS,
-    V_SVHBU,
-    V_VEHBS,
-    V_VEHBU,
-    V_VVHBS,
-    V_VVHBU,
-
-    V_SEHHS,
-    V_SEHHU,
-    V_SVHHS,
-    V_SVHHU,
-    V_VEHHS,
-    V_VEHHU,
-    V_VVHHS,
-    V_VVHHU,
-
-    V_SEHWS,
-    V_SEHWU,
-    V_SVHWS,
-    V_SVHWU,
-    V_VEHWS,
-    V_VEHWU,
-    V_VVHWS,
-    V_VVHWU,
-
-    V_SEWBS,
-    V_SEWBU,
-    V_SVWBS,
-    V_SVWBU,
-    V_VEWBS,
-    V_VEWBU,
-    V_VVWBS,
-    V_VVWBU,
-
-    V_SEWHS,
-    V_SEWHU,
-    V_SVWHS,
-    V_SVWHU,
-    V_VEWHS,
-    V_VEWHU,
-    V_VVWHS,
-    V_VVWHU,
-
-    V_SEWWS,
-    V_SEWWU,
-    V_SVWWS,
-    V_SVWWU,
-    V_VEWWS,
-    V_VEWWU,
-    V_VVWWS,
-    V_VVWWU
-}vbxsim_vmode_t;
-
-// ----------------------
-
-// byte-to-byte ops
-#define SEB  SEBBS
-#define SEBS SEBBS
-#define SEBU SEBBU
-#define SVV  SVBBS
-#define SVBS SVBBS
-#define SVBU SVBBU
-#define SVB  SVBBS
-#define VEB  VEBBS
-#define VEBS VEBBS
-#define VEBU VEBBU
-#define VVB  VVBBS
-#define VVBS VVBBS
-#define VVBU VVBBU
-//
-#define SEBB  SEBBS
-#define SEBBS SEBBS
-#define SEBBU SEBBU
-#define SVBB  SVBBS
-#define SVBBS SVBBS
-#define SVBBU SVBBU
-#define VEBB  VEBBS
-#define VEBBS VEBBS
-#define VEBBU VEBBU
-#define VVBB  VVBBS
-#define VVBBS VVBBS
-#define VVBBU VVBBU
-
-// byte-to-half ops
-#define SEBH  SEBHS
-#define SEBHS SEBHS
-#define SEBHU SEBHU
-#define SVBH  SVBHS
-#define SVBHS SVBHS
-#define SVBHU SVBHU
-#define VEBH  VEBHS
-#define VEBHS VEBHS
-#define VEBHU VEBHU
-#define VVBH  VVBHS
-#define VVBHS VVBHS
-#define VVBHU VVBHU
-
-// byte-to-word ops
-#define SEBW  SEBWS
-#define SEBWS SEBWS
-#define SEBWU SEBWU
-#define SVBW  SVBWS
-#define SVBWS SVBWS
-#define SVBWU SVBWU
-#define VEBW  VEBWS
-#define VEBWS VEBWS
-#define VEBWU VEBWU
-#define VVBW  VVBWS
-#define VVBWS VVBWS
-#define VVBWU VVBWU
-
-// half-to-half ops
-#define SEH  SEHHS
-#define SEHS SEHHS
-#define SEHU SEHHU
-#define SVH  SVHHS
-#define SVHS SVHHS
-#define SVHU SVHHU
-#define VEH  VEHHS
-#define VEHS VEHHS
-#define VEHU VEHHU
-#define VVH  VVHHS
-#define VVHS VVHHS
-#define VVHU VVHHU
-//
-#define SEHH  SEHHS
-#define SEHHS SEHHS
-#define SEHHU SEHHU
-#define SVHH  SVHHS
-#define SVHHS SVHHS
-#define SVHHU SVHHU
-#define VEHH  VEHHS
-#define VEHHS VEHHS
-#define VEHHU VEHHU
-#define VVHH  VVHHS
-#define VVHHS VVHHS
-#define VVHHU VVHHU
-
-// half-to-byte ops
-#define SEHB  SEHBS
-#define SEHBS SEHBS
-#define SEHBU SEHBU
-#define SVHB  SVHBS
-#define SVHBS SVHBS
-#define SVHBU SVHBU
-#define VEHB  VEHBS
-#define VEHBS VEHBS
-#define VEHBU VEHBU
-#define VVHB  VVHBS
-#define VVHBS VVHBS
-#define VVHBU VVHBU
-
-// half-to-word ops
-#define SEHW  SEHWS
-#define SEHWS SEHWS
-#define SEHWU SEHWU
-#define SVHW  SVHWS
-#define SVHWS SVHWS
-#define SVHWU SVHWU
-#define VEHW  VEHWS
-#define VEHWS VEHWS
-#define VEHWU VEHWU
-#define VVHW  VVHWS
-#define VVHWS VVHWS
-#define VVHWU VVHWU
-
-// word-to-word ops
-#define SEW  SEWWS
-#define SEWS SEWWS
-#define SEWU SEWWU
-#define SVW  SVWWS
-#define SVWS SVWWS
-#define SVWU SVWWU
-#define VEW  VEWWS
-#define VEWS VEWWS
-#define VEWU VEWWU
-#define VVW  VVWWS
-#define VVWS VVWWS
-#define VVWU VVWWU
-//
-#define SEWW  SEWWS
-#define SEWWS SEWWS
-#define SEWWU SEWWU
-#define SVWW  SVWWS
-#define SVWWS SVWWS
-#define SVWWU SVWWU
-#define VEWW  VEWWS
-#define VEWWS VEWWS
-#define VEWWU VEWWU
-#define VVWW  VVWWS
-#define VVWWS VVWWS
-#define VVWWU VVWWU
-
-// word-to-byte ops
-#define SEWB  SEWBS
-#define SEWBS SEWBS
-#define SEWBU SEWBU
-#define SVWB  SVWBS
-#define SVWBS SVWBS
-#define SVWBU SVWBU
-#define VEWB  VEWBS
-#define VEWBS VEWBS
-#define VEWBU VEWBU
-#define VVWB  VVWBS
-#define VVWBS VVWBS
-#define VVWBU VVWBU
-
-// word-to-half ops
-#define SEWH  SEWHS
-#define SEWHS SEWHS
-#define SEWHU SEWHU
-#define SVWH  SVWHS
-#define SVWHS SVWHS
-#define SVWHU SVWHU
-#define VEWH  VEWHS
-#define VEWHS VEWHS
-#define VEWHU VEWHU
-#define VVWH  VVWHS
-#define VVWHS VVWHS
-#define VVWHU VVWHU
-
-void vbxsim_setup_mask(vbxsim_vmode_t vmode,vinstr_t vinstr,void *src);
-void vbxsim_setup_mask_masked(vbxsim_vmode_t vmode,vinstr_t vinstr,void *src);
+	// ----------------------
+	void vbxsim_setup_mask(vbxsim_vmode_t vmode,vinstr_t vinstr,void *src);
+	void vbxsim_setup_mask_masked(vbxsim_vmode_t vmode,vinstr_t vinstr,void *src);
 
 
-// -------------------------------------
-// Vector API: Macros
+	// -------------------------------------
+	// Vector API: Macros
 
-// NOTE: the double-macro calling is required to ensure macro arguments are fully expanded.
-#define _vbxasm(VMODE,VINSTR,DEST,SRCA,SRCB)            vbxsim_1D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_acc(VMODE,VINSTR,DEST,SRCA,SRCB)        vbxsim_acc_1D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_2D(VMODE,VINSTR,DEST,SRCA,SRCB)         vbxsim_2D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_acc_2D(VMODE,VINSTR,DEST,SRCA,SRCB)     vbxsim_acc_2D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_3D(VMODE,VINSTR,DEST,SRCA,SRCB)         vbxsim_3D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_acc_3D(VMODE,VINSTR,DEST,SRCA,SRCB)     vbxsim_acc_3D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_masked(VMODE,VINSTR,DEST,SRCA,SRCB)     vbxsim_masked_1D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
-#define _vbxasm_masked_acc(VMODE,VINSTR,DEST,SRCA,SRCB) vbxsim_masked_acc_1D_##VMODE(V_##VMODE,VINSTR,DEST,SRCA,SRCB)
+	// NOTE: the double-macro calling is required to ensure macro arguments are fully expanded.
+#define _vbxasm(VMODE,VINSTR,DEST,SRCA,SRCB)            vbxsim_##VMODE(VINSTR,DEST,SRCA,SRCB)
+#define _vbxasm_acc(VMODE,VINSTR,DEST,SRCA,SRCB)        vbxsim_acc_##VMODE(VINSTR,DEST,SRCA,SRCB)
+#define _vbxasm_masked(VMODE,VINSTR,DEST,SRCA,SRCB)     vbxsim_masked_##VMODE(VINSTR,DEST,SRCA,SRCB)
+#define _vbxasm_masked_acc(VMODE,VINSTR,DEST,SRCA,SRCB) vbxsim_masked_acc_##VMODE(VINSTR,DEST,SRCA,SRCB)
 #define _vbxasm_setup_mask(VMODE,VINSTR,SRC)            vbxsim_setup_mask(V_##VMODE,VINSTR,SRC)
 #define _vbxasm_setup_mask_masked(VMODE,VINSTR,SRC)     vbxsim_setup_mask_masked(V_##VMODE,VINSTR,SRC)
-/**@name VBX Assembly Macros*/
-/**@{*/
-#define vbxasm(VMODE,VINSTR,DEST,SRCA,SRCB)             _vbxasm(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_acc(VMODE,VINSTR,DEST,SRCA,SRCB)         _vbxasm_acc(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_2D(VMODE,VINSTR,DEST,SRCA,SRCB)          _vbxasm_2D(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_acc_2D(VMODE,VINSTR,DEST,SRCA,SRCB)      _vbxasm_acc_2D(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_3D(VMODE,VINSTR,DEST,SRCA,SRCB)          _vbxasm_3D(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_acc_3D(VMODE,VINSTR,DEST,SRCA,SRCB)      _vbxasm_acc_3D(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_masked(VMODE,VINSTR,DEST,SRCA,SRCB)      _vbxasm_masked(VMODE,VINSTR,DEST,SRCA,SRCB)
-#define vbxasm_masked_acc(VMODE,VINSTR,DEST,SRCA,SRCB)  _vbxasm_masked_acc(VMODE,VINSTR,DEST,SRCA,SRCB)
+	/**@name VBX Assembly Macros*/
+	/**@{*/
+#define vbxasm(MODIFY,VMODE,VINSTR,DEST,SRCA,SRCB)      do{	  \
+		if(MODIFY == MOD_NONE){ \
+			_vbxasm(VMODE,VINSTR,DEST,SRCA,SRCB); \
+		}else if(MODIFY == MOD_ACC){ \
+			_vbxasm_acc(VMODE,VINSTR,DEST,SRCA,SRCB); \
+		}else if(MODIFY == MOD_MASKED){ \
+			_vbxasm_masked(VMODE,VINSTR,DEST,SRCA,SRCB); \
+		}else if(MODIFY == (MOD_MASKED|MOD_ACC)){ \
+			_vbxasm_masked_acc(VMODE,VINSTR,DEST,SRCA,SRCB); \
+		}}while(0)
 
 #define vbxasm_setup_mask(VMODE,VINSTR,SRC)             _vbxasm_setup_mask(VMODE,VINSTR,SRC)
 #define vbxasm_setup_mask_masked(VMODE,VINSTR,SRC)      _vbxasm_setup_mask_masked(VMODE,VINSTR,SRC)
-/**@}*/
+	/**@}*/
 
 #include "vbx_simproto.h"
 
-// -------------------------------------
-// Vector API: Prototypes
+	// -------------------------------------
+	// Vector API: Prototypes
 
-void vbxsim_init( int num_lanes,
-                  int scratchpad_capacity_kb ,
-                  int max_masked_waves,
-                  int fxp_word_frac_bits,
-                  int fxp_half_frac_bits,
-                  int fxp_byte_frac_bits);
+	void vbxsim_init( int num_lanes,
+	                  int scratchpad_capacity_kb ,
+	                  int max_masked_waves,
+	                  int fxp_word_frac_bits,
+	                  int fxp_half_frac_bits,
+	                  int fxp_byte_frac_bits);
 
-void vbxsim_destroy();
+	void vbxsim_destroy();
 
-typedef struct{
-	//bool reset;         ///< Global (hard) synchronous reset
-	uint16_t valid;       ///< Current wavefront contains valid data
-	char vector_start;	 ///< First cycle of vector operation
-	char vector_end;	    ///< last cycle of vector operation
-	void* dest_addr_in;	 ///< Destination (writeback) address from address generation
-	void* dest_addr_out;	 ///< Destination (writeback) address to be written  (OUTPUT)
-	char sign;				 ///< Signed operation
-	int opsize;           ///< Datasize (00=Byte, 01=Halfword, 10=Word)
-	void* byte_valid;	    ///< Bytes containing valid data
-	void* byte_enable;    ///< Bytes to be written to scratchpad              (OUTPUT)
-	void* data_a;	       ///< Source A input data
-	void* flag_a;			 ///< Source A input flags
-	void* data_b;	       ///< Source B input data
-	void* flag_b;			 ///< Source B input flags
-	void* data_out;       ///< Destination (writeback) data          (OUTPUT)
-	void* flag_out;       ///< Destination (writeback) flags         (OUTPUT)
-}vbxsim_custom_instr_t;
+	typedef struct{
+		//bool reset;         ///< Global (hard) synchronous reset
+		uint16_t valid;       ///< Current wavefront contains valid data
+		char vector_start;	 ///< First cycle of vector operation
+		char vector_end;	    ///< last cycle of vector operation
+		void* dest_addr_in;	 ///< Destination (writeback) address from address generation
+		void* dest_addr_out;	 ///< Destination (writeback) address to be written  (OUTPUT)
+		char sign;				 ///< Signed operation
+		int opsize;           ///< Datasize (00=Byte, 01=Halfword, 10=Word)
+		void* byte_valid;	    ///< Bytes containing valid data
+		void* byte_enable;    ///< Bytes to be written to scratchpad              (OUTPUT)
+		void* data_a;	       ///< Source A input data
+		void* flag_a;			 ///< Source A input flags
+		void* data_b;	       ///< Source B input data
+		void* flag_b;			 ///< Source B input flags
+		void* data_out;       ///< Destination (writeback) data          (OUTPUT)
+		void* flag_out;       ///< Destination (writeback) flags         (OUTPUT)
+	}vbxsim_custom_instr_t;
 
-typedef void (*custom_instr_func)(vbxsim_custom_instr_t*);
-void vbxsim_set_custom_instruction(int opcode_start,
-                                   int internal_functions,
-                                   int lanes,
-                                   custom_instr_func fun);
+	typedef void (*custom_instr_func)(vbxsim_custom_instr_t*);
+	void vbxsim_set_custom_instruction(int opcode_start,
+	                                   int internal_functions,
+	                                   int lanes,
+	                                   int uid,
+	                                   custom_instr_func fun);
 
 
 #define MAX_VEC_LANE  /*2^9*/ 9
-struct simulator_statistics{
-	union{
-		struct {
-			unsigned VMOV[MAX_VEC_LANE];
-			unsigned VAND[MAX_VEC_LANE];
-			unsigned VOR[MAX_VEC_LANE];
-			unsigned VXOR[MAX_VEC_LANE];
-			unsigned VADD[MAX_VEC_LANE];
-			unsigned VSUB[MAX_VEC_LANE];
-			unsigned VADDC[MAX_VEC_LANE];
-			unsigned VSUBB[MAX_VEC_LANE];
-			unsigned VMUL[MAX_VEC_LANE];
-			unsigned VMULHI[MAX_VEC_LANE];
-			unsigned VMULFXP[MAX_VEC_LANE];
-			unsigned VSHL[MAX_VEC_LANE];
-			unsigned VSHR[MAX_VEC_LANE];
-			unsigned VROTL[MAX_VEC_LANE];
-			unsigned VROTR[MAX_VEC_LANE];
-			unsigned VCMV_LEZ[MAX_VEC_LANE];
-			unsigned VCMV_GTZ[MAX_VEC_LANE];
-			unsigned VCMV_LTZ[MAX_VEC_LANE];
-			unsigned VCMV_GEZ[MAX_VEC_LANE];
-			unsigned VCMV_Z[MAX_VEC_LANE];
-			unsigned VCMV_NZ[MAX_VEC_LANE];
-			unsigned VABSDIFF[MAX_VEC_LANE];
-			unsigned VCUSTOM0[MAX_VEC_LANE];
-			unsigned VCUSTOM1[MAX_VEC_LANE];
-			unsigned VCUSTOM2[MAX_VEC_LANE];
-			unsigned VCUSTOM3[MAX_VEC_LANE];
-			unsigned VCUSTOM4[MAX_VEC_LANE];
-			unsigned VCUSTOM5[MAX_VEC_LANE];
-			unsigned VCUSTOM6[MAX_VEC_LANE];
-			unsigned VCUSTOM7[MAX_VEC_LANE];
-			unsigned VCUSTOM8[MAX_VEC_LANE];
-			unsigned VCUSTOM9[MAX_VEC_LANE];
-			unsigned VCUSTOM10[MAX_VEC_LANE];
-			unsigned VCUSTOM11[MAX_VEC_LANE];
-			unsigned VCUSTOM12[MAX_VEC_LANE];
-			unsigned VCUSTOM13[MAX_VEC_LANE];
-			unsigned VCUSTOM14[MAX_VEC_LANE];
-			unsigned VCUSTOM15[MAX_VEC_LANE];
-		}as_name;
-		unsigned as_array[MAX_INSTR_VAL+1][MAX_VEC_LANE];
-	}instruction_cycles;
-	unsigned int instruction_count[MAX_INSTR_VAL+1];
-	unsigned int set_vl;
-	unsigned int set_2D;
-	unsigned int set_3D;
-	unsigned int dma_bytes;
-	unsigned int dma_calls;
-	unsigned int dma_cycles[MAX_VEC_LANE];
-};
-struct simulator_statistics vbxsim_get_stats();
-//deferred is default because it is zero, static variables are initialized to zero
-enum dma_type {DEFERRED=0,	IMMEDIATE=1};
-void vbxsim_set_dma_type(enum dma_type);
-//reset all statistics to zero
-void vbxsim_reset_stats();
-//print out all the wave counts for all the instructions for all the
-//lane sizes;
-void vbxsim_print_stats();
-void vbxsim_print_stats_extended();
-//disable simulator specific warnings
-void vbxsim_disable_warnings();
-//enable simulator specific warnings
-void vbxsim_enable_warnings();
+	struct simulator_statistics{
+		union{
+			struct {
+				unsigned VMOV[MAX_VEC_LANE];
+				unsigned VAND[MAX_VEC_LANE];
+				unsigned VOR[MAX_VEC_LANE];
+				unsigned VXOR[MAX_VEC_LANE];
+				unsigned VADD[MAX_VEC_LANE];
+				unsigned VSUB[MAX_VEC_LANE];
+				unsigned VADDC[MAX_VEC_LANE];
+				unsigned VSUBB[MAX_VEC_LANE];
+				unsigned VMUL[MAX_VEC_LANE];
+				unsigned VMULHI[MAX_VEC_LANE];
+				unsigned VMULFXP[MAX_VEC_LANE];
+				unsigned VSHL[MAX_VEC_LANE];
+				unsigned VSHR[MAX_VEC_LANE];
+				unsigned VCMV_LEZ[MAX_VEC_LANE];
+				unsigned VCMV_GTZ[MAX_VEC_LANE];
+				unsigned VCMV_LTZ[MAX_VEC_LANE];
+				unsigned VCMV_GEZ[MAX_VEC_LANE];
+				unsigned VCMV_Z[MAX_VEC_LANE];
+				unsigned VCMV_NZ[MAX_VEC_LANE];
+				unsigned VABSDIFF[MAX_VEC_LANE];
+				unsigned VCUSTOM0[MAX_VEC_LANE];
+				unsigned VCUSTOM1[MAX_VEC_LANE];
+				unsigned VCUSTOM2[MAX_VEC_LANE];
+				unsigned VCUSTOM3[MAX_VEC_LANE];
+				unsigned VCUSTOM4[MAX_VEC_LANE];
+				unsigned VCUSTOM5[MAX_VEC_LANE];
+				unsigned VCUSTOM6[MAX_VEC_LANE];
+				unsigned VCUSTOM7[MAX_VEC_LANE];
+				unsigned VCUSTOM8[MAX_VEC_LANE];
+				unsigned VCUSTOM9[MAX_VEC_LANE];
+				unsigned VCUSTOM10[MAX_VEC_LANE];
+				unsigned VCUSTOM11[MAX_VEC_LANE];
+				unsigned VCUSTOM12[MAX_VEC_LANE];
+				unsigned VCUSTOM13[MAX_VEC_LANE];
+				unsigned VCUSTOM14[MAX_VEC_LANE];
+				unsigned VCUSTOM15[MAX_VEC_LANE];
+			}as_name;
+			unsigned as_array[MAX_INSTR_VAL+1][MAX_VEC_LANE];
+		}instruction_cycles;
+		unsigned int instruction_count[MAX_INSTR_VAL+1];
+		unsigned int set_vl;
+		unsigned int set_2D;
+		unsigned int set_3D;
+		unsigned int dma_bytes;
+		unsigned int dma_calls;
+		unsigned int dma_cycles[MAX_VEC_LANE];
+	};
+	struct simulator_statistics vbxsim_get_stats();
+	//deferred is default because it is zero, static variables are initialized to zero
+	enum dma_type_e {DEFERRED=0,	IMMEDIATE=1};
+	void vbxsim_set_dma_type(enum dma_type_e);
+	int vbxsim_get_custom_uid(int instr_num);
+	//reset all statistics to zero
+	void vbxsim_reset_stats();
+	//print out all the wave counts for all the instructions for all the
+	//lane sizes;
+	void vbxsim_print_stats();
+	void vbxsim_print_stats_extended();
+
+	enum vbxsim_debug_level_e {
+		IGNORE,
+		WARN,
+		FATAL
+	};
+
+	enum vbxsim_debug_level_e vbxsim_acc_overflow_debug_level(enum vbxsim_debug_level_e);
+	enum vbxsim_debug_level_e vbxsim_bad_pointer_debug_level(enum vbxsim_debug_level_e);
+
+	//disable simulator specific warnings
+	void vbxsim_disable_warnings();
+	//enable simulator specific warnings
+	void vbxsim_enable_warnings();
 #ifdef __cplusplus
 }
 #endif

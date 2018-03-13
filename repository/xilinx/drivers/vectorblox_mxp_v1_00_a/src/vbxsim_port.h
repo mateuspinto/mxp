@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,7 @@ typedef uint64_t vbx_timestamp_t;
 extern vbx_timestamp_t vbxsim_timestamp;
 
 #define vbx_timestamp_start()
-#define vbx_timestamp()	                ++vbxsim_timestamp;
+#define vbx_timestamp()	                (++vbxsim_timestamp)
 
 #define vbx_timestamp_freq() \
 	({ \
@@ -70,7 +70,7 @@ extern vbx_timestamp_t vbxsim_timestamp;
 
 #define vbx_remap_cached(PTR,LEN)			PTR
 #define vbx_remap_uncached(PTR)				PTR
-#define vbx_remap_uncached_flush(PTR,LEN)	        PTR
+#define vbx_remap_uncached_flush(PTR,LEN)	        (PTR)
 
 
 #endif // __VBXSIM_PORT_H

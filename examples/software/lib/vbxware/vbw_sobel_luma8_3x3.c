@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ VBXCOPYRIGHT(vbw_sobel_luma8_3x3)
 inline static void vbw_sobel_3x3_row(vbx_uhalf_t *lpf, vbx_ubyte_t *raw, const short image_width)
 {
 	vbx_set_vl(image_width-1);
-	vbx(VVBHU, VADD, lpf, raw, raw+1);
+	vbx(VVHBU, VADD, lpf, raw, raw+1);
 	vbx_set_vl(image_width-2);
 	vbx(VVHU, VADD, lpf, lpf, lpf+1);
 }
@@ -119,7 +119,7 @@ int vbw_sobel_luma8_3x3(unsigned *output, unsigned char *input, const short imag
 		v_luma_bot=rp_get_buffer(&v_luma,2);
 		// Start calculating gradient_x
 		vbx_set_vl(image_width);
-		vbx(SVBHU, VSHL, v_gradient_x, 1, v_luma_mid); // multiply by 2
+		vbx(SVHBU, VSHL, v_gradient_x, 1, v_luma_mid); // multiply by 2
 
 		// Calculate gradient_y
 		// Apply [1 2 1] matrix to last row in window and calculate absolute difference with pre-computed first row
@@ -132,7 +132,7 @@ int vbw_sobel_luma8_3x3(unsigned *output, unsigned char *input, const short imag
 		// Finish calculating gradient_x
 		// Apply [1 2 1]T matrix to all columns
 		vbx_set_vl(image_width);
-		vbx(VVBHU, VADD, v_tmp, v_luma_top, v_luma_bot);
+		vbx(VVHBU, VADD, v_tmp, v_luma_top, v_luma_bot);
 		vbx(VVHU,  VADD, v_tmp, v_tmp,      v_gradient_x);
 		// For each column, calculate absolute difference with 2nd column to the right
 		vbx_set_vl(image_width-2);
@@ -151,7 +151,7 @@ int vbw_sobel_luma8_3x3(unsigned *output, unsigned char *input, const short imag
 		// Trick to copy the low byte (b) to the middle two bytes as well
 		// Note that first and last columns are 0
 		//vbx_set_vl(image_width-2);
-		vbx(SVHWU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
+		vbx(SVWWHU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
 
 		// DMA the result to the output
 		vbx_dma_to_host(output+(y+1)*image_pitch, v_row_out, image_width*sizeof(vbx_uword_t));

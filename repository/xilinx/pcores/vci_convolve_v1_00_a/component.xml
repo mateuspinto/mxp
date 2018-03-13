@@ -443,6 +443,28 @@
           </spirit:wireTypeDefs>
         </spirit:wire>
       </spirit:port>
+      <spirit:port>
+        <spirit:name>vci_clk_2x</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+	<spirit:vendorExtensions>
+	  <xilinx:portInfo>
+	    <xilinx:enablement>
+	      <xilinx:presence>optional</xilinx:presence>
+	      <xilinx:isEnabled xilinx:resolve="dependent"
+				xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES&apos;)) > 0)">true</xilinx:isEnabled>
+	    </xilinx:enablement>
+	  </xilinx:portInfo>
+	</spirit:vendorExtensions>
+      </spirit:port>
     </spirit:ports>
     <spirit:modelParameters>
       <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="positive">
@@ -468,7 +490,7 @@
       <spirit:modelParameter spirit:dataType="positive">
         <spirit:name>MAX_COEFFICIENTS</spirit:name>
         <spirit:displayName>Maxmium Coefficients</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.MAX_COEFFICIENTS" spirit:minimum="1" spirit:rangeType="long">1024</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.MAX_COEFFICIENTS" spirit:minimum="2" spirit:maximum="32768" spirit:rangeType="long">1024</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="positive">
         <spirit:name>FILTER_WIDTH</spirit:name>
@@ -483,7 +505,12 @@
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>CONJOINED_MULTIPLIES</spirit:name>
         <spirit:displayName>Conjoined Multiplies</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.CONJOINED_MULTIPLIES" spirit:minimum="0" spirit:maximum="1" spirit:rangeType="long">1</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.CONJOINED_MULTIPLIES" spirit:choiceRef="xippack_UserParameter_choiceref_zero_one" spirit:minimum="0" spirit:maximum="1" spirit:rangeType="long">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>DOUBLE_CLOCKED_MULTIPLIES</spirit:name>
+        <spirit:displayName>Double-Clocked Multiplies</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES" spirit:choiceRef="xippack_UserParameter_choiceref_zero_one" spirit:minimum="0" spirit:maximum="1" spirit:rangeType="long">0</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>FXP_BITS</spirit:name>
@@ -495,12 +522,12 @@
         <spirit:displayName>Filter Stages</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.FILTER_STAGES" spirit:minimum="3" spirit:maximum="16" spirit:rangeType="long">5</spirit:value>
       </spirit:modelParameter>
-      <spirit:modelParameter spirit:dataType="positive">
+      <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>INPUT_REGISTER_STAGES</spirit:name>
         <spirit:displayName>Input Register Stages</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.INPUT_REGISTER_STAGES" spirit:minimum="0" spirit:maximum="16" spirit:rangeType="long">1</spirit:value>
       </spirit:modelParameter>
-      <spirit:modelParameter spirit:dataType="positive">
+      <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>ADD_TREE_STAGES</spirit:name>
         <spirit:displayName>Add Tree Stages</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.ADD_TREE_STAGES" spirit:minimum="0" spirit:maximum="16" spirit:rangeType="long">2</spirit:value>
@@ -510,6 +537,11 @@
         <spirit:displayName>Filter Copies</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.FILTER_COPIES" spirit:rangeType="long">1</spirit:value>
       </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="positive">
+        <spirit:name>COEFFICIENT_COPIES</spirit:name>
+        <spirit:displayName>Coefficient Copies</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.COEFFICIENT_COPIES" spirit:minimum="1" spirit:maximum="256" spirit:rangeType="long">1</spirit:value>
+      </spirit:modelParameter>
     </spirit:modelParameters>
   </spirit:model>
   <spirit:choices>
@@ -518,6 +550,11 @@
       <spirit:enumeration>1</spirit:enumeration>
       <spirit:enumeration>2</spirit:enumeration>
       <spirit:enumeration>4</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>xippack_UserParameter_choiceref_zero_one</spirit:name>
+      <spirit:enumeration>0</spirit:enumeration>
+      <spirit:enumeration>1</spirit:enumeration>
     </spirit:choice>
   </spirit:choices>
   <spirit:fileSets>
@@ -563,10 +600,29 @@
   </spirit:fileSets>
   <spirit:description>Convolve Vector Custom Instruction</spirit:description>
   <spirit:parameters>
+
+	 <spirit:parameter>
+      <spirit:name>VCI_UID</spirit:name>
+      <spirit:displayName>Vci UID</spirit:displayName>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.VCI_UID" spirit:bitStringLength="32">0x7FFF0601</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.VCI_UID">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+
     <spirit:parameter>
       <spirit:name>CONJOINED_MULTIPLIES</spirit:name>
       <spirit:displayName>Conjoined Multiplies</spirit:displayName>
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.CONJOINED_MULTIPLIES" spirit:minimum="0" spirit:maximum="1" spirit:configGroups="0 UnGrouped comboBox">1</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>DOUBLE_CLOCKED_MULTIPLIES</spirit:name>
+      <spirit:displayName>Double-Clocked Multiplies</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES" spirit:minimum="0" spirit:maximum="1" spirit:configGroups="0 UnGrouped comboBox">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>FXP_BITS</spirit:name>
@@ -601,7 +657,7 @@
     <spirit:parameter>
       <spirit:name>MAX_COEFFICIENTS</spirit:name>
       <spirit:displayName>Maxmium Coefficients</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.MAX_COEFFICIENTS" spirit:minimum="1" spirit:order="1475">1024</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.MAX_COEFFICIENTS" spirit:minimum="2" spirit:maximum="32768" spirit:order="1475">1024</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>VCI_LANES</spirit:name>
@@ -631,6 +687,11 @@
       <spirit:name>FILTER_COPIES</spirit:name>
       <spirit:displayName>Filter Copies</spirit:displayName>
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.FILTER_COPIES" spirit:order="1600" spirit:rangeType="long">1</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>COEFFICIENT_COPIES</spirit:name>
+      <spirit:displayName>Coefficient Copies</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.COEFFICIENT_COPIES" spirit:order="1600" spirit:minimum="1" spirit:maximum="256" spirit:rangeType="long">1</spirit:value>
     </spirit:parameter>
   </spirit:parameters>
   <spirit:vendorExtensions>

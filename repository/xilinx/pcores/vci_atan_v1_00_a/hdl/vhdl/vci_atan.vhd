@@ -1,5 +1,5 @@
 -- vci_atan.vhd
--- Copyright (C) 2012-2017 VectorBlox Computing, Inc.
+-- Copyright (C) 2012-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- Arctangent custom instruction.  Takes in Q2.14 magnitude inputs and outputs

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -113,7 +113,6 @@ static vbx_mxp_dev_t dev = \
 		(name##_VCUSTOM14_LANES), \
 		(name##_VCUSTOM15_LANES), \
 		(name##_MAX_MASKED_VECTOR_LENGTH), \
-		(name##_MASK_PARTITIONS), \
 		(name##_VECTOR_CUSTOM_INSTRUCTIONS), \
 		(name##_FIXED_POINT_SUPPORT), \
 		(name##_MULFXP_WORD_FRACTION_BITS), \

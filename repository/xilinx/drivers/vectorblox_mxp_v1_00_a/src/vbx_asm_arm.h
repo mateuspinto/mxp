@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -267,9 +267,12 @@ extern "C" {
 
 #endif // !(VBX_USE_AXI_INSTR_PORT_ADDR_INCR && VBX_USE_GLOBAL_MXP_PTR)
 
-#define VBX_ASM(MODIFIERS,VMODE,VINSTR,DEST,SRCA,SRCB) \
-	VBX_INSTR_QUAD((((VINSTR) << (VBX_OPCODE_SHIFT)) | (VMODE) | (MODIFIERS)), \
-	               (SRCA), (SRCB), (DEST))
+		 static inline void VBX_ASM(size_t MODIFIERS,size_t VMODE,size_t VINSTR,size_t DEST,size_t SRCA,size_t SRCB)
+		 {
+
+			 VBX_INSTR_QUAD((((VINSTR) << (VBX_OPCODE_SHIFT)) | (VMODE) | (MODIFIERS)),
+			                (SRCA), (SRCB), (DEST));
+		 }
 
 // -------------------------------------
 

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@
 // The tile that is found may be larger than the matrix in one dimension, so that
 // should be controlled for by the caller.
 static inline void findTileSize( int *ph, int *pw, const int height,
-		const int width, const int max_elements, const int min_dim )
+                                 const int width, const int max_elements, const int min_dim )
 {
 	int max_dim = max_elements / min_dim;
 
@@ -90,10 +90,10 @@ static inline void findTileSize( int *ph, int *pw, const int height,
 template<typename vbx_sp_t>
 int vbw_mtx_xp(vbx_sp_t *v_dst, vbx_sp_t *v_src, const int INROWS, const int INCOLS )
 {
-	vbx_set_vl( 1 );
-	vbx_set_2D(  INCOLS, INROWS*sizeof(vbx_sp_t),       sizeof(vbx_sp_t), 0 );
-	vbx_set_3D( INROWS,        sizeof(vbx_sp_t), INCOLS*sizeof(vbx_sp_t), 0 );
-	vbxx_3D( VMOV, v_dst, v_src);
+	vbx_set_vl(1 ,INCOLS,INROWS);
+	vbx_set_2D(INROWS*sizeof(vbx_sp_t), sizeof(vbx_sp_t), 0 );
+	vbx_set_3D(sizeof(vbx_sp_t), INCOLS*sizeof(vbx_sp_t), 0 );
+	vbxx( VMOV, v_dst, v_src);
 	return VBW_SUCCESS;
 }
 
@@ -171,17 +171,17 @@ int vbw_mtx_xp_ext(vbx_mm_t *out, vbx_mm_t *in, const int INROWS, const int INCO
 
 		vbx_dma_to_host( out, v_out, elements*sizeof(vbx_mm_t) );
 	} else {                                     // At this point we know at least one full tile will be needed
-		#define QUICK_A_LANES_THRESHOLD 8        // Use merge transpose if there are at least this many lanes
-		#define QUICK_A_TILE_WIDTH 128
-		#define QUICK_A_TILE_ELEMENTS (QUICK_A_TILE_WIDTH*QUICK_A_TILE_WIDTH)
-		#define QUICK_A_VF_ELEMENTS (QUICK_A_TILE_ELEMENTS/2)
-		#define QUICK_A_REQ_ELEMENTS (2*VBX_PAD_UP(QUICK_A_TILE_ELEMENTS,SP_WIDTH_B/sizeof(vbx_sp_t)) + VBX_PAD_UP(QUICK_A_VF_ELEMENTS,sizeof(vbx_sp_t)))
+#define QUICK_A_LANES_THRESHOLD 8        // Use merge transpose if there are at least this many lanes
+#define QUICK_A_TILE_WIDTH 128
+#define QUICK_A_TILE_ELEMENTS (QUICK_A_TILE_WIDTH*QUICK_A_TILE_WIDTH)
+#define QUICK_A_VF_ELEMENTS (QUICK_A_TILE_ELEMENTS/2)
+#define QUICK_A_REQ_ELEMENTS (2*VBX_PAD_UP(QUICK_A_TILE_ELEMENTS,SP_WIDTH_B/sizeof(vbx_sp_t)) + VBX_PAD_UP(QUICK_A_VF_ELEMENTS,sizeof(vbx_sp_t)))
 
-		#define QUICK_B_LANES_THRESHOLD 16        // Use smaller merge transpose tile only if there are a lot of lanes
-		#define QUICK_B_TILE_WIDTH 64             //     and only if larger tile A size cannot be used.
-		#define QUICK_B_TILE_ELEMENTS (QUICK_B_TILE_WIDTH*QUICK_B_TILE_WIDTH)
-		#define QUICK_B_VF_ELEMENTS (QUICK_B_TILE_ELEMENTS/2)
-		#define QUICK_B_REQ_ELEMENTS (2*VBX_PAD_UP(QUICK_B_TILE_ELEMENTS,SP_WIDTH_B/sizeof(vbx_sp_t)) + VBX_PAD_UP(QUICK_B_VF_ELEMENTS,sizeof(vbx_sp_t)))
+#define QUICK_B_LANES_THRESHOLD 16        // Use smaller merge transpose tile only if there are a lot of lanes
+#define QUICK_B_TILE_WIDTH 64             //     and only if larger tile A size cannot be used.
+#define QUICK_B_TILE_ELEMENTS (QUICK_B_TILE_WIDTH*QUICK_B_TILE_WIDTH)
+#define QUICK_B_VF_ELEMENTS (QUICK_B_TILE_ELEMENTS/2)
+#define QUICK_B_REQ_ELEMENTS (2*VBX_PAD_UP(QUICK_B_TILE_ELEMENTS,SP_WIDTH_B/sizeof(vbx_sp_t)) + VBX_PAD_UP(QUICK_B_VF_ELEMENTS,sizeof(vbx_sp_t)))
 
 		int NUM_LANES = this_mxp->vector_lanes;
 		int DMA_BYTES = this_mxp->dma_alignment_bytes;
@@ -191,15 +191,15 @@ int vbw_mtx_xp_ext(vbx_mm_t *out, vbx_mm_t *in, const int INROWS, const int INCO
 		vbx_sp_t *vf = 0;
 
 		if( NUM_LANES >= QUICK_A_LANES_THRESHOLD       // Check for appropriate conditions to use merge transpose tiles
-					&& INCOLS >= QUICK_A_TILE_WIDTH
-					&& INROWS >= QUICK_A_TILE_WIDTH
-			&& (unsigned)max_sp_elements >= QUICK_A_REQ_ELEMENTS ) {
+		    && INCOLS >= QUICK_A_TILE_WIDTH
+		    && INROWS >= QUICK_A_TILE_WIDTH
+		    && (unsigned)max_sp_elements >= QUICK_A_REQ_ELEMENTS ) {
 			tile_width = tile_height = QUICK_A_TILE_WIDTH;
 			vf = (vbx_sp_t *)vbx_sp_malloc( QUICK_A_VF_ELEMENTS * sizeof(vbx_sp_t));
 		} else if( NUM_LANES >= QUICK_B_LANES_THRESHOLD
-					&& INCOLS >= QUICK_B_TILE_WIDTH
-					&& INROWS >= QUICK_B_TILE_WIDTH
-			&& (unsigned)max_sp_elements >= QUICK_B_REQ_ELEMENTS ) {
+		           && INCOLS >= QUICK_B_TILE_WIDTH
+		           && INROWS >= QUICK_B_TILE_WIDTH
+		           && (unsigned)max_sp_elements >= QUICK_B_REQ_ELEMENTS ) {
 			tile_width = tile_height = QUICK_B_TILE_WIDTH;
 			vf = (vbx_sp_t *)vbx_sp_malloc( QUICK_B_VF_ELEMENTS * sizeof(vbx_sp_t));
 		} else {
@@ -221,62 +221,63 @@ int vbw_mtx_xp_ext(vbx_mm_t *out, vbx_mm_t *in, const int INROWS, const int INCO
 
 		tile_y = 0;                              // Reset y position for new col
 		while( tile_y < INROWS ) {
-		vbx_set_2D( tile_width, tile_height*sizeof(vbx_sp_t), sizeof(vbx_sp_t), sizeof(vbx_sp_t) );
-		vbx_set_3D( tile_height, sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t) );
+			vbx_set_2D(tile_height*sizeof(vbx_sp_t), sizeof(vbx_sp_t), sizeof(vbx_sp_t) );
+			vbx_set_3D(sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t) );
 			tile_x = 0;                          // Reset x position for new row
 			while( tile_x < INCOLS ) {
 
 				vbx_dma_to_vector_2D(
-						v_in,
-						in+(tile_y*INCOLS)+tile_x,
-						tile_width*sizeof(vbx_mm_t),
-						tile_height,
-						tile_width*sizeof(vbx_sp_t),
-						INCOLS*sizeof(vbx_mm_t) );
+				                     v_in,
+				                     in+(tile_y*INCOLS)+tile_x,
+				                     tile_width*sizeof(vbx_mm_t),
+				                     tile_height,
+				                     tile_width*sizeof(vbx_sp_t),
+				                     INCOLS*sizeof(vbx_mm_t) );
 
 				v_out_sel = v_out;                         // select v_out as default vector to DMA to MM
 
 				/* *** merge transpose (matrix must be square and a power of 2 wide) *** */
 				if( vf && tile_width == tile_height
-							&& (tile_width==QUICK_A_TILE_WIDTH || tile_width==QUICK_B_TILE_WIDTH) ) {
+				    && (tile_width==QUICK_A_TILE_WIDTH || tile_width==QUICK_B_TILE_WIDTH) ) {
 					int src = 0;
 					int n;
 					for( n=1; n<tile_width; n *= 2 ) {     // can't do 1st iteration until entire tile is DMA'd in
 						const int nn = 2*n;
 
 						// copy the destination matrix
-						vbx_set_vl( tile_width*tile_width );    // use v_in & v_out as working matrices (clobber v_in)
+						vbx_set_vl( tile_width*tile_width ,1,1);    // use v_in & v_out as working matrices (clobber v_in)
 						vbxx(  VMOV, v[!src], v[src]);
 
 						// do the work
-						vbx_set_vl( n*tile_width );
+						vbx_set_vl( n*tile_width,1,1 );
 						vbxx( VAND, vf, n, (vbx_enum_t*)0 );           // mask for merging: 0101010... then 00110011...
-						vbx_set_2D( tile_width/nn, nn*tile_width*sizeof(vbx_sp_t), nn*tile_width*sizeof(vbx_sp_t), 0 );
-						vbxx_2D( VCMV_Z, v[!src]+n*tile_width, v[src]+n           , vf );
-						vbxx_2D( VCMV_Z, v[!src]+n,            v[src]+n*tile_width, vf );
+						vbx_set_vl( n*tile_width,tile_width/nn,1 );
+						vbx_set_2D( nn*tile_width*sizeof(vbx_sp_t), nn*tile_width*sizeof(vbx_sp_t), 0 );
+						vbxx( VCMV_Z, v[!src]+n*tile_width, v[src]+n           , vf );
+						vbxx( VCMV_Z, v[!src]+n,            v[src]+n*tile_width, vf );
 
 						src = !src;
 					}
 
 					v_out_sel = v[src];     // depending on the size of the mtx, the final result may be in v_in or v_out
 				} else {
-					vbx_set_vl( 1 );        // 2D and 3D will be set by the x and y edge conditions, even using merge
-					vbxx_3D(VMOV, v_out, v_in );
+					vbx_set_vl( 1,tile_width,tile_height );        // 2D and 3D will be set by the x and y edge conditions, even using merge
+					vbxx(VMOV, v_out, v_in );
 				}
 
 				vbx_dma_to_host_2D(
-						out+(tile_x*INROWS)+tile_y,
-						v_out_sel,
-						tile_height*sizeof(vbx_mm_t),
-						tile_width,
-						INROWS*sizeof(vbx_mm_t),
-						tile_height*sizeof(vbx_sp_t) );
+				                   out+(tile_x*INROWS)+tile_y,
+				                   v_out_sel,
+				                   tile_height*sizeof(vbx_mm_t),
+				                   tile_width,
+				                   INROWS*sizeof(vbx_mm_t),
+				                   tile_height*sizeof(vbx_sp_t) );
 
 				tile_x += tile_width;                 // Set up width for next tile
 				if( tile_x + tile_width > INCOLS ) {  // Temporarily reduce tile width when reaching right edge of matrix
 					tile_width = INCOLS - tile_x;
-					vbx_set_2D( tile_width, tile_height*sizeof(vbx_sp_t), sizeof(vbx_sp_t), sizeof(vbx_sp_t) );
-					vbx_set_3D( tile_height, sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t) );
+					vbx_set_2D( tile_height*sizeof(vbx_sp_t), sizeof(vbx_sp_t), sizeof(vbx_sp_t) );
+					vbx_set_3D( sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t), tile_width*sizeof(vbx_sp_t) );
 				}
 			}
 			tile_y += tile_height;                    // Set up width and height for next row of tiles

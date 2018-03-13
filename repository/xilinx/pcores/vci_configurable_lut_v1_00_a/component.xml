@@ -573,6 +573,19 @@
   </spirit:fileSets>
   <spirit:description>Look-up Table Vector Custom Instruction</spirit:description>
   <spirit:parameters>
+	 <spirit:parameter>
+      <spirit:name>VCI_UID</spirit:name>
+      <spirit:displayName>Vci UID</spirit:displayName>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.VCI_UID" spirit:bitStringLength="32">0x7FFF0501</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.VCI_UID">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+
     <spirit:parameter>
       <spirit:name>DOUBLE_CLOCKED</spirit:name>
       <spirit:displayName>Double Clocked</spirit:displayName>

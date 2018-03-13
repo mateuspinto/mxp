@@ -1,6 +1,6 @@
 # +-----------------------------------
 # |
-# | Copyright (C) 2012-2017 VectorBlox Computing, Inc.
+# | Copyright (C) 2012-2018 VectorBlox Computing, Inc.
 # |
 # +-----------------------------------
 
@@ -42,6 +42,10 @@ add_documentation_link "Programming Reference" "../../docs/mxp_reference.pdf"
 add_fileset fileset_synth       QUARTUS_SYNTH fileset_synth_callback
 add_fileset fileset_sim_verilog SIM_VERILOG   fileset_sim_verilog_callback
 add_fileset fileset_sim_vhdl    SIM_VHDL      fileset_sim_vhdl_callback
+
+set_fileset_property fileset_synth TOP_LEVEL vectorblox_1
+set_fileset_property fileset_sim_verilog TOP_LEVEL vectorblox_1
+set_fileset_property fileset_sim_vhdl  TOP_LEVEL vectorblox_1
 
 ###########################################################################
 # Assumes all required VHDL source files are already in tmp_output_dir.
@@ -105,6 +109,7 @@ proc common_add_files {entity_name fileset} {
 
     set vector_lanes               [get_parameter_value VECTOR_LANES]
     set vector_custom_instructions [get_parameter_value VECTOR_CUSTOM_INSTRUCTIONS]
+    set max_vci_depth_without_flush [get_parameter_value MAX_VCI_DEPTH_WITHOUT_FLUSH]
     for {set opcode 0} {$opcode < 16} {incr opcode} {
 		  set vcustom[set opcode]_depth 0
 		  set vcustom[set opcode]_lanes 0
@@ -138,6 +143,7 @@ proc common_add_files {entity_name fileset} {
 		  set vci_[set vci]_bits         [expr 32 * [set vci_[set vci]_lanes]]
     }
 
+
     set memory_width_lanes [get_parameter_value MEMORY_WIDTH_LANES]
     set slave_width_lanes  [get_parameter_value SLAVE_WIDTH_LANES]
     set scratchpad_kb      [get_parameter_value SCRATCHPAD_KB]
@@ -151,7 +157,6 @@ proc common_add_files {entity_name fileset} {
         [get_parameter_value MULFXP_BYTE_FRACTION_BITS]
     # Convert true/false to 1/0.
     set max_masked_waves    [get_parameter_value MAX_MASKED_WAVES]
-    set mask_partitions     [get_parameter_value MASK_PARTITIONS]
     set fixed_point_support [get_parameter_value FIXED_POINT_SUPPORT]
 
     foreach p [get_parameters] {
@@ -168,13 +173,13 @@ proc common_add_files {entity_name fileset} {
     set vhd_files [list]
     set f [open Filelist]
     while {[gets $f line] >= 0} {
+
         set line [string trim $line]
         if {[string index $line 0] != "#"} {
             lappend vhd_files $line
         }
     }
     close $f
-
     foreach f $vhd_files {
         file copy $f $tmp_output_dir
     }
@@ -185,145 +190,44 @@ proc common_add_files {entity_name fileset} {
     set vector_bytes     [expr 4*$vector_lanes]
     set vector_bits      [expr 32*$vector_lanes]
 
-    # Create ${entity_name}.vhd and ${entity_name}_pkg.vhd from
-    # vectorblox_mxp.template and vectorblox_mxp_pkg.template.
-    # Replace entity / component / package names.
-    # Substitute parameters in generic map of vectorblox_1 instance.
-    foreach {infile outfile} [list vectorblox_mxp.template \
-                                  $tmp_output_dir/${entity_name}.vhd \
-                                  vectorblox_mxp_pkg.template \
-                                  $tmp_output_dir/${entity_name}_pkg.vhd] {
-        set f_in  [open $infile]
-        set f_out [open $outfile w]
-        while {[gets $f_in line] >= 0} {
-            # entity / component / package name
-            regsub {vectorblox_mxp} $line ${entity_name} line
-
-            # parameters used in port width expressions:
-            regsub {BURSTCOUNT_WIDTH} $line $burstcount_width line
-            regsub {MEMORY_BUS_WIDTH} $line $memory_bus_width line
-            regsub {SLAVE_ADDR_WIDTH} $line $slave_addr_width line
-            regsub {VECTOR_BYTES}     $line $vector_bytes line
-            regsub {VECTOR_BITS}      $line $vector_bits line
-				set ipt [ get_parameter_value INSTR_PORT_TYPE ]
-				if { $ipt == "AXI" } {
-					 regsub {INSTR_PORT_CHOICE_TMPLT}  $line 1 line
-				} elseif { $ipt == "NCI" } {
-					 regsub {INSTR_PORT_CHOICE_TMPLT}  $line 2 line
-				} elseif { $ipt == "NCI_CONDUIT" } {
-					 regsub {INSTR_PORT_CHOICE_TMPLT}  $line 0 line
-				} else {
-					 send_message Error "Invalid Instruction Port Type \"$ipt\""
-				}
-				set id_width [ get_parameter_value INSTR_PORT_ID_WIDTH ]
-            regsub {ID_WIDTH([ \t]*[^:= \t])} $line \
-                "$id_width\\1" line
-				set waddr_width [ get_port_property axs_awaddr WIDTH_EXPR ]
-				set raddr_width [ get_port_property axs_araddr WIDTH_EXPR ]
-				if { $waddr_width != $raddr_width } {
-					 send_message Error "Axi Instruction port Write Address width does not equal Read Address width"
-				}
-				regsub {INSTR_ADDR_WIDTH([ \t]*[^:= \t])} $line \
-                "$waddr_width\\1" line
 
 
-				for {set vci 0} {$vci < 16} {incr vci} {
-					 regsub "VCI_[set vci]_BYTES"     $line [set vci_[set vci]_bytes] line
-					 regsub "VCI_[set vci]_BITS"      $line [set vci_[set vci]_bits] line
-					 regsub "VCI_[set vci]_FUNCTIONS" $line [set vci_[set vci]_functions] line
-				}
+	 # Add new files to end of file list.
+	 #lappend vhd_files ${entity_name}.vhd ${entity_name}_pkg.vhd
 
-            # don't replace if followed by : or => because that would be
-            # the generic declaration or map.
-            regsub {MEMORY_WIDTH_LANES([ \t]*[^:= \t])} $line \
-                "$memory_width_lanes\\1" line
-            regsub {SLAVE_WIDTH_LANES([ \t]*[^:= \t])} $line \
-                "$slave_width_lanes\\1" line
-
-            # parameters mapped to generics:
-            regsub {(VECTOR_LANES.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$vector_lanes" line
-            regsub {(MEMORY_WIDTH_LANES.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$memory_width_lanes" line
-            regsub {(SLAVE_WIDTH_LANES.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$slave_width_lanes" line
-            regsub {(SCRATCHPAD_KB.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$scratchpad_kb" line
-            regsub {(BURSTLENGTH_BYTES.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$burstlength_bytes" line
-            regsub {(MAX_MASKED_WAVES.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$max_masked_waves" line
-            regsub {(MASK_PARTITIONS.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$mask_partitions" line
-            regsub {(FIXED_POINT_SUPPORT.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1[string is true -strict $fixed_point_support]" line
-            regsub {(MIN_MULTIPLIER_HW.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$min_multiplier_hw" line
-            regsub {(MULFXP_WORD_FRACTION_BITS.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$mulfxp_word_fraction_bits" line
-            regsub {(MULFXP_HALF_FRACTION_BITS.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$mulfxp_half_fraction_bits" line
-            regsub {(MULFXP_BYTE_FRACTION_BITS.*=>[ \t]*)([^ \t,]+)} $line \
-                "\\1$mulfxp_byte_fraction_bits" line
-            regsub {VECTOR_CUSTOM_INSTRUCTIONS([ \t]*[^:= \t])} $line \
-                "$vector_custom_instructions\\1" line
-				for {set vci 0} {$vci < 16} {incr vci} {
-					 regsub [set dummy "(VCI_[set vci]_LANES"][set dummy {.*=>[ \t]*)([^ \t,]+)}] $line \
-					 "\\1[set vci_[set vci]_lanes]" line
-				regsub [set dummy "(VCI_[set vci]_OPCODE_START"][set dummy {.*=>[ \t]*)([^ \t,]+)}] $line \
-				"\\1[set vci_[set vci]_opcode_start]" line
-		  regsub [set dummy "(VCI_[set vci]_OPCODE_END"][set dummy {.*=>[ \t]*)([^ \t,]+)}] $line \
-		  "\\1[set vci_[set vci]_opcode_end]" line
-	 regsub [set dummy "(VCI_[set vci]_MODIFIES_DEST_ADDR"][set dummy {.*=>[ \t]*)([^ \t,]+)}] $line \
-	 "\\1[string is true -strict [set vci_[set vci]_modifies_dest_addr]]" line
-}
-for {set opcode 0} {$opcode < 16} {incr opcode} {
-	 regsub [set dummy "(VCUSTOM[set opcode]_DEPTH"][set dummy {.*=>[ \t]*)([^ \t,]+)}] $line \
-	 "\\1[set vcustom[set opcode]_depth]" line
-}
-
-# puts $line
-puts $f_out $line
-}
-close $f_in
-close $f_out
-}
-
-# Add new files to end of file list.
-lappend vhd_files ${entity_name}.vhd ${entity_name}_pkg.vhd
-
-set ocp_files [glob -nocomplain *.ocp]
-foreach f $ocp_files {
-	 file copy $f $tmp_output_dir
-}
-
-# Files get copied to a subdirectory of synthesis/submodules or
-# simulation/submodules.
-set dest_subdir vbx/mxp
-
-# Assume existence of this file means the unencrypted sources
-# are available.
-set unencrypted_src [file exists vectorblox_1.vhd]
-
-if {($fileset == "QUARTUS_SYNTH") || \
-        (($fileset == "SIM_VHDL") && $unencrypted_src)} {
-	 # For SYNTH case, copy VHDL sources whether they are encrypted or not.
-	 # For SIM_VHDL, only copy the VHDL sources if they are unencrypted.
-	 foreach f $vhd_files {
-		  add_fileset_file $dest_subdir/$f VHDL PATH $tmp_output_dir/$f
-	 }
-} else {
-	 # Generate IPFS model.
-	 # (SIM_VHDL or SIM_VERILOG with encrypted sources, or
-	 # SIM_VERILOG with unencrypted sources.)
-	 ipfs_gen $entity_name $fileset $dest_subdir $tmp_output_dir
-}
-
-if {$fileset == "QUARTUS_SYNTH"} {
+	 set ocp_files [glob -nocomplain *.ocp]
 	 foreach f $ocp_files {
-		  add_fileset_file $dest_subdir/$f OTHER PATH $tmp_output_dir/$f
+		  file copy $f $tmp_output_dir
 	 }
-}
+
+	 # Files get copied to a subdirectory of synthesis/submodules or
+	 # simulation/submodules.
+	 set dest_subdir vbx/mxp
+
+	 # Assume existence of this file means the unencrypted sources
+	 # are available.
+	 set unencrypted_src [file exists vectorblox_1.vhd]
+
+	 if {($fileset == "QUARTUS_SYNTH") || \
+				(($fileset == "SIM_VHDL") && $unencrypted_src)} {
+		  # For SYNTH case, copy VHDL sources whether they are encrypted or not.
+		  # For SIM_VHDL, only copy the VHDL sources if they are unencrypted.
+		  foreach f $vhd_files {
+				add_fileset_file $dest_subdir/$f VHDL PATH $tmp_output_dir/$f
+		  }
+	 } else {
+		  # Generate IPFS model.
+		  # (SIM_VHDL or SIM_VERILOG with encrypted sources, or
+		  # SIM_VERILOG with unencrypted sources.)
+		  ipfs_gen $entity_name $fileset $dest_subdir $tmp_output_dir
+	 }
+
+	 if {$fileset == "QUARTUS_SYNTH"} {
+		  foreach f $ocp_files {
+				add_fileset_file $dest_subdir/$f OTHER PATH $tmp_output_dir/$f
+		  }
+	 }
+	 send_message Info "fileset = $fileset"
 }
 
 # +-----------------------------------
@@ -337,6 +241,7 @@ set_parameter_property VECTOR_LANES DESCRIPTION [concat \
 																	  "lane requires about the same amount of resources as the Nios II/f " \
 																	  "host CPU."]
 set_parameter_property VECTOR_LANES ALLOWED_RANGES {1 2 4 8 16 32 64 128 256}
+set_parameter_property VECTOR_LANES HDL_PARAMETER true
 
 add_parameter MEMORY_WIDTH_LANES INTEGER 1
 set_parameter_property MEMORY_WIDTH_LANES DISPLAY_NAME "Number of Memory Lanes (DMA Bus Width)"
@@ -350,6 +255,7 @@ set_parameter_property MEMORY_WIDTH_LANES DESCRIPTION [concat \
 # The maximum Avalon data bus width is 1024 bits, allowing at most 32 lanes.
 set_parameter_property MEMORY_WIDTH_LANES ALLOWED_RANGES {1 2 4 8 16 32}
 set_parameter_property MEMORY_WIDTH_LANES DISPLAY_UNITS "Words"
+set_parameter_property MEMORY_WIDTH_LANES HDL_PARAMETER true
 
 add_parameter SLAVE_WIDTH_LANES INTEGER 1
 set_parameter_property SLAVE_WIDTH_LANES DISPLAY_NAME "Number of Slave Memory Lanes"
@@ -363,6 +269,7 @@ set_parameter_property SLAVE_WIDTH_LANES DESCRIPTION [concat \
 # The maximum Avalon data bus width is 1024 bits, allowing at most 32 lanes.
 set_parameter_property SLAVE_WIDTH_LANES ALLOWED_RANGES {1 2 4 8 16 32}
 set_parameter_property SLAVE_WIDTH_LANES DISPLAY_UNITS "Words"
+set_parameter_property SLAVe_WIDTH_LANES HDL_PARAMETER true
 
 add_parameter BEATS_PER_BURST INTEGER 8
 set_parameter_property BEATS_PER_BURST DISPLAY_NAME "Maximum Burst Size in Beats"
@@ -386,10 +293,12 @@ set_parameter_property SCRATCHPAD_KB DESCRIPTION [concat \
 																		"The Scratchpad RAM size in kilobytes. VectorBlox recommends 4KB per " \
 																		"vector lane for most applications."]
 set_parameter_property SCRATCHPAD_KB UNITS Kilobytes
+set_parameter_property SCRATCHPAD_KB HDL_PARAMETER true
 
-add_parameter INSTR_PORT_TYPE STRING "NCI"
-set_parameter_property INSTR_PORT_TYPE DISPLAY_NAME "Instruction Port Type"
-set_parameter_property INSTR_PORT_TYPE DESCRIPTION [concat \
+add_parameter INSTR_PORT_CHOICE integer 1
+set_parameter_property INSTR_PORT_CHOICE DISPLAY_NAME "Instruction Port Type"
+set_parameter_property INSTR_PORT_CHOICE HDL_PARAMETER true
+set_parameter_property INSTR_PORT_CHOICE DESCRIPTION [concat \
 																		  "The MXP can be controlled using several different instruction ports. To connect"\
 																		  "an ARM host processor to the MXP use the AXI Memory Mapped Port. To connect A"\
 																		  "NIOS II host processor to the MXP use the Nios Custom Instruction Port. The "\
@@ -397,15 +306,22 @@ set_parameter_property INSTR_PORT_TYPE DESCRIPTION [concat \
 																		  "BSP generation tools fail while creating a multiprocessing system. "]
 
 
-set_parameter_property INSTR_PORT_TYPE ALLOWED_RANGES \
-    {AXI:AXI\ Memory\ Mapped\ (Beta) NCI:Nios\ Custom\ Instruction NCI_CONDUIT:Nios\ Custom\ Instruction\ (With\ Shim) }
+set_parameter_property INSTR_PORT_CHOICE ALLOWED_RANGES \
+    {3:Vector\ Coprocessor\ Port\ (VCP), 2:AXI\ Memory\ Mapped\ (Beta) 1:Nios\ Custom\ Instruction }
+
 
 add_parameter INSTR_PORT_ID_WIDTH INTEGER 12
+set_parameter_property INSTR_PORT_ID_WIDTH HDL_PARAMETER true
 set_parameter_property INSTR_PORT_ID_WIDTH DISPLAY_NAME "Instruction Port ID Width"
 set_parameter_property INSTR_PORT_ID_WIDTH DESCRIPTION "Choose an appropriate width for the ID field on the AXI instruction Port"
 set_parameter_property INSTR_PORT_ID_WIDTH VISIBLE false
 
-add_parameter MIN_MULTIPLIER_HW STRING "BYTE"
+add_parameter INSTR_ADDR_WIDTH INTEGER 6
+set_parameter_property INSTR_ADDR_WIDTH HDL_PARAMETER true
+set_parameter_property INSTR_ADDR_WIDTH VISIBLE false
+
+
+add_parameter MIN_MULTIPLIER_HW integer 1
 set_parameter_property MIN_MULTIPLIER_HW DISPLAY_NAME "Multiplier Performance"
 set_parameter_property MIN_MULTIPLIER_HW DESCRIPTION [concat \
 																			 "This sets the minimum multiplier size. This can be used to reduce the " \
@@ -419,20 +335,10 @@ set_parameter_property MIN_MULTIPLIER_HW DESCRIPTION [concat \
 																			 "halfword-width multiplication will run at half speed and " \
 																			 "byte-width multiplication will run at quarter speed."]
 set_parameter_property MIN_MULTIPLIER_HW ALLOWED_RANGES \
-    {BYTE:Byte HALF:Halfword WORD:Word}
+    {0:Byte 1:Halfword 2:Word}
+set_parameter_property MIN_MULTIPLIER_HW HDL_PARAMETER true
 
 
-###########################################################################
-set masked_grp "Masked Instruction Options"
-
-#Currently mask partitions is only 1/0
-add_parameter MASK_PARTITIONS NATURAL 1
-set_parameter_property MASK_PARTITIONS DISPLAY_NAME "Number of mask partitions"
-set_parameter_property MASK_PARTITIONS DESCRIPTION [concat \
-																		  "Changes the granularity of masked instructions. " \
-																		  "Set to 0 to disable."]
-set_parameter_property MASK_PARTITIONS ALLOWED_RANGES {0 1}
-set_parameter_property MASK_PARTITIONS GROUP $masked_grp
 
 add_parameter MAX_MASKED_WAVES POSITIVE 128
 set_parameter_property MAX_MASKED_WAVES DISPLAY_NAME "Maximum # of waves for masked instructions"
@@ -441,8 +347,8 @@ set_parameter_property MAX_MASKED_WAVES DESCRIPTION [concat \
 																			"(when the element size is one byte). " \
 																			"The maximum vector length for masked instructions will be this " \
 																			"value multiplied by VECTOR_LANES*4."]
-set_parameter_property MAX_MASKED_WAVES ALLOWED_RANGES {128 256 512 1024}
-set_parameter_property MAX_MASKED_WAVES GROUP $masked_grp
+set_parameter_property MAX_MASKED_WAVES ALLOWED_RANGES {0 128 256 512 1024}
+set_parameter_property MAX_MASKED_WAVES HDL_PARAMETER true
 
 
 ###########################################################################
@@ -456,11 +362,36 @@ set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS DESCRIPTION [concat \
 set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS ALLOWED_RANGES \
     {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16}
 set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS GROUP $vci_grp
+set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS HDL_PARAMETER true
+
+add_parameter MAX_VCI_DEPTH_WITHOUT_FLUSH NATURAL 2
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DISPLAY_NAME "Max VCI Depth Without Pipeline Flush"
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DEFAULT_VALUE 2
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DESCRIPTION [concat \
+																						 "Maximum Vector Custom Instruction (VCI) depth without pipeline flush.  Any longer pipeline VCIs will cause a pipeline flush after each execution."]
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH ALLOWED_RANGES 0:256
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH GROUP $vci_grp
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH VISIBLE false
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH HDL_PARAMETER true
+
 
 for {set vci 0} {$vci < 16} {incr vci} {
     set vci_[set vci]_grp "VCI $vci"
 
+    add_parameter VCI_[set vci]_UID integer -1
+    set_parameter_property VCI_[set vci]_UID DISPLAY_NAME "Unique ID"
+    set_parameter_property VCI_[set vci]_UID DESCRIPTION [concat "Unique ID that matches connected Custom Instruction"]
+    set_parameter_property VCI_[set vci]_UID GROUP [set vci_[set vci]_grp]
+	 set_display_item_property VCI_[set vci]_UID DISPLAY_HINT hexadecimal
+
+
+	 add_parameter VCUSTOM[set vci]_DEPTH integer 0
+	 set_parameter_property  VCUSTOM[set vci]_DEPTH HDL_PARAMETER true
+	 set_parameter_property  VCUSTOM[set vci]_DEPTH VISIBLE false
+	 set_parameter_property  VCUSTOM[set vci]_DEPTH DERIVED true
+
     add_parameter VCI_[set vci]_LANES POSITIVE 1
+	 set_parameter_property  VCI_[set vci]_LANES HDL_PARAMETER true
     set_parameter_property VCI_[set vci]_LANES DISPLAY_NAME "Lanes"
     set_parameter_property VCI_[set vci]_LANES DESCRIPTION [concat \
 																					 "The number of lanes of data to/from custom instruction port 0. " \
@@ -469,6 +400,7 @@ for {set vci 0} {$vci < 16} {incr vci} {
     set_parameter_property VCI_[set vci]_LANES GROUP [set vci_[set vci]_grp]
 
     add_parameter VCI_[set vci]_OPCODE_START NATURAL $vci
+	 set_parameter_property  VCI_[set vci]_OPCODE_START HDL_PARAMETER true
     set_parameter_property VCI_[set vci]_OPCODE_START DISPLAY_NAME "Opcode Start"
     set_parameter_property VCI_[set vci]_OPCODE_START DESCRIPTION [concat \
 																							  "The start of the VCI opcode space used by the VCI " \
@@ -491,16 +423,14 @@ for {set vci 0} {$vci < 16} {incr vci} {
     set_parameter_property VCI_[set vci]_FUNCTIONS ALLOWED_RANGES $functions_range
     set_parameter_property VCI_[set vci]_FUNCTIONS GROUP [set vci_[set vci]_grp]
 
-	 #Instead of setting end directly, set # of functions to make it easier to modify
-	 #    add_parameter VCI_[set vci]_OPCODE_END NATURAL $vci
-	 #    set_parameter_property VCI_[set vci]_OPCODE_END DISPLAY_NAME "Opcode End"
-	 #    set_parameter_property VCI_[set vci]_OPCODE_END DESCRIPTION [concat \
-		  #        "The end of the VCI opcode space used by the VCI " \
-		  #        "attached on custom instruction port 0."]
-	 #    set_parameter_property VCI_[set vci]_OPCODE_END ALLOWED_RANGES 0:15
-	 #    set_parameter_property VCI_[set vci]_OPCODE_END GROUP [set vci_[set vci]_grp]
+
+	 add_parameter VCI_[set vci]_OPCODE_END NATURAL $vci
+	 set_parameter_property VCI_[set vci]_OPCODE_END VISIBLE false
+	 set_parameter_property VCI_[set vci]_OPCODE_END HDL_PARAMETER true
+	 set_parameter_property VCI_[set vci]_OPCODE_END DERIVED true
 
     for {set function 0} {$function < [expr 16 - $vci]} {incr function} {
+
 		  add_parameter VCI_[set vci]_FUNCTION_[set function]_DEPTH NATURAL 0
 		  set_parameter_property VCI_[set vci]_FUNCTION_[set function]_DEPTH DISPLAY_NAME "Function $function Pipeline Depth"
 		  set_parameter_property VCI_[set vci]_FUNCTION_[set function]_DEPTH DESCRIPTION [concat \
@@ -510,25 +440,30 @@ for {set vci 0} {$vci < 16} {incr vci} {
 		  set_parameter_property VCI_[set vci]_FUNCTION_[set function]_DEPTH GROUP [set vci_[set vci]_grp]
     }
 
-    add_parameter VCI_[set vci]_MODIFIES_DEST_ADDR BOOLEAN FALSE
+    add_parameter VCI_[set vci]_MODIFIES_DEST_ADDR integer 0
+set_parameter_property  VCI_[set vci]_MODIFIES_DEST_ADDR HDL_PARAMETER true
     set_parameter_property VCI_[set vci]_MODIFIES_DEST_ADDR DISPLAY_NAME "Modifies Destination Address"
     set_parameter_property VCI_[set vci]_MODIFIES_DEST_ADDR DESCRIPTION [concat \
 																									  "Check if the VCI attached on custom instruction port $vci modifies " \
 																									  "the destination address.  This forces a pipeline flush after " \
 																									  "executing this VCI to ensure correct operation."]
     set_parameter_property VCI_[set vci]_MODIFIES_DEST_ADDR GROUP [set vci_[set vci]_grp]
+	 set_display_item_property VCI_[set vci]_MODIFIES_DEST_ADDR DISPLAY_HINT boolean
 }
 
 
 ###########################################################################
 set fxp_grp "Fixed-Point Multiply Format"
 
-add_parameter FIXED_POINT_SUPPORT BOOLEAN TRUE
+add_parameter FIXED_POINT_SUPPORT integer 1
+set_parameter_property  FIXED_POINT_SUPPORT HDL_PARAMETER true
 set_parameter_property FIXED_POINT_SUPPORT DISPLAY_NAME "Fixed Point Support"
 set_parameter_property FIXED_POINT_SUPPORT DESCRIPTION "Support fixed-point operations (VMULFXP, VADDFXP, VSUBFXP)."
 set_parameter_property FIXED_POINT_SUPPORT GROUP $fxp_grp
+set_display_item_property FIXED_POINT_SUPPORT DISPLAY_HINT boolean
 
 add_parameter MULFXP_WORD_FRACTION_BITS INTEGER 25
+set_parameter_property  MULFXP_WORD_FRACTION_BITS HDL_PARAMETER true
 set_parameter_property MULFXP_WORD_FRACTION_BITS DISPLAY_NAME \
     "Number of fractional bits in a word"
 set_parameter_property MULFXP_WORD_FRACTION_BITS DESCRIPTION [concat \
@@ -539,6 +474,7 @@ set_parameter_property MULFXP_WORD_FRACTION_BITS UNITS Bits
 set_parameter_property MULFXP_WORD_FRACTION_BITS GROUP $fxp_grp
 
 add_parameter MULFXP_HALF_FRACTION_BITS INTEGER 15
+set_parameter_property  MULFXP_HALF_FRACTION_BITS HDL_PARAMETER true
 set_parameter_property MULFXP_HALF_FRACTION_BITS DISPLAY_NAME \
     "Number of fractional bits in a halfword"
 set_parameter_property MULFXP_HALF_FRACTION_BITS DESCRIPTION [concat \
@@ -549,6 +485,7 @@ set_parameter_property MULFXP_HALF_FRACTION_BITS UNITS Bits
 set_parameter_property MULFXP_HALF_FRACTION_BITS GROUP $fxp_grp
 
 add_parameter MULFXP_BYTE_FRACTION_BITS INTEGER 4
+set_parameter_property  MULFXP_BYTE_FRACTION_BITS HDL_PARAMETER true
 set_parameter_property MULFXP_BYTE_FRACTION_BITS DISPLAY_NAME \
     "Number of fractional bits in a byte"
 set_parameter_property MULFXP_BYTE_FRACTION_BITS DESCRIPTION [concat \
@@ -630,6 +567,7 @@ set_parameter_property MEMORY_BUS_WIDTH UNITS Bits
 set_parameter_property MEMORY_BUS_WIDTH GROUP $derived_grp
 
 add_parameter BURSTLENGTH_BYTES INTEGER
+set_parameter_property  BURSTLENGTH_BYTES HDL_PARAMETER true
 set_parameter_property BURSTLENGTH_BYTES DERIVED true
 set_parameter_property BURSTLENGTH_BYTES DISPLAY_NAME "DMA Master Burst Size"
 set_parameter_property BURSTLENGTH_BYTES ALLOWED_RANGES 0:131072
@@ -717,6 +655,29 @@ add_interface_port instr_conduit ci_result export Output 32
 # |
 # +-----------------------------------
 
+#
+# connection point conduit_end
+#
+add_interface vcp conduit end
+set_interface_property vcp associatedClock core_clk
+set_interface_property vcp associatedReset core_reset
+set_interface_property vcp ENABLED true
+
+add_interface_port vcp vcp_data0            data0             Input  32
+add_interface_port vcp vcp_data1            data1             Input  32
+add_interface_port vcp vcp_data2            data2             Input  32
+add_interface_port vcp vcp_instruction      instruction       Input  41
+add_interface_port vcp vcp_valid_instr      valid_instr       Input  1
+add_interface_port vcp vcp_ready            ready             Output 1
+add_interface_port vcp vcp_writeback_data   writeback_data    Output 32
+add_interface_port vcp vcp_writeback_en     writeback_en      Output 1
+add_interface_port vcp vcp_alu_data1        alu_data1         Output 32
+add_interface_port vcp vcp_alu_data2        alu_data2         Output 32
+add_interface_port vcp vcp_alu_used         alu_used          Output 1
+add_interface_port vcp vcp_alu_source_valid alu_source_valid  Output 1
+add_interface_port vcp vcp_alu_result       alu_result        Input  32
+add_interface_port vcp vcp_alu_result_valid alu_result_valid  Input  1
+
 ###########################################################################
 # Nios II Custom Instruction Slave interface
 add_interface ncs nios_custom_instruction slave
@@ -746,9 +707,8 @@ set_interface_property axi_instr_slave writeAcceptanceCapability 1
 set_interface_property axi_instr_slave combinedAcceptanceCapability 1
 set_interface_property axi_instr_slave ENABLED false
 
-set instr_addr_width 20
 
-add_interface_port axi_instr_slave axs_awaddr   awaddr    Input  $instr_addr_width
+add_interface_port axi_instr_slave axs_awaddr   awaddr    Input  INSTR_ADDR_WIDTH
 add_interface_port axi_instr_slave axs_awvalid  awvalid	  Input  1
 add_interface_port axi_instr_slave axs_awready  awready	  Output 1
 add_interface_port axi_instr_slave axs_awid     awid   	  Input 1
@@ -775,7 +735,7 @@ add_interface_port axi_instr_slave axs_bresp  	 bresp  	  Output 2
 add_interface_port axi_instr_slave axs_bvalid 	 bvalid 	  Output 1
 add_interface_port axi_instr_slave axs_bid    	 bid    	  Output 1
 
-add_interface_port axi_instr_slave axs_araddr   araddr 	  Input  $instr_addr_width
+add_interface_port axi_instr_slave axs_araddr   araddr 	  Input  INSTR_ADDR_WIDTH
 add_interface_port axi_instr_slave axs_arvalid  arvalid	  Input  1
 add_interface_port axi_instr_slave axs_arready  arready	  Output 1
 add_interface_port axi_instr_slave axs_arid     arid   	  Input 1
@@ -916,14 +876,14 @@ for {set vci 0} {$vci < 16} {incr vci} {
     add_interface_port vci_[set vci]_conduit vci_[set vci]_opsize        export Output 2
     add_interface_port vci_[set vci]_conduit vci_[set vci]_vector_start  export Output 1
     add_interface_port vci_[set vci]_conduit vci_[set vci]_vector_end    export Output 1
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_byte_valid    export Output vci_[set vci]_lanes*4
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_a        export Output vci_[set vci]_lanes*32
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_a        export Output vci_[set vci]_lanes*4
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_b        export Output vci_[set vci]_lanes*32
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_b        export Output vci_[set vci]_lanes*4
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_out      export Input  vci_[set vci]_lanes*32
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_out      export Input  vci_[set vci]_lanes*4
-    add_interface_port vci_[set vci]_conduit vci_[set vci]_byteenable    export Input  vci_[set vci]_lanes*4
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_byte_valid    export Output VCI_[set vci]_LANES*4
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_a        export Output VCI_[set vci]_LANES*32
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_a        export Output VCI_[set vci]_LANES*4
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_b        export Output VCI_[set vci]_LANES*32
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_b        export Output VCI_[set vci]_LANES*4
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_data_out      export Input  VCI_[set vci]_LANES*32
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_flag_out      export Input  VCI_[set vci]_LANES*4
+    add_interface_port vci_[set vci]_conduit vci_[set vci]_byteenable    export Input  VCI_[set vci]_LANES*4
 
     #Make sure that even when only 1 bit it still shows up as slv
     set_port_property vci_[set vci]_valid VHDL_TYPE std_logic_vector
@@ -1023,28 +983,38 @@ proc elaboration_callback {} {
 		  #Will get set later for valid opcodes
 		  set vcustom[set opcode]_depth 0
 		  set vcustom[set opcode]_lanes 0
+		  set vcustom[set opcode]_uid -1
     }
 
     set total_functions 0
     for {set vci 0} {$vci < 16} {incr vci} {
 		  if {$vector_custom_instructions > $vci} {
 				set vci_[set vci]_lanes              [get_parameter_value VCI_[set vci]_LANES]
+				set vci_[set vci]_uid                [get_parameter_value VCI_[set vci]_UID]
 				set vci_[set vci]_opcode_start       [get_parameter_value VCI_[set vci]_OPCODE_START]
 				set vci_[set vci]_functions          [get_parameter_value VCI_[set vci]_FUNCTIONS]
 				set total_functions                  [expr $total_functions + [set vci_[set vci]_functions]]
 				set vci_[set vci]_opcode_end         [expr [set vci_[set vci]_opcode_start] + [set vci_[set vci]_functions] - 1]
 				set vci_[set vci]_modifies_dest_addr [get_parameter_value VCI_[set vci]_MODIFIES_DEST_ADDR]
 
+				set_parameter_value VCI_[set vci]_OPCODE_END [set vci_[set vci]_opcode_end]
+				if { [set vci_[set vci]_uid] == -1 } {
+					 send_message WARNING [concat \
+													 "The UID for VCI$vci has not been set. It must match "\
+													 "the UID that is connected on that conduit" ]
+				}
 				for {set function 0} {$function < [expr 16 - $vci]} {incr function} {
 					 set vci_[set vci]_function_[set function]_depth [get_parameter_value VCI_[set vci]_FUNCTION_[set function]_DEPTH]
 					 if {$function < [set vci_[set vci]_functions]} {
 						  set opcode [expr [set vci_[set vci]_opcode_start] + $function]
 						  set_parameter_property VCI_[set vci]_FUNCTION_[set function]_DEPTH ENABLED true
 						  set_parameter_property VCI_[set vci]_FUNCTION_[set function]_DEPTH VISIBLE true
-						  set vcustom[set opcode]_depth [set vci_[set vci]_function_[set function]_depth]
+						  set_parameter_value VCUSTOM[set opcode]_DEPTH [set vci_[set vci]_function_[set function]_depth]
 						  set vcustom[set opcode]_lanes [set vci_[set vci]_lanes]
+						  set vcustom[set opcode]_uid [set vci_[set vci]_uid]
 					 }
 				}
+
 
 				if {[set vci_[set vci]_modifies_dest_addr]} {
 					 add_interface_port vci_[set vci]_conduit vci_[set vci]_dest_addr_in  export Output 32
@@ -1099,6 +1069,8 @@ proc elaboration_callback {} {
 				set_interface_property vci_[set vci]_conduit ENABLED true
 				set_parameter_property VCI_[set vci]_LANES ENABLED true
 				set_parameter_property VCI_[set vci]_LANES VISIBLE true
+				set_parameter_property VCI_[set vci]_UID ENABLED true
+				set_parameter_property VCI_[set vci]_UID VISIBLE true
 				set_parameter_property VCI_[set vci]_OPCODE_START ENABLED true
 				set_parameter_property VCI_[set vci]_OPCODE_START VISIBLE true
 				set_parameter_property VCI_[set vci]_FUNCTIONS ENABLED true
@@ -1108,14 +1080,15 @@ proc elaboration_callback {} {
 		  } else {
 				set vci_[set vci]_lanes              $vector_lanes
 
-				set_port_property vci_[set vci]_data_a     WIDTH_EXPR [expr $vector_lanes * 32]
-				set_port_property vci_[set vci]_flag_a     WIDTH_EXPR [expr $vector_lanes * 4]
-				set_port_property vci_[set vci]_data_b     WIDTH_EXPR [expr $vector_lanes * 32]
-				set_port_property vci_[set vci]_flag_b     WIDTH_EXPR [expr $vector_lanes * 4]
-				set_port_property vci_[set vci]_data_out   WIDTH_EXPR [expr $vector_lanes * 32]
-				set_port_property vci_[set vci]_flag_out   WIDTH_EXPR [expr $vector_lanes * 4]
-				set_port_property vci_[set vci]_byteenable WIDTH_EXPR [expr $vector_lanes * 4]
-				set_port_property vci_[set vci]_byte_valid WIDTH_EXPR [expr $vector_lanes * 4]
+
+				set_port_property vci_[set vci]_data_a     WIDTH_EXPR [expr 32]
+				set_port_property vci_[set vci]_flag_a     WIDTH_EXPR [expr 4]
+				set_port_property vci_[set vci]_data_b     WIDTH_EXPR [expr 32]
+				set_port_property vci_[set vci]_flag_b     WIDTH_EXPR [expr 4]
+				set_port_property vci_[set vci]_data_out   WIDTH_EXPR [expr 32]
+				set_port_property vci_[set vci]_flag_out   WIDTH_EXPR [expr 4]
+				set_port_property vci_[set vci]_byteenable WIDTH_EXPR [expr 4]
+				set_port_property vci_[set vci]_byte_valid WIDTH_EXPR [expr 4]
 				set vci_[set vci]_opcode_start       $vci
 				set vci_[set vci]_functions          1
 				set_port_property vci_[set vci]_valid WIDTH_EXPR 1
@@ -1133,6 +1106,8 @@ proc elaboration_callback {} {
 				set_interface_property vci_[set vci]_conduit ENABLED false
 				set_parameter_property VCI_[set vci]_LANES ENABLED false
 				set_parameter_property VCI_[set vci]_LANES VISIBLE false
+				set_parameter_property VCI_[set vci]_UID ENABLED false
+				set_parameter_property VCI_[set vci]_UID VISIBLE false
 				set_parameter_property VCI_[set vci]_OPCODE_START ENABLED false
 				set_parameter_property VCI_[set vci]_OPCODE_START VISIBLE false
 				set_parameter_property VCI_[set vci]_FUNCTIONS ENABLED false
@@ -1250,28 +1225,19 @@ proc elaboration_callback {} {
 	 set_port_property axs_arid WIDTH_EXPR [expr $id_width ]
 	 set_port_property axs_rid WIDTH_EXPR  [expr $id_width ]
 
-	 set ipt [ get_parameter_value INSTR_PORT_TYPE ]
-	 if { $ipt == "AXI" } {
-		  set_interface_property axi_instr_slave ENABLED true
-		  set_interface_property instr_conduit ENABLED false
-		  set_interface_property ncs ENABLED false
+	 set ipc [ get_parameter_value INSTR_PORT_CHOICE ]
+	 if { $ipc >3 } {
+		  send_message Error "Invalid Instruction Port Type \"$ipc\""
+	 }
+	 set_interface_property instr_conduit ENABLED [expr $ipc == 0]
+	 set_interface_property ncs ENABLED [expr $ipc == 1]
+	 set_interface_property axi_instr_slave ENABLED [expr $ipc == 2]
+	 set_interface_property vcp ENABLED [expr $ipc == 3]
 
-		  set_parameter_property INSTR_PORT_ID_WIDTH VISIBLE true
-	 } elseif { $ipt == "NCI" } {
-		  set_interface_property axi_instr_slave ENABLED false
-		  set_interface_property instr_conduit ENABLED false
-		  set_interface_property ncs ENABLED true
+	 set_parameter_property INSTR_PORT_ID_WIDTH VISIBLE [get_interface_property axi_instr_slave ENABLED]
 
-		  set_parameter_property INSTR_PORT_ID_WIDTH VISIBLE false
-	 } elseif { $ipt == "NCI_CONDUIT" } {
-		  set_interface_property axi_instr_slave ENABLED false
-		  set_interface_property instr_conduit ENABLED true
-		  set_interface_property ncs ENABLED false
-
-		  set_parameter_property INSTR_PORT_ID_WIDTH VISIBLE false
+	 if { [get_interface_property instr_conduit ENABLED] } {
 		  send_message Warning "Nios Custom Instruction (With Shim) is deprecated, will be removed in future versions"
-	 } else {
-		  send_message Error "Invalid Instruction Port Type \"$ipt\""
 	 }
 
     # Avalon slave address port width is determined by scratchpad size.
@@ -1358,20 +1324,10 @@ proc elaboration_callback {} {
         set params_valid false
     }
 
-    set mask_partitions [get_parameter_value MASK_PARTITIONS]
-    if {(![is_pow2 $mask_partitions]) && ($mask_partitions != 0)} {
-        send_message Error "The number of mask partitions is not a power of two."
-        set params_valid false
-    }
     set vector_bytes [expr $vector_lanes * 4]
-    if {$mask_partitions > $vector_bytes} {
-        send_message Error [concat "MASK_PARTITIONS ($mask_partitions) " \
-										  "is larger than the width of the vector processor in bytes ($vector_bytes)."]
-        set params_valid false
-    }
 
     set fixed_point_support [get_parameter_value FIXED_POINT_SUPPORT]
-    
+
     ######################################################################
     # Set CMacros.
     set_module_assignment embeddedsw.CMacro.VECTOR_LANES $vector_lanes
@@ -1379,6 +1335,7 @@ proc elaboration_callback {} {
     set_module_assignment embeddedsw.CMacro.VECTOR_CUSTOM_INSTRUCTIONS $vector_custom_instructions
     for {set opcode 0} {$opcode < 16} {incr opcode} {
 		  set_module_assignment embeddedsw.CMacro.VCUSTOM[set opcode]_LANES [set vcustom[set opcode]_lanes]
+		  set_module_assignment embeddedsw.CMacro.VCUSTOM[set opcode]_UID [set vcustom[set opcode]_uid]
     }
     set_module_assignment embeddedsw.CMacro.MEMORY_WIDTH_LANES \
         $memory_width_lanes
@@ -1389,7 +1346,6 @@ proc elaboration_callback {} {
     set_module_assignment embeddedsw.CMacro.SCRATCHPAD_KB $scratchpad_kb
     # Convert true/false to 1/0.
     set_module_assignment embeddedsw.CMacro.MAX_MASKED_VECTOR_LENGTH [expr $max_masked_waves * $vector_lanes * 4]
-    set_module_assignment embeddedsw.CMacro.MASK_PARTITIONS $mask_partitions
     set_module_assignment embeddedsw.CMacro.FIXED_POINT_SUPPORT [string is true -strict $fixed_point_support]
     set_module_assignment embeddedsw.CMacro.MULFXP_WORD_FRACTION_BITS $word_qn
     set_module_assignment embeddedsw.CMacro.MULFXP_HALF_FRACTION_BITS $half_qn

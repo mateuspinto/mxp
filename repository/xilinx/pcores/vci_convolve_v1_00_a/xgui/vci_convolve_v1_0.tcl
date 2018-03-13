@@ -2,7 +2,8 @@
 proc init_gui { IPINST } {
 	set Page0 [ipgui::add_page $IPINST -name "Page 0" -layout vertical]
 	set Component_Name [ipgui::add_param $IPINST -parent $Page0 -name Component_Name]
-	set CONJOINED_MULTIPLIES [ipgui::add_param $IPINST -parent $Page0 -name CONJOINED_MULTIPLIES]
+	set CONJOINED_MULTIPLIES [ipgui::add_param $IPINST -parent $Page0 -name CONJOINED_MULTIPLIES -widget checkBox]
+	set DOUBLE_CLOCKED_MULTIPLIES [ipgui::add_param $IPINST -parent $Page0 -name DOUBLE_CLOCKED_MULTIPLIES -widget checkBox]
 	set FXP_BITS [ipgui::add_param $IPINST -parent $Page0 -name FXP_BITS]
 	set INPUT_SIZE_BYTES [ipgui::add_param $IPINST -parent $Page0 -name INPUT_SIZE_BYTES]
 	set OUTPUT_SIZE_BYTES [ipgui::add_param $IPINST -parent $Page0 -name OUTPUT_SIZE_BYTES]
@@ -11,6 +12,7 @@ proc init_gui { IPINST } {
 	set FILTER_WIDTH [ipgui::add_param $IPINST -parent $Page0 -name FILTER_WIDTH]
 	set FILTER_HEIGHT [ipgui::add_param $IPINST -parent $Page0 -name FILTER_HEIGHT]
 	set FILTER_COPIES [ipgui::add_param $IPINST -parent $Page0 -name FILTER_COPIES]
+	set COEFFICIENT_COPIES [ipgui::add_param $IPINST -parent $Page0 -name COEFFICIENT_COPIES]
 	set FILTER_STAGES [ipgui::add_param $IPINST -parent $Page0 -name FILTER_STAGES]
 	set INPUT_REGISTER_STAGES [ipgui::add_param $IPINST -parent $Page0 -name INPUT_REGISTER_STAGES]
 	set ADD_TREE_STAGES [ipgui::add_param $IPINST -parent $Page0 -name ADD_TREE_STAGES]
@@ -23,6 +25,15 @@ proc update_PARAM_VALUE.CONJOINED_MULTIPLIES { PARAM_VALUE.CONJOINED_MULTIPLIES 
 
 proc validate_PARAM_VALUE.CONJOINED_MULTIPLIES { PARAM_VALUE.CONJOINED_MULTIPLIES } {
 	# Procedure called to validate CONJOINED_MULTIPLIES
+	return true
+}
+
+proc update_PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES { PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES } {
+	# Procedure called to update DOUBLE_CLOCKED_MULTIPLIES when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES { PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES } {
+	# Procedure called to validate DOUBLE_CLOCKED_MULTIPLIES
 	return true
 }
 
@@ -98,6 +109,15 @@ proc validate_PARAM_VALUE.FILTER_COPIES { PARAM_VALUE.FILTER_COPIES } {
 	return true
 }
 
+proc update_PARAM_VALUE.COEFFICIENT_COPIES { PARAM_VALUE.COEFFICIENT_COPIES } {
+	# Procedure called to update COEFFICIENT_COPIES when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.COEFFICIENT_COPIES { PARAM_VALUE.COEFFICIENT_COPIES } {
+	# Procedure called to validate COEFFICIENT_COPIES
+	return true
+}
+
 proc update_PARAM_VALUE.FILTER_STAGES { PARAM_VALUE.FILTER_STAGES } {
 	# Procedure called to update FILTER_STAGES when any of the dependent parameters in the arguments change
 }
@@ -143,6 +163,11 @@ proc update_MODELPARAM_VALUE.VCI_LANES { MODELPARAM_VALUE.VCI_LANES PARAM_VALUE.
 proc update_MODELPARAM_VALUE.FILTER_COPIES { MODELPARAM_VALUE.FILTER_COPIES PARAM_VALUE.FILTER_COPIES } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.FILTER_COPIES}] ${MODELPARAM_VALUE.FILTER_COPIES}
+}
+
+proc update_MODELPARAM_VALUE.COEFFICIENT_COPIES { MODELPARAM_VALUE.COEFFICIENT_COPIES PARAM_VALUE.COEFFICIENT_COPIES } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.COEFFICIENT_COPIES}] ${MODELPARAM_VALUE.COEFFICIENT_COPIES}
 }
 
 proc update_MODELPARAM_VALUE.FILTER_STAGES { MODELPARAM_VALUE.FILTER_STAGES PARAM_VALUE.FILTER_STAGES } {
@@ -193,6 +218,11 @@ proc update_MODELPARAM_VALUE.MAX_COEFFICIENTS { MODELPARAM_VALUE.MAX_COEFFICIENT
 proc update_MODELPARAM_VALUE.CONJOINED_MULTIPLIES { MODELPARAM_VALUE.CONJOINED_MULTIPLIES PARAM_VALUE.CONJOINED_MULTIPLIES } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.CONJOINED_MULTIPLIES}] ${MODELPARAM_VALUE.CONJOINED_MULTIPLIES}
+}
+
+proc update_MODELPARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES { MODELPARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES}] ${MODELPARAM_VALUE.DOUBLE_CLOCKED_MULTIPLIES}
 }
 
 proc update_MODELPARAM_VALUE.FXP_BITS { MODELPARAM_VALUE.FXP_BITS PARAM_VALUE.FXP_BITS } {

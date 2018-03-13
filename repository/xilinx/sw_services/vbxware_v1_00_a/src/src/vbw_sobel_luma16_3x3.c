@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -151,7 +151,7 @@ int vbw_sobel_luma16_3x3(unsigned *output, unsigned short *input, const short im
 		// Trick to copy the low byte (b) to the middle two bytes as well
 		// Note that first and last columns are 0
 		vbx_set_vl(image_width-2);
-		vbx(SVHWU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
+		vbx(SVWWHU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
 
 		// DMA the result to the output
 		vbx_dma_to_host(output+(y+1)*image_pitch, v_row_out, image_width*sizeof(vbx_uword_t));

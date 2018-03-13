@@ -32,7 +32,6 @@ To get started immediately:
 
 - Follow the VectorBlox MXP Hardware & Software Quickstart for
   [Quartus](http://vectorblox.github.io/mxp/mxp_quickstart_altera.html) /
-  [ISE](http://vectorblox.github.io/mxp/mxp_quickstart_ise.html) /
   [Vivado](http://vectorblox.github.io/mxp/mxp_quickstart_vivado.html) /
   [Simulator](http://vectorblox.github.io/mxp/mxp_quickstart_simulator.html)
 
@@ -42,6 +41,23 @@ For further VectorBlox MXP documentation, refer to the following:
 
 - [VectorBlox MXP Programming  Reference](http://vectorblox.github.io/mxp/mxp_reference.html)
 
+### API Changes March 2018
+There are several breaking changes to the API since between the 2017 and 2018
+releases. Below is an overview of the changes, please see the Programming Reference
+(link above) for more details on the current API.
+
+* Vector Shifts are srca >> srcb rather than srcb>> srca.
+This leads to some issues with shifting by scalar values which can be resolved
+by mapping shifting by scalar values to VMUL, and VMULH for shifting left
+and right respectively.
+
+* All vector instructions are 3 dimensional, to do 1 or 2 dimensional instructions
+set nmats and/or nrows to 1. Because of this the `vbx_set_vl`,`vbx_set_2D`, and
+`vbx_set_3D` have changed. They now all accept 3 arguments.
+
+* Destination, source A and source B all have independant sizes and signedness.
+
+### Contact information
 For further information please email us at
 [info@vectorblox.com](mailto:info@vectorblox.com) or visit
 <http://www.vectorblox.com>.

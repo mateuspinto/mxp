@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- Copyright (C) 2013-2017 VectorBlox Computing, Inc. -->
+<!-- Copyright (C) 2013-2018 VectorBlox Computing, Inc. -->
 
 <!DOCTYPE doc SYSTEM "../../ipdialog.dtd" [
 
@@ -58,15 +58,6 @@
         (when the element size is one byte).
         The maximum vector length for masked instructions will be this
         value multiplied by VECTOR_LANES*4.</tip>
-    </widget>
-    '>
-
-    <!ENTITY MASK_PARTITIONS '
-    <widget id="MASK_PARTITIONS">
-        <key>MASK_PARTITIONS</key>
-        <label>Number of Mask Partitions</label>
-        <tip>Changes the granularity of masked instructions. Currently only 1
-        (enabled) and 0 (disabled) supported.</tip>
     </widget>
     '>
 
@@ -1044,7 +1035,6 @@
             <item>&BEATS_PER_BURST;</item>
             <item>&BURSTLENGTH_BYTES;</item>
             <item>&MAX_MASKED_WAVES;</item>
-            <item>&MASK_PARTITIONS;</item>
             <item>&FIXED_POINT_SUPPORT;</item>
             <item>&VECTOR_CUSTOM_INSTRUCTIONS;</item>
             <item>&SCRATCHPAD_KB;</item>
@@ -1187,4 +1177,3 @@
     </view>
 
 </doc>
-

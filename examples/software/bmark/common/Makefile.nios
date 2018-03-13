@@ -216,6 +216,8 @@ BUILD_POST_PROCESS :=
 
 ALT_LIBRARY_ROOT_DIR := ../../lib/vbxtest
 include ../../lib/vbxtest/public.mk
+ALT_LIBRARY_ROOT_DIR := ../../lib/vbxware
+include ../../lib/vbxware/public.mk
 ALT_LIBRARY_ROOT_DIR := ../../lib/scalar
 include ../../lib/scalar/public.mk
 ALT_LIBRARY_ROOT_DIR := ../../lib/libfixmath
@@ -292,8 +294,6 @@ include $(BSP_INCLUDE_FILE)
 ABS_BSP_INCLUDE_FILE := $(ABS_BSP_ROOT_DIR)/public.mk
 
 ifeq ($(INCLUDE_VBXAPI),true)
-ALT_LIBRARY_ROOT_DIR := ../../lib/vbxware
-include ../../lib/vbxware/public.mk
 
 ALT_LIBRARY_ROOT_DIR := ../../../../repository/lib/vbxapi
 include ../../../../repository/lib/vbxapi/public.mk
@@ -642,7 +642,7 @@ endif
 ifeq ($(DOWNLOAD_CABLE),)
 DOWNLOAD_CABLE := 1
 endif
-RVI_ADDRESS := $(shell jtagconfig | sed -n "s/$(DOWNLOAD_CABLE). \(.*\) \[\(.*\)\]/\1 on localhost [\2]:\1 \2/p")
+RVI_ADDRESS := $(shell jtagconfig 2>/dev/null | sed -n "s/$(DOWNLOAD_CABLE). \(.*\) \[\(.*\)\]/\1 on localhost [\2]:\1 \2/p")
 
 DOWNLOAD_CABLE_FLAG := --cable '$(DOWNLOAD_CABLE)'
 

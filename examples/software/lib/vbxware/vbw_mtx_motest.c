@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -114,23 +114,23 @@ int vbw_mtx_motest_byte(output_type *result, input_type *x, input_type *y, vbw_m
 	}
 
 	// column-ize the reference block
-	vbx_set_vl( m->block_width );
-	vbx_set_2D( m->block_height, m->block_width*sizeof(input_type), sub_block_width*sizeof(input_type), 0 );
-	vbx_2D( VVB, VMOV, (vbx_byte_t*)m->v_block, (vbx_byte_t*)m->v_block, 0 );
+	vbx_set_vl( m->block_width ,m->block_height,1);
+	vbx_set_2D( m->block_width*sizeof(input_type), sub_block_width*sizeof(input_type), 0 );
+	vbx( VVB, VMOV, (vbx_byte_t*)m->v_block, (vbx_byte_t*)m->v_block, 0 );
 
 	//Do column by column
 
 	for( j=0; j < m->search_width; j++ )
 	{
 		// column-ize the search image
-		vbx_set_vl( m->block_width );
-		vbx_set_2D( m->block_height+m->search_height,  m->block_width*sizeof(input_type), sub_block_width*sizeof(input_type), 0 );
-		vbx_2D( VVBU, VMOV, m->v_img_sub, m->v_img+j, 0 );
+		vbx_set_vl( m->block_width , m->block_height+m->search_height,1);
+		vbx_set_2D(  m->block_width*sizeof(input_type), sub_block_width*sizeof(input_type), 0 );
+		vbx( VVBU, VMOV, m->v_img_sub, m->v_img+j, 0 );
 
 		// search the image columnwise
-		vbx_set_vl( m->block_width*m->block_height );
-		vbx_set_2D( m->search_height, m->search_width*sizeof(output_type), 0,  m->block_width*sizeof(input_type) );
-		vbx_acc_2D( VVBWU, VABSDIFF, (vbx_uword_t*)m->v_result+j, m->v_block, m->v_img_sub );
+		vbx_set_vl( m->block_width*m->block_height,m->search_height, 1 );
+		vbx_set_2D( m->search_width*sizeof(output_type), 0,  m->block_width*sizeof(input_type) );
+		vbx_acc( VVWBU, VABSDIFF, (vbx_uword_t*)m->v_result+j, m->v_block, m->v_img_sub );
 	}
 
 	// Write back result
@@ -191,18 +191,18 @@ int vbw_mtx_motest_3d_byte(output_type *result, input_type* x, input_type *y, vb
 		vbx_dma_to_vector( m->v_img+j*sub_block_width, y+j*m->image_width, sub_block_width*sizeof(input_type) );
 	}
 
-	vbx_set_3D( m->search_width, m->block_height*sizeof(intermediate_type), sizeof(input_type), 0 );
+	vbx_set_3D( m->block_height*sizeof(intermediate_type), sizeof(input_type), 0 );
 
 	for( l = 0; l < m->search_height; l++ ) {
 		//Accumulate each row into a vbx of row SADs
-		vbx_set_vl( m->block_width );
-		vbx_set_2D( m->block_height, sizeof(intermediate_type), sub_block_width*sizeof(input_type), m->block_width*sizeof(input_type) );
-		vbx_acc_3D( VVBHU, VABSDIFF, m->v_row_sad, m->v_img+l*sub_block_width, m->v_block );
+		vbx_set_vl( m->block_width ,m->block_height, m->search_width);
+		vbx_set_2D( sizeof(intermediate_type), sub_block_width*sizeof(input_type), m->block_width*sizeof(input_type) );
+		vbx_acc( VVHBU, VABSDIFF, m->v_row_sad, m->v_img+l*sub_block_width, m->v_block );
 
 		//Accumulate the SADs
-		vbx_set_vl( m->block_height/2 );
-		vbx_set_2D( m->search_width, sizeof(output_type), m->block_height*sizeof(intermediate_type), m->block_height*sizeof(intermediate_type) );
-		vbx_acc_2D( VVHWU, VADD, (vbx_uword_t*)m->v_result+l*m->search_width, m->v_row_sad, m->v_row_sad+(m->block_height/2) );
+		vbx_set_vl( m->block_height/2, m->search_width, m->search_width);
+		vbx_set_2D( sizeof(output_type), m->block_height*sizeof(intermediate_type), m->block_height*sizeof(intermediate_type) );
+		vbx_acc( VVWHU, VADD, (vbx_uword_t*)m->v_result+l*m->search_width, m->v_row_sad, m->v_row_sad+(m->block_height/2) );
 
 		//Transfer the line to host
 		vbx_dma_to_host( result+l*m->search_width, m->v_result+l*m->search_width, m->search_width*sizeof(output_type) );

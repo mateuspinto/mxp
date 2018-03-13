@@ -1,8 +1,10 @@
 # Definitional proc to organize widgets for parameters.
 proc init_gui { IPINST } {
-	set Page0 [ipgui::add_page $IPINST -name "Page 0" -layout vertical]
-	set Component_Name [ipgui::add_param $IPINST -parent $Page0 -name Component_Name]
-	set VCI_LANES [ipgui::add_param $IPINST -parent $Page0 -name VCI_LANES]
+	 set Page0 [ipgui::add_page $IPINST -name "Page 0" -layout vertical]
+	 set Component_Name [ipgui::add_param $IPINST -parent $Page0 -name Component_Name]
+	 ipgui::add_param $IPINST -parent $Page0 -name VCI_UID
+	 set VCI_LANES [ipgui::add_param $IPINST -parent $Page0 -name VCI_LANES]
+
 }
 
 proc update_PARAM_VALUE.VCI_LANES { PARAM_VALUE.VCI_LANES } {
@@ -19,4 +21,3 @@ proc update_MODELPARAM_VALUE.VCI_LANES { MODELPARAM_VALUE.VCI_LANES PARAM_VALUE.
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.VCI_LANES}] ${MODELPARAM_VALUE.VCI_LANES}
 }
-

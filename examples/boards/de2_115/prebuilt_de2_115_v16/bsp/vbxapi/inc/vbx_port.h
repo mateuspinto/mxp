@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -380,6 +380,43 @@ static inline volatile void* vbx_uncached_malloc(size_t size)
 #endif
 	// VBX_ASSEMBLER
 
+#if ORCA_STANDALONE
+	#include "bsp.h"
+	typedef uint64_t vbx_timestamp_t;
+	static inline int vbx_timestamp_start()
+	{
+		return 0;
+	}
+
+	static inline 	vbx_timestamp_t vbx_timestamp()
+	{
+		unsigned hi,low,tmp;
+		uint64_t time;
+		do{
+			asm volatile("csrr %0,timeh":"=r"(hi));
+			asm volatile("csrr %0,time":"=r"(low));
+			asm volatile("csrr %0,timeh":"=r"(tmp));
+		}while(hi !=tmp);
+		time=hi;
+		time<<=32;
+		time|=low;
+		return time;
+	}
+
+	static inline uint32_t vbx_timestamp_freq()
+	{
+		return TIMER_CLK;
+	}
+
+#define VBX_CPU_DCACHE_SIZE      32768
+#define VBX_CPU_DCACHE_LINE_SIZE    32
+
+#define vbx_uncached_malloc(size) malloc(size)
+#define vbx_uncached_free(size) free(size)
+#define vbx_remap_uncached_flush(aligned_ptr,num_bytes) (aligned_ptr)
+#define vbx_remap_cached(ptr,len) (ptr)
+#define vbx_dcache_flush_all() _Pragma("GCC warning \"vbx_dcache_flush not implemented\"")
+#endif
 	///////////////////////////////////////////////////////////////////////////
 #if VBX_SIMULATOR
 #include "vbxsim_port.h"

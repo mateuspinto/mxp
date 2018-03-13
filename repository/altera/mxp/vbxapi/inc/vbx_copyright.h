@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,7 +65,7 @@
 #define VBXCOPYRIGHT(fname)	  \
 	extern_decl char	fname##_copyright[]; \
 	char	fname##_copyright[] =   "Function " STRINGY(fname) \
-	     "\nCopyright (C) 2012-2016 VectorBlox Computing, Inc.\n" \
+	     "\nCopyright (C) 2012-2018 VectorBlox Computing, Inc.\n" \
 	     "File " __FILE__ " compiled on " __TIME__ " " __DATE__ \
 	     " using " COMPILER \
 	     ".\n" ;

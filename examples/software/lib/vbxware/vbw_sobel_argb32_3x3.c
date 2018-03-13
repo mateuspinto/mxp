@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,24 +50,24 @@ VBXCOPYRIGHT(vbw_sobel_argb32_3x3)
 /// Trashes v_temp
 static void vbw_rgb2luma(vbx_uhalf_t *v_luma, vbx_uword_t *v_row_in, vbx_uhalf_t *v_temp, const int image_width)
 {
-	vbx_set_vl(image_width);
+	vbx_set_vl(image_width,1,1);
 
 	// Move weighted B into v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   v_row_in);
+	vbx(SVHWU, VAND, v_temp, 0xFF,   v_row_in);
 	vbx(SVHU,  VMUL, v_luma, 25,     v_temp);
 
 	// Move weighted G into v_temp and add it to v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
+	vbx(SVHWU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
 	vbx(SVHU,  VMUL, v_temp, 129,    v_temp);
 	vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 
 	// Move weighted R into v_temp and add it to v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
+	vbx(SVHWU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
 	vbx(SVHU,  VMUL, v_temp, 66,     v_temp);
 	vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 
 	vbx(SVHU,  VADD, v_luma, 128,    v_luma); // for rounding
-	vbx(SVHU,  VSHR, v_luma, 8,      v_luma);
+	vbx(VSHU,  VSHR, v_luma, v_luma, 8);
 }
 
 
@@ -75,9 +75,9 @@ static void vbw_rgb2luma(vbx_uhalf_t *v_luma, vbx_uword_t *v_row_in, vbx_uhalf_t
 /// NB: Last two output pixels are not meaningful
 inline static void vbw_sobel_3x3_row(vbx_uhalf_t *lpf, vbx_uhalf_t *raw, const short image_width)
 {
-	vbx_set_vl(image_width-1);
+	vbx_set_vl(image_width-1,1,1);
 	vbx(VVHU, VADD, lpf, raw, raw+1);
-	vbx_set_vl(image_width-2);
+	vbx_set_vl(image_width-2,1,1);
 	vbx(VVHU, VADD, lpf, lpf, lpf+1);
 }
 
@@ -146,7 +146,7 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 	vbw_sobel_3x3_row(v_sobel_row_mid, v_luma_mid, image_width);                                     // 2nd partial sobel row
 
 	// Set top output row to 0
-	vbx_set_vl(image_width);
+	vbx_set_vl(image_width,1,1);
 	vbx(SVWU, VMOV, v_row_out, 0, 0);
 	vbx_dma_to_host(output, v_row_out, image_width*sizeof(vbx_uword_t));
 
@@ -166,12 +166,12 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 
 		// Calculate gradient_x
 		// Apply [1 2 1]T matrix to all columns
-		vbx_set_vl(image_width);
-		vbx(SVHU, VSHL, v_gradient_x, 1,          v_luma_mid); // multiply by 2
+		vbx_set_vl(image_width,1,1);
+		vbx(VSHU, VSHL, v_gradient_x, v_luma_mid, 1); // multiply by 2
 		vbx(VVHU, VADD, v_tmp,        v_luma_top, v_luma_bot);
 		vbx(VVHU, VADD, v_tmp,        v_tmp,      v_gradient_x);
 		// For each column, calculate absolute difference with 2nd column to the right
-		vbx_set_vl(image_width-2);
+		vbx_set_vl(image_width-2,1,1);
 		vbx(VVH, VABSDIFF, (vbx_half_t*)v_gradient_x, (vbx_half_t*)v_tmp, (vbx_half_t*)v_tmp+2);
 
 		// Calculate gradient_y
@@ -183,9 +183,9 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 		v_tmp = v_sobel_row_top;
 
 		// sum of absoute gradients
-		vbx_set_vl(image_width-2);
+		vbx_set_vl(image_width-2,1,1);
 		vbx(VVHU, VADD, v_tmp, v_gradient_x,  v_gradient_y);
-		vbx(SVHU, VSHR, v_tmp, renorm, v_tmp);
+		vbx(VSHU, VSHR, v_tmp, v_tmp, renorm);
 
 		// Threshold
 		vbx(SVHU, VSUB,     v_gradient_y, 255, v_tmp);
@@ -194,8 +194,8 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 		// Copy the result to the low byte of the output row
 		// Trick to copy the low byte (b) to the middle two bytes as well
 		// Note that first and last columns are 0
-		vbx_set_vl(image_width-2);
-		vbx(SVHWU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
+		vbx_set_vl(image_width-2,1,1);
+		vbx(SVWWHU, VMULLO, v_row_out+1, 0x00010101, v_tmp);
 
 		// DMA the result to the output (minus the outside two pixels
 		vbx_dma_to_host(output+(y+1)*image_pitch+1, v_row_out+1, (image_width-2)*sizeof(vbx_uword_t));
@@ -214,7 +214,7 @@ int vbw_sobel_argb32_3x3_partial(unsigned *output, unsigned *input, const short 
 	}
 
 	// Set bottom row to 0
-	vbx_set_vl(image_width);
+	vbx_set_vl(image_width,1,1);
 	vbx(SVWU, VMOV, v_row_out, 0, 0);
 	vbx_dma_to_host(output+(image_height-1)*image_pitch, v_row_out, image_width*sizeof(vbx_uword_t));
 
@@ -229,7 +229,10 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 	size_t vectors_needed=8;
 	size_t partial_width=free_sp/(vectors_needed*sizeof(vbx_uword_t));
 	if(partial_width>image_width){
-		vbw_sobel_argb32_3x3_partial(output, input, image_width, image_height, image_pitch,renorm);
+		int status = vbw_sobel_argb32_3x3_partial(output, input, image_width, image_height, image_pitch,renorm);
+		if(status){
+			return status;
+		}
 	}else{
 		//can do entire row at a time, so do partial_width at a time
 		size_t partial_step=partial_width-2;
@@ -240,7 +243,10 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 				partial_width=image_width-i;
 			}
 
-			vbw_sobel_argb32_3x3_partial(output+i, input+i, partial_width, image_height, image_pitch,renorm);
+			int status = vbw_sobel_argb32_3x3_partial(output+i, input+i, partial_width, image_height, image_pitch,renorm);
+			if(status){
+				return status;
+			}
 
 			if(i+partial_width == image_width){
 				//that was the last tile, so break,
@@ -251,7 +257,7 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 	}
 	vbx_sp_push();
 	vbx_word_t* side=vbx_sp_malloc(sizeof(vbx_word_t));
-	vbx_set_vl(1);
+	vbx_set_vl(1,1,1);
 	vbx(SVW,VMOV,side,0,0);
 	vbx_dma_to_host_2D(output,/*host_ptr*/
 	                   side,/*sp_ptr*/
@@ -267,5 +273,5 @@ int vbw_sobel_argb32_3x3(unsigned *output, unsigned *input, const short image_wi
 	                   0);/*sp incr*/
 	vbx_sp_pop();
 	vbx_sync();
-	return 0;
+	return VBW_SUCCESS;
 }

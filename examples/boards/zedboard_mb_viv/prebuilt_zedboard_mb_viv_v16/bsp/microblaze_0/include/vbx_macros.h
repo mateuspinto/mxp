@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ extern "C" {
 #define VBX_REG_MXPCPU       16
 
 #if VBX_USE_GLOBAL_MXP_PTR
-#ifdef CATAPULTPS_SIMULATOR
+#if VBX_SIMULATOR
 vbx_mxp_t *VBX_GET_THIS_MXP();
 void VBX_SET_THIS_MXP(vbx_mxp_t *POINTER);
 #else
@@ -71,6 +71,19 @@ void VBX_SET_THIS_MXP(vbx_mxp_t *POINTER);
 	({ int __t__; vbx_get_reg( VBX_REG_MXPCPU, &__t__ ); (vbx_mxp_t*)__t__; })
 #endif
 
+	/**
+	 *This block of Code allows default arguments to vbx_set_vl function
+	 * if it were a c++ function it would have the signature void vbx_set_vl(vlen,nrows=1,nmats=1);
+	 */
+#define vbx_set_vl_1(vl) vbx_set_vl(vl,1,1)
+#define vbx_set_vl_2(vl,rows) vbx_set_vl(vl,rows,1)
+#define vbx_set_vl_3(vl,rows,cols) vbx_set_vl(vl,rows,cols)
+
+#define vbx_set_vl_X(x,A,B,C,FUNC, ...)  FUNC
+#define vbx_set_vl(...) vbx_set_vl_X(,##__VA_ARGS__,	  \
+                                     vbx_set_vl_3(__VA_ARGS__),\
+                                     vbx_set_vl_2(__VA_ARGS__),\
+                                     vbx_set_vl_1(__VA_ARGS__))
 //#define VBX_IS_VPTR(PTR)
 //	({ vbx_void_t *__vptr__ = (vbx_void_t *)(PTR);
 ///           ( (VBX_SCRATCHPAD_ADDR<=__vptr__) && (__vptr__<VBX_SCRATCHPAD_END) );
@@ -137,6 +150,106 @@ void VBX_SET_THIS_MXP(vbx_mxp_t *POINTER);
 #ifdef __cplusplus
 }
 #endif
+
+//Custom instruction macros
+// A custom instruction id has three fields
+// 31..16 : VENDOR_ID
+// 15..8 : INSTRUCTION_ID
+// 7 ..0 : INSTRUCITON_VERSION
+//
+// This gives us 64K VENDOR IDs
+// each vendor_id has 256 instructions
+// if a vendor runs out of these we will
+// provide another id
+
+#define VBX_VCI_VENDOR_VECTORBLOX 0x7FFF
+
+#define VBX_VCI_ID(vendor,instr,ver) (((vendor)<<16)|((instr)<<8)|(ver))
+#define VBX_VCI_VENDOR(id)  (((id)>>16) & 0xFFFF)
+#define VBX_VCI_INSTR(id)   (((id)>>8) & 0xFF)
+#define VBX_VCI_VERSION(id) ((id) & 0xFF)
+
+
+#if VBX_SIMULATOR
+#define VBX_VCI_API_INSTR(id) \
+	(((id)==vbxsim_get_custom_uid(0)) ? VCUSTOM0 : \
+	((id)==vbxsim_get_custom_uid(1)) ? VCUSTOM1 : \
+	((id)==vbxsim_get_custom_uid(2)) ? VCUSTOM2 : \
+	((id)==vbxsim_get_custom_uid(3)) ? VCUSTOM3 : \
+	((id)==vbxsim_get_custom_uid(4)) ? VCUSTOM4 : \
+	((id)==vbxsim_get_custom_uid(5)) ? VCUSTOM5 : \
+	((id)==vbxsim_get_custom_uid(6)) ? VCUSTOM6 : \
+	((id)==vbxsim_get_custom_uid(7)) ? VCUSTOM7 : \
+	((id)==vbxsim_get_custom_uid(8)) ? VCUSTOM8 : \
+	((id)==vbxsim_get_custom_uid(9)) ? VCUSTOM9 : \
+	((id)==vbxsim_get_custom_uid(10)) ? VCUSTOM10 : \
+	((id)==vbxsim_get_custom_uid(11)) ? VCUSTOM11 : \
+	((id)==vbxsim_get_custom_uid(12)) ? VCUSTOM12 : \
+	((id)==vbxsim_get_custom_uid(13)) ? VCUSTOM13 : \
+	((id)==vbxsim_get_custom_uid(14)) ? VCUSTOM14 : \
+	((id)==vbxsim_get_custom_uid(15)) ? VCUSTOM15 : \
+	 -1)
+#elif ARM_XIL_STANDALONE
+
+#define VBX_VCI_API_INSTR(id) \
+	(((id)==XPAR_VECTORBLOX_MXP_0_VCI_0_UID) ? VCUSTOM0 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_1_UID) ? VCUSTOM1 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_2_UID) ? VCUSTOM2 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_3_UID) ? VCUSTOM3 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_4_UID) ? VCUSTOM4 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_5_UID) ? VCUSTOM5 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_6_UID) ? VCUSTOM6 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_7_UID) ? VCUSTOM7 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_8_UID) ? VCUSTOM8 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_9_UID) ? VCUSTOM9 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_10_UID) ? VCUSTOM10 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_11_UID) ? VCUSTOM10 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_12_UID) ? VCUSTOM12 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_13_UID) ? VCUSTOM13 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_14_UID) ? VCUSTOM14 : \
+	 ((id)==XPAR_VECTORBLOX_MXP_0_VCI_15_UID) ? VCUSTOM15 : \
+	 -1 )
+
+#elif  NIOS_STANDALONE
+#include "system.h"
+#define VBX_VCI_API_INSTR(id) 	  \
+	(((id)==VCUSTOM0_UID) ? VCUSTOM0 : \
+	((id)==VCUSTOM1_UID) ? VCUSTOM1 : \
+	((id)==VCUSTOM2_UID) ? VCUSTOM2 : \
+	((id)==VCUSTOM3_UID) ? VCUSTOM3 : \
+	((id)==VCUSTOM4_UID) ? VCUSTOM4 : \
+	((id)==VCUSTOM5_UID) ? VCUSTOM5 : \
+	((id)==VCUSTOM6_UID) ? VCUSTOM6 : \
+	((id)==VCUSTOM7_UID) ? VCUSTOM7 : \
+	((id)==VCUSTOM8_UID) ? VCUSTOM8 : \
+	((id)==VCUSTOM9_UID) ? VCUSTOM9 : \
+	((id)==VCUSTOM10_UID) ? VCUSTOM10 : \
+	((id)==VCUSTOM11_UID) ? VCUSTOM10 : \
+	((id)==VCUSTOM12_UID) ? VCUSTOM12 : \
+	((id)==VCUSTOM13_UID) ? VCUSTOM13 : \
+	((id)==VCUSTOM14_UID) ? VCUSTOM14 : \
+	((id)==VCUSTOM15_UID) ? VCUSTOM15 : \
+	-1 )
+#endif
+
+
+
+#define VCI_A_IMPLIES_B      VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 0  ,1)
+#define VCI_ARRIA10_FP 		  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 1  ,1)
+#define VCI_ATAN 				  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 2  ,1)
+#define VCI_CLZ 				  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 3  ,1)
+#define VCI_COMPRESS 		  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 4  ,1)
+#define VCI_CONFIGURABLE_LUT VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 5  ,1)
+#define VCI_CONVOLVE 		  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 6  ,1)
+#define VCI_DIVIDE 			  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 7  ,1)
+#define VCI_HALFSQRT 		  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 8  ,1)
+#define VCI_LBP_LUT 			  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 9  ,1)
+#define VCI_LBP_PATTERN 	  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 10 ,1)
+#define VCI_PREFIX_SUM 		  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 11 ,1)
+#define VCI_SQRT 				  VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 12 ,1)
+#define VCI_STENCIL          VBX_VCI_ID(VBX_VCI_VENDOR_VECTORBLOX, 13 ,1)
+
+
 
 #endif //__VBX_MACROS_H
 /**@}*/

@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (C) 2012-2017 VectorBlox Computing, Inc.
+# Copyright (C) 2012-2018 VectorBlox Computing, Inc.
 #
 ###########################################################################
 
@@ -42,6 +42,7 @@ add_sw_property include_source inc/vectorblox_mxp.h
 add_sw_property include_source inc/vbx_asm_nios.h
 add_sw_property include_source inc/vbx_extern.h
 add_sw_property include_source inc/vbxsim_port.h
+add_sw_property include_source inc/vbx_asm_orca.h
 add_sw_property include_source inc/vbx_copyright.h
 add_sw_property include_source inc/prefetch.hpp
 add_sw_property include_source inc/vector_mask_obj.hpp

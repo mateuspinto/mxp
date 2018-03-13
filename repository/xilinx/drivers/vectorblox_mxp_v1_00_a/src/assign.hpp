@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,29 +74,27 @@ namespace VBX{
 
 			//Bin_Op
 			template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim1>
-			INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
+			VBX_INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
 			                          const bin_op <lhs_t,rhs_t,instr,btype,dim1,NO_ACC >& src,size_t vlen)
 			{
-				set_vl(vlen);
+				set_vl(dim,vlen,dest_rows,dest_mats);
 				typedef typename source_resolve<dest_t,btype>::type src_t;
 				vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 				src_t* sp=(src_t*)this_mxp->sp;
 				typedef typename same_sign_as<dest_t,src_t>::type d_t;
 
-				typeof(resolve<src_t,is_masked>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen)) srcB=
-					resolve<src_t,is_masked>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen);
-				typeof(resolve<src_t,is_masked>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen)) srcA=
-					resolve<src_t,is_masked>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen)) srcB=
+					resolve<src_t,is_masked,dim>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen)) srcA=
+					resolve<src_t,is_masked,dim>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen);
 
 				if(dim>=2){
-					vbx_set_2D(dest_rows,
-					           dest_inc2,
+					vbx_set_2D(dest_inc2,
 					           get_increment2(src.lhs,vlen),
 					           get_increment2(src.rhs,vlen));
 				}
 				if(dim==3){
-					vbx_set_3D(dest_mats,
-					           dest_inc3,
+					vbx_set_3D(dest_inc3,
 					           get_increment3(src.lhs,vlen,dest_rows),
 					           get_increment3(src.rhs,vlen,dest_rows));
 				}
@@ -105,32 +103,30 @@ namespace VBX{
 			}
 			//bin op accumulate
 			template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim1>
-			INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
+			VBX_INLINE static void assign(dest_t* dest,int dest_rows,int dest_inc2,int dest_mats,int dest_inc3,
 			                          const bin_op <lhs_t,rhs_t,instr,btype,dim1,IS_ACC >& src,size_t vlen)
 			{
 				int src_len=get_length(src);
-				set_vl(src_len);
+				set_vl(dim+1,src_len,vlen,dest_rows);
  				typedef typename source_resolve<dest_t,btype>::type src_t;
 				vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 				src_t* sp=(src_t*)this_mxp->sp;
 				typedef typename same_sign_as<dest_t,src_t>::type d_t;
 
-				typeof(resolve<src_t,is_masked>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen)) srcB=
-					resolve<src_t,is_masked>::_resolve(src.rhs,sp,dest_mats,dest_rows,src_len);
-				typeof(resolve<src_t,is_masked>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen)) srcA=
-					resolve<src_t,is_masked>::_resolve(src.lhs,sp,dest_mats,dest_rows,src_len);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(src.rhs,sp,dest_mats,dest_rows,vlen)) srcB=
+					resolve<src_t,is_masked,dim>::_resolve(src.rhs,sp,dest_mats,dest_rows,src_len);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(src.lhs,sp,dest_mats,dest_rows,vlen)) srcA=
+					resolve<src_t,is_masked,dim>::_resolve(src.lhs,sp,dest_mats,dest_rows,src_len);
 
 				if(dim>=1){
 					//do 2d accumulate
-					vbx_set_2D(vlen,
-					           sizeof(dest_t),
+					vbx_set_2D(sizeof(dest_t),
 					           get_increment2(src.lhs,vlen),
 					           get_increment2(src.rhs,vlen));
 				}
 				if(dim==2){
 					//do 3d accumulate
-					vbx_set_3D(dest_rows,
-					           dest_inc2,
+					vbx_set_3D(dest_inc2,
 					           get_increment3(src.lhs,vlen,dest_rows),
 					           get_increment3(src.rhs,vlen,dest_rows));
 				}
@@ -140,42 +136,42 @@ namespace VBX{
 
 			//Vector
 			template<typename T>
-			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
+			VBX_INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          const Vector<T,dim>& src,size_t vlen)
 			{
 				typedef typename same_sign_as<dest_t,T>::type d_t;
-				set_vl(vlen);
+				set_vl(dim,vlen,dest_rows,dest_mats);
 				if(dim>=2){
-					vbx_set_2D(dest_rows,dest_inc2,src.increment2,0);
+					vbx_set_2D(dest_inc2,src.increment2,0);
 				}
 				if(dim==3){
-					vbx_set_3D(dest_mats,dest_inc3,src.increment3,0);
+					vbx_set_3D(dest_inc3,src.increment3,0);
 				}
 
 				vbx_func<is_masked,NO_ACC,dim>::func(VMOV,(d_t*)dest,src.data);
 			}
 			//enum
-			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
+			VBX_INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          const enum_t& src,size_t vlen){
-				set_vl(vlen);
+				set_vl(dim,vlen,dest_rows,dest_mats);
 				if(dim>=2){
-					vbx_set_2D(dest_rows,dest_inc2,0,0);
+					vbx_set_2D(dest_inc2,0,0);
 				}
 				if(dim==3){
-					vbx_set_3D(dest_mats,dest_inc3,0,0);
+					vbx_set_3D(dest_inc3,0,0);
 				}
 
 				vbx_func<is_masked,NO_ACC,dim>::func(VOR,dest,(vbx_word_t)0,(vbx_enum_t*)0);
 			}
 			//scalar
-			INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
+			VBX_INLINE static void assign(dest_t* dest,int dest_rows, int dest_inc2,int dest_mats,int dest_inc3,
 			                          typename word_sized<dest_t>::type src,size_t vlen){
-				set_vl(vlen);
+				set_vl(dim,vlen,dest_rows,dest_mats);
 				if(dim>=2){
-					vbx_set_2D(dest_rows,dest_inc2,0,0);
+					vbx_set_2D(dest_inc2,0,0);
 				}
 				if(dim==3){
-					vbx_set_3D(dest_mats,dest_inc3,0,0);
+					vbx_set_3D(dest_inc3,0,0);
 				}
 
 				vbx_func<is_masked,NO_ACC,dim>::func(VMOV,dest,src);
@@ -186,7 +182,7 @@ namespace VBX{
 			////////////////////
 			//bin_op
 			template<typename if_t,typename then_t>
-			INLINE static void cond_move(dest_t* data,
+			VBX_INLINE static void cond_move(dest_t* data,
 			                             const  if_t& v_if,
 			                             const then_t& v_then,
 			                             size_t dest_mats,int dest_inc3,
@@ -201,15 +197,14 @@ namespace VBX{
 				src_t* sp=(src_t*)this_mxp->sp;
 				vinstr_t cmv=get_cmv(v_if);
 
-				set_vl(vlen);
-				typeof(resolve<src_t,is_masked>::_resolve(v_then,sp,dest_mats,dest_rows,vlen)) srcA=
-					resolve<src_t,is_masked>::_resolve(v_then,sp,dest_mats,dest_rows,vlen);
-				typeof(resolve<src_t,is_masked>::_resolve(v_if,sp,dest_mats,dest_rows,vlen)) srcB=
-					resolve<src_t,is_masked>::_resolve(v_if,sp,dest_mats,dest_rows,vlen);
+				set_vl(dim,vlen,dest_rows,1);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(v_then,sp,dest_mats,dest_rows,vlen)) srcA=
+					resolve<src_t,is_masked,dim>::_resolve(v_then,sp,dest_mats,dest_rows,vlen);
+				typeof(resolve<src_t,is_masked,dim>::_resolve(v_if,sp,dest_mats,dest_rows,vlen)) srcB=
+					resolve<src_t,is_masked,dim>::_resolve(v_if,sp,dest_mats,dest_rows,vlen);
 
 				if(dim>=2){
-					vbx_set_2D(dest_rows,
-					           dest_inc2,
+					vbx_set_2D(dest_inc2,
 					           get_increment2(v_then,vlen),
 					           get_increment2(v_if,vlen));
 				}
@@ -221,7 +216,7 @@ namespace VBX{
 			}
 			//Logical op
 			template<typename lhs_t,typename rhs_t,log_op_t lop,bool negate,typename then_t>
-			INLINE static void cond_move(dest_t* data,
+			VBX_INLINE static void cond_move(dest_t* data,
 			                             const Logical_vop<lhs_t,rhs_t,lop,negate> v_if,
 			                             const then_t& v_then,
 			                             size_t dest_mats,int dest_inc3,
@@ -237,10 +232,10 @@ namespace VBX{
 				src_t* sp=(src_t*)this_mxp->sp;
 				vinstr_t cmv=get_cmv(v_if);
 
-				set_vl(vlen);
+				set_vl(1,vlen,1,1);
 				vbx_func<is_masked,NO_ACC,1>::func(cmv,
 				                                   (d_t*)data,
-				                                   resolve<src_t,is_masked>::_resolve(v_then,sp,0,0,vlen),
+				                                   resolve<src_t,is_masked,dim>::_resolve(v_then,sp,0,0,vlen),
 				                                   resolve_logical<src_t,is_masked,NONE>::resolve(v_if,sp,vlen));
 			}
 

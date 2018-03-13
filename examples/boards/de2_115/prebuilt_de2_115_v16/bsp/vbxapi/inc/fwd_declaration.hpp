@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,7 +60,7 @@ namespace VBX{
 		template<typename dest_t,mask_choice is_masked,int dim>
 		struct assignment;
 
-		template<typename dest_t,mask_choice is_masked>
+		template<typename dest_t,mask_choice is_masked,int dest_dim>
 		struct resolve;
 
 		template<typename dest_t,mask_choice is_masked>

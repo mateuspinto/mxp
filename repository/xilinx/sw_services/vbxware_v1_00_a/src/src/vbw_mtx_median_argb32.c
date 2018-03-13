@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -148,7 +148,7 @@ int vbw_mtx_median_ext_argb32( unsigned *output, unsigned *input, const int filt
 			// ??? ??? ??? ??? ??? | a12 a13 a14 a20 a21 |
 			// ??? ??? ??? ??? ??? | a22 a23 a24 a30 a31 |
 			//
-			vbx_set_vl(temp_vl);
+			vbx_set_vl(temp_vl,1,1);
 			for(j = 1; j < filter_height; j++){
 				for(i = 0; i < filter_width; i++){
 					vbx(VVWU, VMOV, v_input+(j*filter_height+i)*temp_vl,
@@ -161,7 +161,7 @@ int vbw_mtx_median_ext_argb32( unsigned *output, unsigned *input, const int filt
 
 			// work on individual color channels
 			temp_vl_byte = temp_vl*sizeof(vbx_uword_t)/sizeof(vbx_ubyte_t);
-			vbx_set_vl(temp_vl_byte);
+			vbx_set_vl(temp_vl_byte,1,1);
 
 			// sort lower half of the values in the window
 			for(j = 0; j < filter_mid; j++){

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,6 @@ enum mxp_attr_t{
         S_AXI_HIGHADDR,
         VECTOR_LANES,
         MAX_MASKED_WAVES,
-        MASK_PARTITIONS,
         SCRATCHPAD_KB,
         M_AXI_DATA_WIDTH,
         FIXED_POINT_SUPPORT,
@@ -135,7 +134,6 @@ int VectorBlox_MXP_Initialize(const char* mxp_dev,const char* cma_dev)
 	the_mxp.vcustom14_lanes = get_attr_from_file(mxp_dev, "VCI_14_LANES");
 	the_mxp.vcustom15_lanes = get_attr_from_file(mxp_dev, "VCI_15_LANES");
 
-	the_mxp.mask_partitions = get_attr_from_file(mxp_dev,"MASK_PARTITIONS");
 
 	the_mxp.max_masked_vector_length = get_attr_from_file(mxp_dev,"MAX_MASKED_WAVES")* the_mxp.vector_lanes * 4;
 	the_mxp.fixed_point_support = get_attr_from_file(mxp_dev,"FIXED_POINT_SUPPORT");

@@ -501,6 +501,19 @@
   </spirit:fileSets>
   <spirit:description>arctangent for 16-bit data (Q2.14 real/imaginary in, Q3.13 phase out (radians)</spirit:description>
   <spirit:parameters>
+	 <spirit:parameter>
+      <spirit:name>VCI_UID</spirit:name>
+      <spirit:displayName>Vci UID</spirit:displayName>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.VCI_UID" spirit:bitStringLength="32">0x7FFF0201</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:id="PARAM_ENABLEMENT.VCI_UID">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+
     <spirit:parameter>
       <spirit:name>VCI_LANES</spirit:name>
       <spirit:displayName>Number of Custom Instruction Lanes</spirit:displayName>

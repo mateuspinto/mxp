@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,7 +68,7 @@ int vbw_vec_add(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2, unsigned int 
 
 	int overlapL1 = 0, overlapL2 = 0, overlapR1 = 0, overlapR2 = 0;
 
-	if( abs(v_out-v_in1) < vl ) {
+	if( (unsigned)abs(v_out-v_in1) < vl ) {
 		if( v_out <= v_in1 ) {
 			overlapL1 = 1;
 		} else {
@@ -76,7 +76,7 @@ int vbw_vec_add(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2, unsigned int 
 		}
 	}
 
-	if( abs(v_out-v_in2) < vl ) {
+	if( (unsigned)abs(v_out-v_in2) < vl ) {
 		if( v_out <= v_in2 ) {
 			overlapL2 = 1;
 		} else {
@@ -85,14 +85,14 @@ int vbw_vec_add(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2, unsigned int 
 	}
 
 	if( !(overlapR1 || overlapR2) || vl <= (unsigned)WB ) {              // 0-2 left side overlaps, no right side overlaps == no hazard
-		vbx_set_vl(vl);
+		vbx_set_vl(vl,1,1);
 		vbxx(VADD, v_out, v_in1, v_in2);
 	} else if( !(overlapL1 || overlapL2) ) {              // 0-2 right side overlaps, no left side overlaps == no hazard if traversed backward
 		int NROWS = vl / WB;
-		vbx_set_vl( WB );
-		vbx_set_2D( NROWS, -WB*sizeof(vbx_sp_t), -WB*sizeof(vbx_sp_t), -WB*sizeof(vbx_sp_t) );
-		vbxx_2D(VADD, v_out+vl-WB, v_in1+vl-WB, v_in2+vl-WB );
-		vbx_set_vl( vl - NROWS*WB );
+		vbx_set_vl( WB ,NROWS,1);
+		vbx_set_2D( -WB*sizeof(vbx_sp_t), -WB*sizeof(vbx_sp_t), -WB*sizeof(vbx_sp_t) );
+		vbxx(VADD, v_out+vl-WB, v_in1+vl-WB, v_in2+vl-WB );
+		vbx_set_vl( vl - NROWS*WB ,1,1);
 		vbxx( VADD, v_out, v_in1, v_in2);
 	} else {                                       // one of each == hazard
 		vbx_sp_push();
@@ -101,7 +101,7 @@ int vbw_vec_add(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2, unsigned int 
 			vbx_sp_pop();
 			return VBW_ERROR_SP_ALLOC_FAILED;
 		}
-		vbx_set_vl( vl );
+		vbx_set_vl( vl,1,1 );
 		if( overlapR1 ) {                          // we need to make a copy of v_in1 to avoid the hazard
 			vbxx( VMOV, v_temp, v_in1);
 			vbxx( VADD, v_out, v_temp, v_in2);

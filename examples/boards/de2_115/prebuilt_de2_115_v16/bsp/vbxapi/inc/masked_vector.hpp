@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,19 +39,30 @@
 #define MASKED_VECTOR_HPP
 
 #include "Vector.hpp"
+
+inline vinstr_t cmv_msk_translate(vinstr_t instr){
+	if(instr == VCMV_LEZ){return VSET_MSK_LEZ;}
+	if(instr == VCMV_GTZ){return VSET_MSK_GTZ;}
+	if(instr == VCMV_LTZ){return VSET_MSK_LTZ;}
+	if(instr == VCMV_GEZ){return VSET_MSK_GEZ;}
+	if(instr == VCMV_Z  ){return VSET_MSK_Z  ;}
+	return VSET_MSK_NZ ;
+}
+
+
 template<typename T,typename U,vinstr_t vinstr,typename btype>
 inline void Vector_mask_narrow(const VBX::_internal::bin_op<T,U,vinstr,btype,1>& msk)
 {
 
 	VBX::Vector<btype> cmp(get_length(msk));
 	cmp = msk;
-	vbx_setup_mask_masked(cmp.cmv,cmp.data);
+	vbxx_masked(cmv_msk_translate(cmp.cmv),cmp.data,cmp.data,cmp.data);
 }
 template<typename T>
 inline void Vector_mask_narrow(const VBX::Vector<T>& msk)
 {
 
-	vbx_setup_mask_masked(msk.cmv,msk.data);
+	vbxx_masked(cmv_msk_translate(msk.cmv),msk.data,msk.data,msk.data);
 }
 template<bool is_all_and>
 struct log_op_mask_narrow;
@@ -71,7 +82,7 @@ template<>struct log_op_mask_narrow<false>
 	{
 		VBX::Vector<char> cmp(get_length(msk));
 		cmp=msk;
-		vbx_setup_mask_masked(cmp.cmv,cmp.data);
+		vbxx_masked(cmv_msk_translate(cmp.cmv),cmp.data,cmp.data,cmp.data);
 	}
 };
 
@@ -94,7 +105,7 @@ inline void Vector_mask_narrow(const VBX::_internal::Logical_vop<lhs_t,rhs_t,lop
 
 template<typename T>
 inline void vector_mask_obj::constructor(const VBX::Vector<T>& msk){
-	vbx_setup_mask(msk.cmv,msk.data);
+	vbxx(cmv_msk_translate(msk.cmv),msk.data,msk.data,msk.data);
 	vector_mask_obj::nested++;
 	done_flag=false;
 }
@@ -114,7 +125,7 @@ inline vector_mask_obj::vector_mask_obj(const VBX::_internal::bin_op<T,U,vinstr,
 template<typename T>
 inline vector_mask_obj::vector_mask_obj(const VBX::Vector<T>& msk)
 {
-	vbx_set_vl(msk.size);
+	VBX::_internal::set_vl(1,msk.size,1,1);
 	constructor(msk);
 }
 
@@ -142,7 +153,5 @@ inline vector_mask_obj::~vector_mask_obj()
 {
 	nested--;
 }
-
-
 
 #endif //MASKED_VECTOR_HPP

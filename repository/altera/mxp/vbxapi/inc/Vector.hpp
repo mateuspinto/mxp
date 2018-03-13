@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,21 +40,30 @@
 #include "vbx.h"
 
 #include "fwd_declaration.hpp"
-#define INLINE inline __attribute__((always_inline))
-//#define INLINE __attribute__((noinline))
+#define VBX_INLINE inline __attribute__((always_inline))
+//#define VBX_INLINE __attribute__((noinline))
 #include "stdlib.h"
 extern "C" size_t __old_vl__;
 namespace VBX{
 #include "vinstr.hpp"
 	namespace _internal{
-		INLINE void set_vl(size_t len)
+		VBX_INLINE void set_vl(int dim,size_t len,size_t nrows,size_t nmats)
 		{
 			//WARNING, not threadsafe,
 			//also doesn't play well with vbx_set_vl()
 			size_t& vl=__old_vl__;
-			if(len!=vl){
-				vbx_set_vl((int)len);
-				vl=len;
+			assert(dim ==1 || dim == 2 || dim == 3);
+			if(dim == 1){
+				if(len!=vl){
+					vbx_set_vl((int)len,1,1);
+					vl=len;
+				}
+			}else if (dim == 2){
+				vbx_set_vl((int)len,nrows,1);
+				vl=0;
+			}else if (dim == 3){
+				vbx_set_vl((int)len,nrows,nmats);
+				vl=0;
 			}
 		}
 		template<typename T,typename U,vinstr_t instr,typename btype,int dim,acc_choice acc>
@@ -73,6 +82,25 @@ namespace VBX{
 			{
 				return cast<new_btype>();
 			}
+		};
+		template<typename T,vinstr_t instr,typename btype,int dim,acc_choice acc>
+		struct bin_op<T,vbx_word_t,instr,btype,dim,acc>{
+			const vbx_word_t rhs;
+			const T& lhs;
+			bin_op(const T& lhs,const vbx_word_t rhs)
+				:rhs(rhs),lhs(lhs){}
+			template<typename new_btype>
+			bin_op<T,vbx_word_t,instr,new_btype,dim,acc> cast() const
+			{
+				return bin_op<T,vbx_word_t,instr,new_btype,dim,acc>(lhs,rhs);
+			}
+			template<typename new_btype>
+			bin_op<T,vbx_word_t,instr,new_btype,dim,acc> cast_to_typeof(const Vector<new_btype>& v) const
+			{
+				return cast<new_btype>();
+			}
+
+
 		};
 		template<typename T,vinstr_t instr,typename btype,int dim,acc_choice acc>
 		struct bin_op<vbx_word_t,T,instr,btype,dim,acc>{
@@ -117,13 +145,13 @@ namespace VBX{
 
 
 	template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim>
-	INLINE _internal::bin_op<lhs_t,rhs_t,instr,btype,dim-1,IS_ACC>
+	VBX_INLINE _internal::bin_op<lhs_t,rhs_t,instr,btype,dim-1,IS_ACC>
 		accumulate(const _internal::bin_op<lhs_t,rhs_t,instr,btype,dim,NO_ACC>& src)
 	{
 		return _internal::bin_op<lhs_t,rhs_t,instr,btype,dim-1,IS_ACC>(src.lhs,src.rhs);
 	}
 	template<typename T,int dim>
-	INLINE _internal::bin_op<vbx_word_t,Vector<T,dim>,VOR,T,dim-1,IS_ACC>
+	VBX_INLINE _internal::bin_op<vbx_word_t,Vector<T,dim>,VOR,T,dim-1,IS_ACC>
 		accumulate(const Vector<T,dim>& v){
 		return _internal::bin_op<vbx_word_t,Vector<T,dim>,VOR,T,dim-1,IS_ACC>(0,v);
 	}
@@ -143,7 +171,7 @@ namespace VBX{
 		int increment3; //stored in bytes
 		Vector():dont_pop(true)
 		{}
-		INLINE Vector(int sz,int rows=0,int incr2=0/*elements*/,int mats=0,int incr3=0/*elements*/):
+		VBX_INLINE Vector(int sz,int rows=0,int incr2=0/*elements*/,int mats=0,int incr3=0/*elements*/):
 			dont_pop(false),size(sz),cmv(VCMV_NZ),rows(rows),increment2(incr2*sizeof(T)),
 			mats(mats),increment3(incr3*sizeof(T))
 		{
@@ -177,7 +205,7 @@ namespace VBX{
 			}
 			assert(data!=NULL);
 		}
-		INLINE Vector(T* sp_ptr,int sz,size_t rows=0,int increment2=0/*elements*/,
+		VBX_INLINE Vector(T* sp_ptr,int sz,size_t rows=0,int increment2=0/*elements*/,
 		              size_t mats=0,int increment3=0/*elements*/):
 			dont_pop(true),size(sz),cmv(VCMV_NZ),data(sp_ptr)
 		{
@@ -192,7 +220,7 @@ namespace VBX{
 			//conspicuous lack of push, because we are not allocating space on sp
 		}
 		enum clone_or_alias{CLONE,ALIAS};
-		INLINE Vector(const Vector& cp,clone_or_alias ca)
+		VBX_INLINE Vector(const Vector& cp,clone_or_alias ca)
 			:dont_pop(ca==ALIAS),size(cp.size)
 		{
 			if(dim>=2){
@@ -213,46 +241,67 @@ namespace VBX{
 			}
 
 		}
-		INLINE  Vector(const Vector& cp)
+		VBX_INLINE  Vector(const Vector& cp)
 			:dont_pop(false),size(cp.size)
 		{
-			vbx_sp_push();
-
 			if(dim>=2){
 				this->rows=cp.rows;
-				this->increment2=cp.increment2;
+				this->increment2=size*sizeof(T);
 			}
 			if(dim==3){
-				this->mats=cp.mats;
-				this->increment3=cp.increment3;
+				this->mats=mats;
+				this->increment3=size*rows*sizeof(T);
 			}
-			data=(T*)vbx_sp_malloc(sizeof(T)*size);
+			vbx_sp_push();
+			if(dim == 1){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size);
+			}else if(dim ==2){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size*rows);
+			}else if(dim ==3 ){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size*rows*mats);
+			}
 			operator=(cp);
 		}
 
 		template<typename U>
-		INLINE  Vector(const Vector<U,dim>& cp)
+		VBX_INLINE  Vector(const Vector<U,dim>& cp)
 			:dont_pop(false),size(cp.size)
 		{
 			if(dim>=2){
 				this->rows=cp.rows;
-				this->increment2=cp.increment2;
+				this->increment2=size*sizeof(T);
 			}
 			if(dim==3){
 				this->mats=mats;
-				this->increment3=cp.increment3;
+				this->increment3=size*rows*sizeof(T);
 			}
 			vbx_sp_push();
-			data=(T*)vbx_sp_malloc(sizeof(T)*size);
+			if(dim == 1){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size);
+			}else if(dim ==2){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size*rows);
+			}else if(dim ==3 ){
+				data=(T*)vbx_sp_malloc(sizeof(T)*size*rows*mats);
+			}
 			operator=(cp);
 		}
 
-		INLINE ~Vector(){
+		VBX_INLINE ~Vector(){
 			if(!this->dont_pop){
 				vbx_sp_pop();
 			}
 		}
-		INLINE Vector& operator=(const Vector& rhs)
+
+		VBX_INLINE int get_increment2() const
+		{
+			return (this->increment2)/sizeof(T);
+		}
+		VBX_INLINE int get_increment3() const
+		{
+			return (this->increment3)/sizeof(T);
+		}
+
+		VBX_INLINE Vector& operator=(const Vector& rhs)
 		{
 			if(IS_MASKED_BLOCK){
 				_internal::assignment<T,IS_MASK,dim>::assign(data,rows,increment2,mats,increment3,rhs,size);
@@ -263,7 +312,7 @@ namespace VBX{
 			return *this;
 		}
 		template<typename lhs_t,typename rhs_t,vinstr_t instr,typename btype,int dim1,acc_choice acc>
-		INLINE Vector& operator=(const _internal::bin_op<lhs_t,rhs_t,instr,btype,dim1,acc>& rhs)
+		VBX_INLINE Vector& operator=(const _internal::bin_op<lhs_t,rhs_t,instr,btype,dim1,acc>& rhs)
 		{
 			dimensions_match<dim,dim1>();
 			if(IS_MASKED_BLOCK){
@@ -275,7 +324,7 @@ namespace VBX{
 			return *this;
 		}
 		template<typename U>
-		INLINE Vector& operator=(const Vector<U,dim>& rhs)
+		VBX_INLINE Vector& operator=(const Vector<U,dim>& rhs)
 		{
 			if(IS_MASKED_BLOCK){
 				_internal::assignment<T,IS_MASK,dim>::assign(data,rows,increment2,mats,increment3,rhs,size);
@@ -285,7 +334,7 @@ namespace VBX{
 			cmv=rhs.cmv;
 			return *this;
 		}
-		INLINE Vector& operator=( vbx_word_t rhs)
+		VBX_INLINE Vector& operator=( vbx_word_t rhs)
 		{
 			if(IS_MASKED_BLOCK){
 				_internal::assignment<T,IS_MASK,dim>::assign(data,rows,increment2,mats,increment3,rhs,size);
@@ -295,7 +344,7 @@ namespace VBX{
 			cmv=VCMV_NZ;
 			return *this;
 		}
-		INLINE Vector& operator=( const enum_t& rhs)
+		VBX_INLINE Vector& operator=( const enum_t& rhs)
 		{
 			if(IS_MASKED_BLOCK){
 				_internal::assignment<T,IS_MASK,dim>::assign(data,rows,increment2,mats,increment3,rhs,size);
@@ -306,7 +355,7 @@ namespace VBX{
 			return *this;
 		}
 		template<typename lhs_t,typename rhs_t,_internal::log_op_t lop,bool negate>
-		INLINE Vector& operator=( const _internal::Logical_vop<lhs_t,rhs_t,lop,negate> lvo)
+		VBX_INLINE Vector& operator=( const _internal::Logical_vop<lhs_t,rhs_t,lop,negate> lvo)
 		{
 			T* data_ptr=data;// make copy, so it is not changed by reference
 			if(IS_MASKED_BLOCK){
@@ -318,21 +367,21 @@ namespace VBX{
 			return *this;
 		}
 		template<typename U>
-		INLINE Vector<U,dim> cast() const
+		VBX_INLINE Vector<U,dim> cast() const
 		{
 			//only do a copy if
 			if(sizeof(T)==sizeof(U)){
-				return Vector<U,dim>((U*)data,size,rows,increment2,mats,increment3);
+				return Vector<U,dim>((U*)data,size,rows,this->get_increment2(),mats,this->get_increment3());
 			}else{
 				return Vector<U,dim>(*this);
 			}
 		}
 		template<typename U,int dim1>
-		INLINE Vector<U,dim1> cast_to_typeof(const Vector<U,dim1>&) const{
+		VBX_INLINE Vector<U,dim1> cast_to_typeof(const Vector<U,dim1>&) const{
 			return cast<U,dim1>();
 		}
 		Vector<T>
-		INLINE operator[](const range_t& range) const
+		VBX_INLINE operator[](const range_t& range) const
 		{
 			dimensions_match<1,dim>();
 			return Vector<T>(this->data + range.from, /*data*/
@@ -340,23 +389,23 @@ namespace VBX{
 
 		}
 		Vector<T,2>
-		INLINE operator[](const range2D_t& range) const
+		VBX_INLINE operator[](const range2D_t& range) const
 		{
 			dimensions_match<2,dim>();
 			Vector<T,2> toret(this->data + range.rows.from*this->increment2/sizeof(T)+range.cols.from , /*data*/
 			                  range.cols.to- range.cols.from,/*columns*/
 			                  range.rows.to- range.rows.from,/*rows*/
-			                  this->increment2/sizeof(T));/*increment*/
+			                  this->get_increment2());/*increment*/
 			return toret;
 		}
 
-		INLINE accum_t<T> operator[](int index) const
+		VBX_INLINE accum_t<T> operator[](int index) const
 		{
 			return accum_t<T>(this->data+index);
 
 		}
 		template<typename if_t,typename then_t>
-		INLINE void cond_move(const if_t& v_if,const then_t& v_then)
+		VBX_INLINE void cond_move(const if_t& v_if,const then_t& v_then)
 		{
 			if(IS_MASKED_BLOCK){
 				_internal::assignment<T,IS_MASK,dim>::cond_move(data,v_if,v_then,mats,increment3,rows,increment2,size);
@@ -380,20 +429,20 @@ namespace VBX{
 			}
 		}
 		//hope for RVO for these next functions.
-		Vector<T> fs(){
-			Vector<T> to_ret(this->data,this->size);
+		Vector<T,dim> fs(){
+			Vector<T,dim> to_ret(this->data,this->size,this->rows,this->increment2/sizeof(T),this->mats,this->increment3/sizeof(T));
 			to_ret.cmv=VCMV_FS;
 			return to_ret;
 		}
-		Vector<T> fc(){
-			Vector<T> to_ret(this->data,this->size);
+		Vector<T,dim> fc(){
+			Vector<T,dim> to_ret(this->data,this->size,this->rows,this->increment2/sizeof(T),this->mats,this->increment3/sizeof(T));
 			to_ret.cmv=VCMV_FC;
 			return to_ret;
 		}
-		Vector<T> overflow(){
+		Vector<T,dim> overflow(){
 			return fs();
 		}
-		Vector<T> carry(){
+		Vector<T,dim> carry(){
 			return fs();
 		}
 
@@ -421,6 +470,11 @@ namespace VBX{
 				}
 			}
 		}
+#define PRINT_VEC(vname) do{\
+		printf("%s:%d  %s\n",__FILE__,__LINE__,#vname); \
+		((vname)).printVec(); \
+	}while(0)
+
 		Vector<T,1> to1D(int vl) const {
 			return Vector<T,1>(data,vl);
 		}
@@ -472,5 +526,5 @@ namespace VBX{
 #include "operators.hpp"
 }//namesapce VBX
 #include "masked_vector.hpp"
-#undef INLINE
+#undef VBX_INLINE
 #endif //__VECTOR_HPP__

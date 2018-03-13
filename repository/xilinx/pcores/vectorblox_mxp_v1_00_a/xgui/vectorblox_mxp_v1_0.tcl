@@ -24,8 +24,6 @@ proc init_gui { IPINST } {
 
     set C_INSTR_PORT_TYPE [ipgui::add_param $IPINST -parent $Page0 -name C_INSTR_PORT_TYPE -widget comboBox]
 
-    set MASK_PARTITIONS [ipgui::add_param $IPINST -parent $Page0 -name MASK_PARTITIONS -widget comboBox]
-
     set MAX_MASKED_WAVES [ipgui::add_param $IPINST -parent $Page0 -name MAX_MASKED_WAVES -widget comboBox]
 
     set tabgroup0 [ipgui::add_group $IPINST -parent $Page0 -name {Fixed-Point Multiply Format} -layout vertical]
@@ -115,10 +113,6 @@ proc init_gui { IPINST } {
         "Type of bus interface to use for the MXP intruction port."] \
         $C_INSTR_PORT_TYPE
 
-    set_property tooltip [concat \
-        "Changes the granularity of masked instructions. Currently only 1
-        (enabled) and 0 (disabled) supported."] \
-        $MASK_PARTITIONS
     set_property tooltip [concat \
         "Enable fixed-point support (VMULFXP, VADDFXP, VSUBFXP). Currently only 1
         (enabled) and 0 (disabled) supported."] \
@@ -442,7 +436,7 @@ for {set vci 0} {$vci < 16} {incr vci} {
 	    set vector_lanes [get_property value ${PARAM_VALUE.VECTOR_LANES}]
 	    if {$vci_<<VCI>>_lanes > $vector_lanes} {
 		return false;
-	    } 
+	    }
 	    return true
 	}
 	proc update_PARAM_VALUE.VCI_<<VCI>>_OPCODE_START { PARAM_VALUE.VCI_<<VCI>>_OPCODE_START PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS } {
@@ -459,7 +453,7 @@ for {set vci 0} {$vci < 16} {incr vci} {
 	    set opcode_end [expr $opcode_start + $functions - 1]
 	    if {$opcode_end > 15} {
 		return false;
-	    } 
+	    }
 	    return true
 	}
 	proc update_PARAM_VALUE.VCI_<<VCI>>_FUNCTIONS { PARAM_VALUE.VCI_<<VCI>>_FUNCTIONS PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS IPINST } {
@@ -476,7 +470,7 @@ for {set vci 0} {$vci < 16} {incr vci} {
 	    set opcode_end [expr $opcode_start + $functions - 1]
 	    if {$opcode_end > 15} {
 		return false;
-	    } 
+	    }
 	    return true
 	}
 	proc update_PARAM_VALUE.VCI_<<VCI>>_OPCODE_END { PARAM_VALUE.VCI_<<VCI>>_OPCODE_END PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS PARAM_VALUE.VCI_<<VCI>>_OPCODE_START PARAM_VALUE.VCI_<<VCI>>_FUNCTIONS } {
@@ -589,9 +583,6 @@ proc update_MODELPARAM_VALUE.C_INSTR_PORT_TYPE { MODELPARAM_VALUE.C_INSTR_PORT_T
         ${MODELPARAM_VALUE.C_INSTR_PORT_TYPE}
 }
 
-proc update_MODELPARAM_VALUE.MASK_PARTITIONS { MODELPARAM_VALUE.MASK_PARTITIONS PARAM_VALUE.MASK_PARTITIONS } {
-    set_property value [get_property value ${PARAM_VALUE.MASK_PARTITIONS}] ${MODELPARAM_VALUE.MASK_PARTITIONS}
-}
 
 proc update_MODELPARAM_VALUE.FIXED_POINT_SUPPORT { MODELPARAM_VALUE.FIXED_POINT_SUPPORT PARAM_VALUE.FIXED_POINT_SUPPORT } {
     set_property value [get_property value ${PARAM_VALUE.FIXED_POINT_SUPPORT}] ${MODELPARAM_VALUE.FIXED_POINT_SUPPORT}

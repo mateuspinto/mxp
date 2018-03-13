@@ -8,3 +8,5 @@ endif
 ifeq ($(CROSS_COMPILE),arm-altera-eabi-)
 C_SRCS += vectorblox_mxp_hps.c
 endif
+
+C_SRCS += $(VBXAPI_EXTRA_C_SRCS)

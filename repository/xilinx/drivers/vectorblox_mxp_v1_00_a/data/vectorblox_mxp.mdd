@@ -1,0 +1,16 @@
+###########################################################################
+#
+# Copyright (C) 2012-2018 VectorBlox Computing, Inc.
+#
+###########################################################################
+
+OPTION psf_version = 2.1;
+
+BEGIN DRIVER vectorblox_mxp
+  OPTION supported_peripherals = (vectorblox_mxp_v1_00_a vectorblox_mxp_v1_0 vectorblox_mxp_v[a-z0-9_]*_v1_00_a);
+  OPTION driver_state = ACTIVE;
+  OPTION copyfiles = all;
+  OPTION VERSION = 1.0;
+#  OPTION depends = (common_v1_00_a);
+  OPTION NAME = vectorblox_mxp;
+END DRIVER

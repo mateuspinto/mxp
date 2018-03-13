@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (C) 2012-2017 VectorBlox Computing, Inc.
+# Copyright (C) 2012-2018 VectorBlox Computing, Inc.
 #
 ###########################################################################
 
@@ -58,8 +58,7 @@ PARAMETER SCRATCHPAD_KB = 64, DT = INTEGER, RANGE = (4,8,16,32,64,128,256,512,10
 # Note: for connection to Zynq PS ACP, want to restrict to max of 4.
 PARAMETER BEATS_PER_BURST = 16, DT = INTEGER, RANGE = (1,2,4,8,16,32,64,128,256), ASSIGNMENT = OPTIONAL, TYPE = NON_HDL
 
-PARAMETER MAX_MASKED_WAVES = 128, DT = INTEGER, RANGE = (128,256,512,1024), ASSIGNMENT = OPTIONAL
-PARAMETER MASK_PARTITIONS = 1, DT = INTEGER, RANGE = (0,1), ASSIGNMENT = OPTIONAL
+PARAMETER MAX_MASKED_WAVES = 128, DT = INTEGER, RANGE = (0,128,256,512,1024), ASSIGNMENT = OPTIONAL
 PARAMETER FIXED_POINT_SUPPORT = 1, DT = INTEGER, RANGE = (0,1), ASSIGNMENT = OPTIONAL
 
 # Derived parameter set to BEATS_PER_BURST*(C_M_AXI_DATA_WIDTH/8).

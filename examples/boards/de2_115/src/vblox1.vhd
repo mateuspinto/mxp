@@ -103,7 +103,6 @@ architecture rtl of fpga is
 
       altpll_0_locked_conduit_export    : out std_logic;
       altpll_0_areset_conduit_export    : in  std_logic;
-      altpll_0_phasedone_conduit_export : out std_logic;
 
       zs_addr_from_the_sdram      : out   std_logic_vector(12 downto 0);
       zs_ba_from_the_sdram        : out   std_logic_vector(1 downto 0);
@@ -168,7 +167,6 @@ begin
 
       altpll_0_locked_conduit_export    => open,
       altpll_0_areset_conduit_export    => '0',
-      altpll_0_phasedone_conduit_export => open,
 
       -- SDRAM
       zs_addr_from_the_sdram      => DRAM_ADDR,

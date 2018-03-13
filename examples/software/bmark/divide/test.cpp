@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,7 +71,7 @@ int exhaustive_test(){
 	test_t* dividend=(test_t*)vbx_sp_malloc  (256*sizeof(test_t));
 	test_t* divisor =(test_t*)vbx_sp_malloc  (256*sizeof(test_t));
 	test_t* scalar_quotient = (test_t*)malloc(256*sizeof(test_t));
-	vbx_set_vl(256);
+	vbx_set_vl(256,1,1);
 	const int limit = (sizeof(test_t)==1) ? 127 : (sizeof(test_t)==2 ? 32767 : (1<<24)-1/*16M*/ );
 	for( int k=1; k<=1+limit/256; k++ ) {
 		vbxx( VMUL, dividend, k, (vbx_enum_t*)0 );
@@ -97,7 +97,7 @@ int main(){
 	test_t* dividend=(test_t*)vbx_sp_malloc(SHORT_TEST_LEN*sizeof(test_t));
 	test_t* divisor =(test_t*)vbx_sp_malloc(SHORT_TEST_LEN*sizeof(test_t));
 	test_t* scalar_quotient = (test_t*)malloc(SHORT_TEST_LEN*sizeof(test_t));
-	vbx_set_vl(SHORT_TEST_LEN);
+	vbx_set_vl(SHORT_TEST_LEN,1,1);
 	vbxx(VMUL,dividend,1,(vbx_enum_t*)0);
 	vbxx(VADD,dividend,120,dividend );
 	vbxx(VMOV,divisor,DIVISOR);
@@ -117,7 +117,9 @@ int main(){
 
 	errors+=verify_array( scalar_quotient,quotient,SHORT_TEST_LEN);
 	vbx_sp_pop();
-	errors+=exhaustive_test();
+	if(!errors){
+		errors+=exhaustive_test();
+	}
 	//vbxsim_print_stats_extended();
 	VBX_TEST_END(errors);
 

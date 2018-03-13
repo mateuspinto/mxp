@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,14 +45,18 @@
 void vbx_sync(){
 	_vbx_sync();
 }
-void vbx_set_vl( int LENGTH )
+extern size_t __old_vl__;
+void vbx_set_vl( int nelems, int nrows, int nmats )
 {
-	VBX_SET_VL( MOD_NONE, LENGTH, LENGTH );
+	VBX_SET_VL( MOD_NONE, nelems, nrows, nmats );
 }
 
-void vbx_get_vl( int *LENGTH )
+void vbx_get_vl( int *nelems ,int *nrows, int* nmats)
 {
-	VBX_GET( GET_VL, *LENGTH );
+
+	VBX_GET( GET_VL, *nelems );
+	VBX_GET( GET_ROWS, *nrows );
+	VBX_GET( GET_MATS, *nmats );
 }
 
 void vbx_get_mask_status( int *MASK_STATUS )
@@ -60,29 +64,25 @@ void vbx_get_mask_status( int *MASK_STATUS )
 	VBX_GET_MASK( *MASK_STATUS );
 }
 
-void vbx_set_2D( int ROWS, int ID, int IA, int IB )
+void vbx_set_2D(int ID, int IA, int IB )
 {
-	VBX_SET_VL( MOD_2D,     ROWS, ID );
-	VBX_SET_VL( MOD_ACC_2D, IA,   IB );
+	VBX_SET_VL( MOD_2D, IA, IB, ID );
 }
 
-void vbx_set_3D( int MATS, int ID3D, int IA3D, int IB3D )
+void vbx_set_3D(int ID3D, int IA3D, int IB3D )
 {
-	VBX_SET_VL3D( MOD_2D,     MATS, ID3D );
-	VBX_SET_VL3D( MOD_ACC_2D, IA3D, IB3D );
+	VBX_SET_VL( MOD_3D, IA3D, IB3D, ID3D );
 }
 
-void vbx_get_2D( int *ROWS, int *ID, int *IA, int *IB )
+void vbx_get_2D(int *ID, int *IA, int *IB )
 {
-	VBX_GET( GET_ROWS, *ROWS );
 	VBX_GET( GET_ID,   *ID );
 	VBX_GET( GET_IA,   *IA );
 	VBX_GET( GET_IB,   *IB );
 }
 
-void vbx_get_3D( int *MATS, int *ID3D, int *IA3D, int *IB3D )
+void vbx_get_3D(int *ID3D, int *IA3D, int *IB3D )
 {
-	VBX_GET( GET_MATS, *MATS );
 	VBX_GET( GET_ID3D, *ID3D );
 	VBX_GET( GET_IA3D, *IA3D );
 	VBX_GET( GET_IB3D, *IB3D );

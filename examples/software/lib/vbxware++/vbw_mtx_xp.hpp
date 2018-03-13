@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,9 @@ namespace vbw{
 		vbx_set_vl( 1 );
 		vbx_set_2D(  INCOLS, INROWS*sizeof(T),       sizeof(T), 0 );
 		vbx_set_3D( INROWS,        sizeof(T), INCOLS*sizeof(T), 0 );
-		vbxx_3D( VMOV, v_dst.data, v_src.data);
+		vbxx( VMOV, v_dst.data, v_src.data);
+		vbx_set_2D(1,0,0,0);
+		vbx_set_3D(1,0,0,0);
 
 		return VBW_SUCCESS;
 	}

@@ -29,6 +29,9 @@ ELFCHECK := $(ELF).elfcheck
 # All Target
 all: libs $(ELF) secondary-outputs
 
+$(BSP_ROOT_DIR)/bsp_vars.mk::
+	$(MAKE) -C $(PROJ_ROOT) $(BSP_NAME)
+
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(C_DEPS)),)
 -include $(C_DEPS)

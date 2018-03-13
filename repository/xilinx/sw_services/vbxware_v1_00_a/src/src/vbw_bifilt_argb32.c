@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,21 +54,21 @@ static void vbw_rgb2luma(vbx_uhalf_t *v_luma, vbx_uword_t *v_row_in, vbx_uhalf_t
 	vbx_set_vl(image_width);
 
 	// Move weighted B into v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   v_row_in);
+	vbx(SVHWU, VAND, v_temp, 0xFF,   v_row_in);
 	vbx(SVHU,  VMUL, v_luma, 25,     v_temp);
 
 	// Move weighted G into v_temp and add it to v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
+	vbx(SVHWU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
 	vbx(SVHU,  VMUL, v_temp, 129,    v_temp);
 	vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 
 	// Move weighted R into v_temp and add it to v_luma
-	vbx(SVWHU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
+	vbx(SVHWU, VAND, v_temp, 0xFF,   (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
 	vbx(SVHU,  VMUL, v_temp, 66,     v_temp);
 	vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 
 	vbx(SVHU,  VADD, v_luma, 128,    v_luma); // for rounding
-//	vbx(SVHU,  VSHR, v_luma, 8,      v_luma);
+	//	vbx(SVHU,  VSHR, v_luma, 8,      v_luma);
 }
 
 
@@ -99,19 +99,19 @@ static int gauss_factors[NUM_GAUSS] = { 93, 154, 255 };
 #if W==3
 
 static int gauss[3][3] = {
-	#if 1
-		{  93, 154,  93 },
-		{ 154, 255, 154 },
-		{  93, 154,  93 }
-	#elif 0
-		{ 255, 255, 255 },
-		{ 255, 255, 255 },
-		{ 255, 255, 255 }
-	#else
-		{  64, 128,  64 },
-		{ 128, 255, 128 },
-		{  64, 128,  64 }
-	#endif
+#if 1
+	{  93, 154,  93 },
+	{ 154, 255, 154 },
+	{  93, 154,  93 }
+#elif 0
+	{ 255, 255, 255 },
+	{ 255, 255, 255 },
+	{ 255, 255, 255 }
+#else
+	{  64, 128,  64 },
+	{ 128, 255, 128 },
+	{  64, 128,  64 }
+#endif
 };
 //static int gauss_factors[3] = { 64, 128, 255 };
 
@@ -136,7 +136,7 @@ static int gauss[5][5] = {
 int vbw_bifilt_argb32_3x3(unsigned *output, unsigned *input, short image_width, const short image_height, const short image_pitch, const short renorm)
 {
 
-//return vbw_sobel_argb32_3x3( output, input, image_width, image_height, image_pitch, renorm);
+	//return vbw_sobel_argb32_3x3( output, input, image_width, image_height, image_pitch, renorm);
 
 	int y;
 	int xx, yy, sharp;
@@ -211,22 +211,22 @@ int vbw_bifilt_argb32_3x3(unsigned *output, unsigned *input, short image_width, 
 	rp_fetch(&v_row_db);
 	v_row_in = rp_get_buffer(&v_row_db,0);
 	vbw_rgb2luma(vW, v_row_in, vT, image_width);                                // 1st luma row
-	vbx( SVHBU, VSHR, v_luma_top, 8, vW );                                     // convert to byte
+	vbx( SVBHU, VSHR, v_luma_top, 8, vW );                                     // convert to byte
 
 	rp_fetch(&v_row_db);
 	v_row_in = rp_get_buffer(&v_row_db,0);
 	vbw_rgb2luma( vW, v_row_in, vT, image_width);                               // 2nd luma row
-	vbx( SVHBU, VSHR, v_luma_hii, 8,  vW );                                    // convert to byte
+	vbx( SVBHU, VSHR, v_luma_hii, 8,  vW );                                    // convert to byte
 
 	rp_fetch(&v_row_db);
 	v_row_in = rp_get_buffer(&v_row_db,0);
 	vbw_rgb2luma( vW, v_row_in, vT, image_width);                               // 2nd luma row
-	vbx( SVHBU, VSHR, v_luma_mid, 8,  vW );                                    // convert to byte
+	vbx( SVBHU, VSHR, v_luma_mid, 8,  vW );                                    // convert to byte
 
 	rp_fetch(&v_row_db);
 	v_row_in = rp_get_buffer(&v_row_db,0);
 	vbw_rgb2luma( vW, v_row_in, vT, image_width);                               // 2nd luma row
-	vbx( SVHBU, VSHR, v_luma_low, 8,  vW );                                    // convert to byte
+	vbx( SVBHU, VSHR, v_luma_low, 8,  vW );                                    // convert to byte
 #endif
 
 
@@ -255,9 +255,9 @@ int vbw_bifilt_argb32_3x3(unsigned *output, unsigned *input, short image_width, 
 		v_row_in = rp_get_buffer(&v_row_db,0);
 		// Convert aRGB input to luma
 		vbw_rgb2luma( vW, v_row_in, vT, image_width);
-		vbx( SVHBU, VSHR, v_luma_bot, 8,  vW );                                     // convert to byte
+		vbx( SVBHU, VSHR, v_luma_bot, 8,  vW );                                     // convert to byte
 
-vbx_sp_push();
+		vbx_sp_push();
 		image_width=image_width/2;
 		vbx_set_vl(image_width);
 
@@ -271,7 +271,7 @@ vbx_sp_push();
 		v[2][1] = v21   = v00 +  7 * image_width*sizeof(vbx_ubyte_t) ;
 		v[2][2] = v22   = v00 +  8 * image_width*sizeof(vbx_ubyte_t) ;
 
-	#if W==5
+#if W==5
 		v[0][3] = v03   = v00 +  9 * image_width*sizeof(vbx_ubyte_t) ;
 		v[0][4] = v04   = v00 + 10 * image_width*sizeof(vbx_ubyte_t) ;
 		v[1][3] = v13   = v00 + 11 * image_width*sizeof(vbx_ubyte_t) ;
@@ -290,17 +290,17 @@ vbx_sp_push();
 		v[4][2] = v42   = v00 + 22 * image_width*sizeof(vbx_ubyte_t) ;
 		v[4][3] = v43   = v00 + 23 * image_width*sizeof(vbx_ubyte_t) ;
 		v[4][4] = v44   = v00 + 24 * image_width*sizeof(vbx_ubyte_t) ;
-	#endif
+#endif
 
 		if(v00==NULL){
-printf("mem alloc failed\n"); fflush(stdout);
+			printf("mem alloc failed\n"); fflush(stdout);
 			vbx_sp_pop();
 			vbx_sp_pop();
 			return VBW_ERROR_SP_ALLOC_FAILED;
 		}
 
 
-//FIXME -- how to manage row buffers with 5 rows?  3 rows are shown below:
+		//FIXME -- how to manage row buffers with 5 rows?  3 rows are shown below:
 #if W==3
 		for( xx=0; xx<W; xx++ ) v_src[0][xx] = v_luma_top+xx;
 		for( xx=0; xx<W; xx++ ) v_src[1][xx] = v_luma_mid+xx;
@@ -346,33 +346,33 @@ printf("mem alloc failed\n"); fflush(stdout);
 		}
 
 		// sum up the weights for normalization later
-		vbx( VVBHU, VADD, vW, v[0][0], v[0][1] );
-		vbx( VVBHU, VADD, vT, v[0][2], v[1][0] );
+		vbx( VVHBU, VADD, vW, v[0][0], v[0][1] );
+		vbx( VVHBU, VADD, vT, v[0][2], v[1][0] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VADD, vT, v[1][1], v[1][2] );
+		vbx( VVHBU, VADD, vT, v[1][1], v[1][2] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VADD, vT, v[2][0], v[2][1] );
+		vbx( VVHBU, VADD, vT, v[2][0], v[2][1] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[2][2], 0 );
+		vbx( VVHBU, VMOV, vT, v[2][2], 0 );
 		vbx( VVHU,  VADD, vW, vW, vT );
-	#if (W==5)
-		vbx( VVBHU, VADD, vT, v[3][0], v[3][1] );
+#if (W==5)
+		vbx( VVHBU, VADD, vT, v[3][0], v[3][1] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VADD, vT, v[3][2], v[4][0] );
+		vbx( VVHBU, VADD, vT, v[3][2], v[4][0] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VADD, vT, v[4][1], v[4][2] );
+		vbx( VVHBU, VADD, vT, v[4][1], v[4][2] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[0][3], v[0][4] );
+		vbx( VVHBU, VMOV, vT, v[0][3], v[0][4] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[1][3], v[1][4] );
+		vbx( VVHBU, VMOV, vT, v[1][3], v[1][4] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[2][3], v[2][4] );
+		vbx( VVHBU, VMOV, vT, v[2][3], v[2][4] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[3][3], v[3][4] );
+		vbx( VVHBU, VMOV, vT, v[3][3], v[3][4] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-		vbx( VVBHU, VMOV, vT, v[4][3], v[4][4] );
+		vbx( VVHBU, VMOV, vT, v[4][3], v[4][4] );
 		vbx( VVHU,  VADD, vW, vW, vT );
-	#endif
+#endif
 
 
 		// convolve image with new weights
@@ -387,44 +387,44 @@ printf("mem alloc failed\n"); fflush(stdout);
 
 
 		// sum up the weighted pixels
-		vbx( VVBHU, VADD, vI, v[0][0], v[0][1] );
-		vbx( VVBHU, VADD, vT, v[0][2], v[1][0] );
+		vbx( VVHBU, VADD, vI, v[0][0], v[0][1] );
+		vbx( VVHBU, VADD, vT, v[0][2], v[1][0] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VADD, vT, v[1][1], v[1][2] );
+		vbx( VVHBU, VADD, vT, v[1][1], v[1][2] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VADD, vT, v[2][0], v[2][1] );
+		vbx( VVHBU, VADD, vT, v[2][0], v[2][1] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[2][2], 0 );
+		vbx( VVHBU, VMOV, vT, v[2][2], 0 );
 		vbx( VVHU,  VADD, vI, vI, vT );
 
-	#if (W==5)
-		vbx( VVBHU, VADD, vT, v[3][0], v[3][1] );
+#if (W==5)
+		vbx( VVHBU, VADD, vT, v[3][0], v[3][1] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VADD, vT, v[3][2], v[4][0] );
+		vbx( VVHBU, VADD, vT, v[3][2], v[4][0] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VADD, vT, v[4][1], v[4][2] );
+		vbx( VVHBU, VADD, vT, v[4][1], v[4][2] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[0][3], v[0][4] );
+		vbx( VVHBU, VMOV, vT, v[0][3], v[0][4] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[1][3], v[1][4] );
+		vbx( VVHBU, VMOV, vT, v[1][3], v[1][4] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[2][3], v[2][4] );
+		vbx( VVHBU, VMOV, vT, v[2][3], v[2][4] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[3][3], v[3][4] );
+		vbx( VVHBU, VMOV, vT, v[3][3], v[3][4] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-		vbx( VVBHU, VMOV, vT, v[4][3], v[4][4] );
+		vbx( VVHBU, VMOV, vT, v[4][3], v[4][4] );
 		vbx( VVHU,  VADD, vI, vI, vT );
-	#endif
+#endif
 
 
-// keep RHS of image as original grayscale
-image_width=image_width*2;
-vbx_set_vl( image_width/2 );
-//vbx( VVWHU, VMOV, vT+image_width/2, (v_row_in       ) + image_width/2+1, 0 );
-vbx( VVBHU, VMOV, vT+image_width/2, (v_src[ 0 ][ 0 ]) + image_width/2+1, 0 );
-vbx_sp_pop(); // don't need v[][] data any more
+		// keep RHS of image as original grayscale
+		image_width=image_width*2;
+		vbx_set_vl( image_width/2 );
+		//vbx( VVWHU, VMOV, vT+image_width/2, (v_row_in       ) + image_width/2+1, 0 );
+		vbx( VVHBU, VMOV, vT+image_width/2, (v_src[ 0 ][ 0 ]) + image_width/2+1, 0 );
+		vbx_sp_pop(); // don't need v[][] data any more
 
-// compute LHS of image
+		// compute LHS of image
 #if 0
 		vbx( VVBHU, VMOV, vT, v_src[2][2], 0 );
 		//vbx( SVHU, VSHR, vI,  3, vI );
@@ -445,7 +445,7 @@ vbx_sp_pop(); // don't need v[][] data any more
 		// Trick to copy the low byte (b) to the middle two bytes as well
 		// Note that first and last columns are 0
 		vbx_set_vl(image_width-W+1);
-		vbx(SVHWU, VMULLO, v_row_out+W/2, 0x00010101, vT);
+		vbx(SVWWHU, VMULLO, v_row_out+W/2, 0x00010101, vT);
 
 		// blank out left and right edges
 		// then DMA the result to the output

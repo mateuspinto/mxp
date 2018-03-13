@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,7 @@ void vbw_mtx_2Dfir(vbx_mm_t *output, vbx_mm_t *input, int32_t *coeffs, const int
 	local_word_t *accum_int = (local_word_t *)vbx_sp_malloc( num_column*sizeof(vbx_word_t) );
 	local_word_t *mult_int  = (local_word_t *)vbx_sp_malloc( num_column*sizeof(vbx_word_t) );
 
-	vbx_set_vl(num_column);
+	vbx_set_vl(num_column,1,1);
 	for( j = 0; j < ntaps_row; j++ ) {
 		vbx_dma_to_vector( sample+(j*num_column), input+j*num_column, num_column*sizeof(vbx_sp_t) );
 	}
@@ -92,7 +92,7 @@ void vbw_mtx_2Dfir(vbx_mm_t *output, vbx_mm_t *input, int32_t *coeffs, const int
 		}
 
 		//vbx( VV(IT), VMOV, accum, ((vbx_sp_t *)accum_int)+1, 0);
-		vbxx(VSHR, accum, 8, accum_int);
+		vbxx(VSHR, accum, accum_int, 8);
 
 		vbx_dma_to_host( output+l*num_column, accum, (num_column-ntaps_column)*sizeof(vbx_sp_t) );
 		if(l+1 < num_row-ntaps_row){

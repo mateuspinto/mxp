@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -121,7 +121,6 @@ typedef struct {
 	short       vcustom14_lanes; ///<Num of lanes on VCUSTOM14
 	short       vcustom15_lanes; ///<Num of lanes on VCUSTOM15
 	int         max_masked_vector_length; ///<Maximum masked vector length
-	short       mask_partitions; ///<Partitioning/granularity of masked instructions
 	char        vector_custom_instructions; //Number of VCIs hooked up
 	char        fixed_point_support; ///Fixed-point instructions supported
 	char        fxp_word_frac_bits; ///< Num of fractional bit used with @ref vbx_word_t or @ref vbx_uword_t data types
@@ -165,12 +164,13 @@ enum {
 	VMUL,  ///< Multiplies the two src operands, saves lower result to dst
 	VMULLO=VMUL, ///< Multiplies the two src operands, saves lower result to dst
 	VMULHI, ///< Multiplies the two src operands, saves upper result to dst
+	VMULH=VMULHI, ///< Multiplies the two src operands, saves upper result to dst
 	VMULFXP,///< Fix-point multiply, where the number of fractional bits is set at compile time
 	VSUBFXP,  ///< Saturating subtracts the two src operands, borrow flag generated
 	VSHL,  ///< Shifts src operand to left by given amount
 	VSHR,  ///< Shifts src operand to right by given amount
-	VROTL, ///< Rotates src operand to left by given amount
-	VROTR, ///< Rotates src operand to right by given amount
+	VSLT, ///< Sets dest to 1 if srcA is < srcB, els sets dest to 0
+	VSGT, ///< Sets dest to 1 if srcA is > srcB, els sets dest to 0
 	VCMV_LEZ, ///< Moves src operand to dst if <= 0
 	VCMV_GTZ, ///< Moves src operand to dst if >  0
 	VCMV_LTZ, ///< Moves src operand to dst if < 0
@@ -181,6 +181,14 @@ enum {
 	VCMV_NZ, ///< Moves src operand to dst if != 0
 	VADDFXP,  ///< Saturating adds the two src operands, carry flag generated
 	VABSDIFF, ///< Calculates the absolute difference between the two src operands
+	VSET_MSK_LEZ, // N | Z
+	VSET_MSK_GTZ, // ~N & ~Z
+	VSET_MSK_LTZ, // N
+	VSET_MSK_FS=VSET_MSK_LTZ,
+	VSET_MSK_GEZ, // ~N
+	VSET_MSK_FC=VSET_MSK_GEZ,
+	VSET_MSK_Z,   // Z
+	VSET_MSK_NZ,  // ~Z
 	VCUSTOM0, ///<
 	VCUSTOM=VCUSTOM0, ///<
 	VCUSTOM1, ///<

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,7 +77,7 @@ inline int vbw_vec_copy( vbx_sp_t *v_dst, vbx_sp_t *v_src, const int N)
 
 	if( !overlap ) {
 		// straight-forward copy, no hazards
-		vbx_set_vl( N );
+		vbx_set_vl( N,1,1 );
 		vbxx(VMOV, v_dst, v_src);
 
 	} else {
@@ -86,12 +86,12 @@ inline int vbw_vec_copy( vbx_sp_t *v_dst, vbx_sp_t *v_src, const int N)
 		// move W words at a time.
 		int width = sizeof(vbx_word_t)/sizeof(vbx_sp_t)*this_mxp->vector_lanes; // VBX_WIDTH_BYTES;
 		int nrows = N / width;
-		vbx_set_vl( width );
-		vbx_set_2D( nrows, -width*sizeof(vbx_sp_t), -width*sizeof(vbx_sp_t), 0 );
-		vbxx_2D( VMOV, v_dst+N-width, v_src+N-width);
+		vbx_set_vl( width,nrows,1 );
+		vbx_set_2D( -width*sizeof(vbx_sp_t), -width*sizeof(vbx_sp_t), 0 );
+		vbxx( VMOV, v_dst+N-width, v_src+N-width);
 		// the 2D move copies a rectangle width * nrows.
 		// copy any last residual amount at the head.
-		vbx_set_vl( N - nrows*width );
+		vbx_set_vl( N - nrows*width ,1,1);
 		vbxx(VMOV, v_dst, v_src);
 	}
 	return VBW_SUCCESS;
