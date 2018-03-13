@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@ static inline void vec_fir_transpose_helper(vbx_sp_t* v_out,vbx_sp_t* v_in,vbx_s
 	//coeff:               1  2  3  4
 	//
 	//      a1b2c3d4 b1c2d3e4 ...
-	vbx_set_vl(sample_size-num_taps);
+	vbx_set_vl(sample_size-num_taps,1,1);
 	vbxx( VMUL, v_out, coeffs[0], v_in);
 	for(int j=1;j<num_taps;j++){
 		vbxx( VMUL, v_mul, coeffs[j], v_in+j);
@@ -64,9 +64,9 @@ static inline void vec_fir_transpose_helper(vbx_sp_t* v_out,vbx_sp_t* v_in,vbx_s
 template<typename vbx_sp_t>
 static inline void vec_fir_helper(vbx_sp_t* v_out,vbx_sp_t* v_in,vbx_sp_t* v_coeffs,int sample_size,int num_taps)
 {
-	vbx_set_vl(num_taps);
-	vbx_set_2D(sample_size, sizeof(vbx_sp_t), 0, sizeof(vbx_sp_t));
-	vbxx_acc_2D( VMUL, v_out, v_coeffs, v_in);
+	vbx_set_vl(num_taps,sample_size,1);
+	vbx_set_2D(sizeof(vbx_sp_t), 0, sizeof(vbx_sp_t));
+	vbxx_acc( VMUL, v_out, v_coeffs, v_in);
 }
 
 template<typename vbx_sp_t>

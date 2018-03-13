@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,8 +43,7 @@
 #define __VBX_LIB_SIM_H
 void VBX_SET( uint32_t reg, uint32_t value );
 
-void VBX_SET_VL( uint32_t mode, uint32_t new_vl1, uint32_t new_vl2 );
-void VBX_SET_VL3D( uint32_t mode, uint32_t new_vl1, uint32_t new_vl2 );
+void VBX_SET_VL( uint32_t mode, uint32_t new_vl1, uint32_t new_vl2, uint32_t new_vl3 );
 uint32_t _VBX_GET1( uint32_t reg );
 inline static void _vbx_sync ()
 {

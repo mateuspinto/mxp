@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -85,7 +85,6 @@ template<typename vbx_sp_t>
 inline int vbw_mtx_mul( vbx_sp_t *v_out, vbx_sp_t *v_in1, const int rows1, const int cols1, vbx_sp_t *v_in2, const int rows2, const int cols2 )
 {
 	// TODO check for overlapping.
-
 	const int OUTROWS = rows1;
 	const int OUTCOLS = cols2;
 
@@ -97,10 +96,10 @@ inline int vbw_mtx_mul( vbx_sp_t *v_out, vbx_sp_t *v_in1, const int rows1, const
 		return  VBW_ERROR_SP_ALLOC_FAILED;
 	}
 	vbw_mtx_xp(v_in2_trans, v_in2, rows2, cols2);
-	vbx_set_vl(cols1);
-	vbx_set_2D(cols2, sizeof(vbx_sp_t), 0, cols2*sizeof(vbx_sp_t));
-	vbx_set_3D(OUTROWS, OUTCOLS*sizeof(vbx_sp_t), cols1*sizeof(vbx_sp_t), 0);
-	vbxx_acc_3D(VMUL,v_out,v_in1,v_in2_trans);
+	vbx_set_vl(cols1,cols2,OUTROWS);
+	vbx_set_2D( sizeof(vbx_sp_t), 0, cols2*sizeof(vbx_sp_t));
+	vbx_set_3D(OUTCOLS*sizeof(vbx_sp_t), cols1*sizeof(vbx_sp_t), 0);
+	vbxx_acc(VMUL,v_out,v_in1,v_in2_trans);
 	vbx_sp_pop();
 	return VBW_SUCCESS;
 }
@@ -176,19 +175,19 @@ int vbw_mtx_mm_trans_ext( vbx_mm_t *out, vbx_mm_t *in1,  int rows1, int cols1, v
 	                                                in2_trans,in2_trans+cols2*rows2,
 	                                                rows_of_2*rows2*sizeof(vbx_sp_t));
 
-	vbx_set_vl(cols1);
+	vbx_set_vl(cols1,rows_of_2,1);
 	for(int row=0;row<rows1;row++){
 		//read in next row of in1
 		vbx_dma_to_vector(v_row1,in1+cols1*row,sizeof(vbx_sp_t)*cols1);
 
 		//read in first bunch of rows from in2
 		rp_fetch(&rowsb);
-		vbx_set_2D(rows_of_2,sizeof(vbx_sp_t),0,cols2*sizeof(vbx_sp_t));
+		vbx_set_2D(sizeof(vbx_sp_t),0,cols2*sizeof(vbx_sp_t));
 
 		for(int out_index=0;out_index<rows2;out_index+=rows_of_2){
 			rp_fetch(&rowsb);
 			vbx_sp_t* v_row2=(vbx_sp_t*)rp_get_buffer(&rowsb,0);
-			vbxx_acc_2D(VMUL,v_out+out_index,v_row1,v_row2);
+			vbxx_acc(VMUL,v_out+out_index,v_row1,v_row2);
 		}
 		vbx_dma_to_host(out+row*outcols,v_out,outcols*sizeof(vbx_mm_t));
 	}

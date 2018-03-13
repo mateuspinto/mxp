@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,7 @@ int vbw_rgb2luma16(unsigned short *luma, unsigned *rgb, const short image_width,
 
 	int vector_bytes = image_width*sizeof(vbx_uword_t);
 
-	vbx_set_vl(image_width);
+	vbx_set_vl(image_width,1,1);
 
 
 
@@ -90,16 +90,16 @@ int vbw_rgb2luma16(unsigned short *luma, unsigned *rgb, const short image_width,
 			vbx_dma_to_vector(v_row_in_next, rgb + (i+1)*image_pitch, vector_bytes);
 
 		// Move weighted B into v_luma
-		vbx(SVWHU, VAND, v_temp,   0xFF, v_row_in);
+		vbx(SVHWU, VAND, v_temp,   0xFF, v_row_in);
 		vbx(SVHU,  VMUL, v_luma,     25, v_temp);
 
 		// Move weighted G into v_temp and add it to v_luma
-        vbx(SVWHU, VAND, v_temp,   0xFF, (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
+		vbx(SVHWU, VAND, v_temp,   0xFF, (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+1));
 		vbx(SVHU,  VMUL, v_temp,    129, v_temp);
 		vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 
 		// Move weighted R into v_temp and add it to v_luma
-        vbx(SVWHU, VAND, v_temp,   0xFF, (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
+		vbx(SVHWU, VAND, v_temp,   0xFF, (vbx_uword_t*)(((vbx_ubyte_t *)v_row_in)+2));
 		vbx(SVHU,  VMUL, v_temp,     66, v_temp);
 		vbx(VVHU,  VADD, v_luma, v_luma, v_temp);
 

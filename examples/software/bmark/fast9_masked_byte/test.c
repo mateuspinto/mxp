@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -153,7 +153,7 @@ int main(void)
 {
 
 	vbx_timestamp_t time_start, time_stop;
-	double scalar_time, vbx_time, vbx_time_masked;
+	double scalar_time;
 	int i, j, l;
     int mode, sync0, sync1;
 	int errors = 0;
@@ -175,6 +175,8 @@ int main(void)
     for(l=0; l<3; l++){
         char *isrc;
         char *idst;
+        (void)isrc;
+        (void)idst;
         if(l==0){
             load_img(scalar_input, IMAGE_HEIGHT, IMAGE_WIDTH);
   					vbx_dcache_flush_all();
@@ -183,20 +185,20 @@ int main(void)
             idst = "lenna_dst";
         }else if(l==1){
             uint8_t *src  = (uint8_t *)vbx_shared_malloc(TILE_WIDTH*TILE_HEIGHT*sizeof(uint8_t));
-            test_zero_array_byte(src, TILE_WIDTH*TILE_HEIGHT);
+            test_zero_array_byte((int8_t*)src, TILE_WIDTH*TILE_HEIGHT);
             generate_tiles(scalar_input, src, TILE_HEIGHT, TILE_WIDTH, TILES);
   					vbx_dcache_flush_all();
             printf("\nSquare\n");
             isrc = "square_src";
             idst = "square_dst";
         }else if(l==2){
-            test_zero_array_byte(scalar_input, IMAGE_WIDTH*IMAGE_HEIGHT);
+	        test_zero_array_byte((int8_t*)scalar_input, IMAGE_WIDTH*IMAGE_HEIGHT);
   					vbx_dcache_flush_all();
             printf("\nblank\n");
             isrc = "blank_src";
             idst = "blank_dst";
         }
-        test_zero_array_byte(scalar_output, IMAGE_WIDTH*IMAGE_HEIGHT);
+        test_zero_array_byte((int8_t*)scalar_output, IMAGE_WIDTH*IMAGE_HEIGHT);
 
 #if DEBUG
         test_print_matrix_byte(scalar_input, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_WIDTH);
@@ -220,13 +222,13 @@ int main(void)
         for(mode=0; mode<3; mode++){
             sync0 = mode > 0 ? 1 : 0;
             sync1 = mode > 1 ? 1 : 0;
-            test_zero_array_byte(vbx_output, IMAGE_WIDTH*IMAGE_HEIGHT);
+            test_zero_array_byte((int8_t*)vbx_output, IMAGE_WIDTH*IMAGE_HEIGHT);
             printf("\nVector\t\tSync: %d,%d", sync0, sync1);
             time_start = vbx_timestamp();
             vector_fast9((uint8_t *)vbx_output, (uint8_t *)input,
                          IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_PITCH, THRESHOLD, sync0, sync1);
             time_stop = vbx_timestamp();
-            vbx_time = vbx_print_vector_time(time_start, time_stop, scalar_time);
+            vbx_print_vector_time(time_start, time_stop, scalar_time);
 #if DEBUG
             test_print_matrix_byte(vbx_output, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_WIDTH);
 #endif
@@ -246,13 +248,13 @@ int main(void)
         for(mode=0; mode<3; mode++){
             sync0 = mode > 0 ? 1 : 0;
             sync1 = mode > 1 ? 1 : 0;
-            test_zero_array_byte(vbx_output_masked, IMAGE_WIDTH*IMAGE_HEIGHT);
+            test_zero_array_byte((int8_t*)vbx_output_masked, IMAGE_WIDTH*IMAGE_HEIGHT);
             printf("\nVector masked\tSync: %d,%d", sync0, sync1);
             time_start = vbx_timestamp();
             vector_fast9_masked((uint8_t *)vbx_output_masked, (uint8_t *)input,
                                 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_PITCH, THRESHOLD, sync0, sync1);
             time_stop = vbx_timestamp();
-            vbx_time_masked = vbx_print_vector_time(time_start, time_stop, scalar_time);
+            vbx_print_vector_time(time_start, time_stop, scalar_time);
 #if DEBUG
             test_print_matrix_byte(vbx_output_masked, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_WIDTH);
 #endif

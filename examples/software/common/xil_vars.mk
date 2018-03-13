@@ -11,18 +11,15 @@ myrealpath = $(join \
              $(filter %:,$(subst :,: ,$(1))),\
              $(realpath $(filter-out %:,$(subst :,: ,$(1)))))
 
-ifdef ComSpec
-PROJ_ROOT ?= $(call myrealpath,$(MAKEFILE_DIR)/../../systems/$(PROJ_NAME))
-else
-PROJ_ROOT ?= $(realpath $(MAKEFILE_DIR)/../../systems/$(PROJ_NAME))
-endif
+PROJ_ROOT = ../../..
 SDK_EXPORT_ROOT := $(PROJ_ROOT)/SDK/SDK_Export
 
 # HW_PLATFORM_XML
 HW_PLATFORM_XML := $(SDK_EXPORT_ROOT)/hw/system.xml
 
 # BSP_ROOT_DIR
-BSP_ROOT_DIR := $(PROJ_ROOT)/bsp
+BSP_NAME ?= bsp
+BSP_ROOT_DIR := $(PROJ_ROOT)/$(BSP_NAME)
 
 # CPU gcc flags
 # e.g. for MicroBlaze:
@@ -43,7 +40,7 @@ CMACRO_DEFS= -DVBX_SIMULATOR
 else ifneq  ($(OS_TARGET),LINUX)
 include $(BSP_ROOT_DIR)/bsp_vars.mk
 endif
-OPT_FLAGS := -O3
+OPT_FLAGS := -O2
 # Debug opt flags:
 #OPT_FLAGS := -O0 -g3 -Wl,--no-relax
 ifeq ($(SIMULATOR),true)
@@ -82,8 +79,13 @@ else
 BSP_INC_DIR  := $(BSP_ROOT_DIR)/$(PROCESSOR_INSTANCE)/include
 BSP_LIB_DIR  := $(BSP_ROOT_DIR)/$(PROCESSOR_INSTANCE)/lib
 
+ifeq ("$(wildcard $(BSP_INC_DIR)/vbx.h)","")
+INC_DIRS := $(VBXAPI_DIRECTORY) $(BSP_INC_DIR)
+endif
+
+
 # LD_SCRIPT := lscript.ld
-LD_SCRIPT := $(PROJ_ROOT)/etc/lscript.ld
+LD_SCRIPT := $(PROJ_ROOT)/etc/$(LD_SCRIPT_PREIX)lscript.ld
 
 LD_FLAGS := -Wl,-T -Wl,$(LD_SCRIPT)
 # Debug linker flags

@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -180,7 +180,7 @@ namespace VBX{
 				else{
 					assert("SHOULD NOT BE HERE"&&0);
 				}
-				src_t* a=_internal::resolve<src_t,is_masked>::_resolve(src,src_sp,0,0,vlen);
+				src_t* a=_internal::resolve<src_t,is_masked,1>::_resolve(src,src_sp,0,0,vlen);
 				vbx_func<is_masked,NO_ACC>::func(instr,
 				                                 sp,
 				                                 val,

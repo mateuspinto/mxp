@@ -1,3 +1,4 @@
+export SIMULATOR=true
 # Get directory where this file resides
 MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 

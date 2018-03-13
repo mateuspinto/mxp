@@ -1,6 +1,6 @@
 /* VECTORBLOX MXP SOFTWARE DEVELOPMENT KIT
  *
- * Copyright (C) 2012-2017 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
+ * Copyright (C) 2012-2018 VectorBlox Computing Inc., Vancouver, British Columbia, Canada.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,7 +65,6 @@ template<typename vbx_sp_t>
 int vbw_vec_divide(vbx_sp_t *v_out, vbx_sp_t *v_in1, vbx_sp_t *v_in2, unsigned int vl)
 {
 	uint32_t i;
-	vbx_set_vl(vl);
 
 	typedef typename unsigned_conv<vbx_sp_t>::type unsigned_sp_t;
 	typedef typename signed_conv<vbx_sp_t>::type signed_sp_t;
