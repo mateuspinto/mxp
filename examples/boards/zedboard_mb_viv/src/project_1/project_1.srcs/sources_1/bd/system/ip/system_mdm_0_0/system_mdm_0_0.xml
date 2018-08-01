@@ -30592,6 +30592,28 @@
         </spirit:vendorExtensions>
       </spirit:port>
       <spirit:port>
+        <spirit:name>Scan_En</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="bitString" spirit:bitStringLength="1">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.Scan_En" xilinx:dependency="false">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
         <spirit:name>S_AXI_ACLK</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
@@ -63474,6 +63496,11 @@
         <spirit:displayName>Enable Cross Trigger</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_USE_CROSS_TRIGGER" spirit:choiceRef="choice_pairs_4873554b">0</spirit:value>
       </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="std_logic_vector">
+        <spirit:name>C_EXT_TRIG_RESET_VALUE</spirit:name>
+        <spirit:displayName>External Trigger Reset Value</spirit:displayName>
+        <spirit:value spirit:format="bitString" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_EXT_TRIG_RESET_VALUE" spirit:bitStringLength="20">0xF1234</spirit:value>
+      </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_TRACE_OUTPUT</spirit:name>
         <spirit:displayName>Select External Trace Output Interface</spirit:displayName>
@@ -63523,6 +63550,30 @@
           <xilinx:parameterInfo>
             <xilinx:enablement>
               <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="MODELPARAM_ENABLEMENT.C_TRACE_ASYNC_RESET" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_TRACE_OUTPUT&apos;)) = 2) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_MB_DBG_PORTS&apos;)) = 1)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:parameterInfo>
+        </spirit:vendorExtensions>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_TRACE_PROTOCOL</spirit:name>
+        <spirit:displayName>Select External Trace Protocol</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_TRACE_PROTOCOL" spirit:choiceRef="choice_pairs_13879a79">1</spirit:value>
+        <spirit:vendorExtensions>
+          <xilinx:parameterInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="MODELPARAM_ENABLEMENT.C_TRACE_PROTOCOL" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_TRACE_OUTPUT&apos;)) != 0)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:parameterInfo>
+        </spirit:vendorExtensions>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_TRACE_ID</spirit:name>
+        <spirit:displayName>Select External Trace ID</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_TRACE_ID" spirit:minimum="1" spirit:maximum="110" spirit:rangeType="long">110</spirit:value>
+        <spirit:vendorExtensions>
+          <xilinx:parameterInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="MODELPARAM_ENABLEMENT.C_TRACE_ID" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_TRACE_OUTPUT&apos;)) != 0) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_TRACE_PROTOCOL&apos;)) > 0)">false</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:parameterInfo>
         </spirit:vendorExtensions>
@@ -63649,6 +63700,11 @@
     <spirit:choice>
       <spirit:name>choice_list_d85ad257</spirit:name>
       <spirit:enumeration>0</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_13879a79</spirit:name>
+      <spirit:enumeration spirit:text="DEFAULT">0</spirit:enumeration>
+      <spirit:enumeration spirit:text="ALTERNATE">1</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_pairs_3f3d981f</spirit:name>
@@ -63900,7 +63956,7 @@
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
-            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_USE_CROSS_TRIGGER">false</xilinx:isEnabled>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_USE_CROSS_TRIGGER">true</xilinx:isEnabled>
           </xilinx:enablement>
         </xilinx:parameterInfo>
       </spirit:vendorExtensions>
@@ -63930,13 +63986,25 @@
       </spirit:vendorExtensions>
     </spirit:parameter>
     <spirit:parameter>
+      <spirit:name>C_EXT_TRIG_RESET_VALUE</spirit:name>
+      <spirit:displayName>External Trigger Reset Value</spirit:displayName>
+      <spirit:value spirit:format="bitString" spirit:resolve="user" spirit:id="PARAM_VALUE.C_EXT_TRIG_RESET_VALUE" spirit:order="1920" spirit:configGroups="1 Advanced" spirit:bitStringLength="20">0xF1234</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_EXT_TRIG_RESET_VALUE">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+    <spirit:parameter>
       <spirit:name>C_TRACE_OUTPUT</spirit:name>
       <spirit:displayName>Select External Trace Output Interface</spirit:displayName>
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_TRACE_OUTPUT" spirit:choiceRef="choice_pairs_d6ac2a69" spirit:order="2000" spirit:configGroups="1 Debug">0</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
-            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_TRACE_OUTPUT">false</xilinx:isEnabled>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_TRACE_OUTPUT">true</xilinx:isEnabled>
           </xilinx:enablement>
         </xilinx:parameterInfo>
       </spirit:vendorExtensions>
@@ -63990,6 +64058,30 @@
       </spirit:vendorExtensions>
     </spirit:parameter>
     <spirit:parameter>
+      <spirit:name>C_TRACE_PROTOCOL</spirit:name>
+      <spirit:displayName>Select External Trace Protocol</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_TRACE_PROTOCOL" spirit:choiceRef="choice_pairs_13879a79" spirit:order="2410" spirit:configGroups="2 NoDisplay">1</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_TRACE_PROTOCOL">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>C_TRACE_ID</spirit:name>
+      <spirit:displayName>Select External Trace ID</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_TRACE_ID" spirit:order="2420" spirit:configGroups="2 NoDisplay" spirit:minimum="1" spirit:maximum="110" spirit:rangeType="long">110</spirit:value>
+      <spirit:vendorExtensions>
+        <xilinx:parameterInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PARAM_ENABLEMENT.C_TRACE_ID">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:parameterInfo>
+      </spirit:vendorExtensions>
+    </spirit:parameter>
+    <spirit:parameter>
       <spirit:name>Component_Name</spirit:name>
       <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Component_Name" spirit:order="1">system_mdm_0_0</spirit:value>
     </spirit:parameter>
@@ -63997,7 +64089,7 @@
   <spirit:vendorExtensions>
     <xilinx:coreExtensions>
       <xilinx:displayName>MicroBlaze Debug Module (MDM)</xilinx:displayName>
-      <xilinx:coreRevision>11</xilinx:coreRevision>
+      <xilinx:coreRevision>14</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.S_AXI_ACLK.CLK_DOMAIN" xilinx:valueSource="ip_propagated" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.S_AXI_ACLK.FREQ_HZ" xilinx:valueSource="ip_propagated" xilinx:valuePermission="bd"/>
@@ -64033,14 +64125,14 @@
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2017.3.1</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="9dfd8b35"/>
       <xilinx:checksum xilinx:scope="addressSpaces" xilinx:value="c5bba396"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="2b6a4576"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="24fe4308"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="c8eb6a26"/>
-      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="f1414ad0"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="d2aa2ae7"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="1e6f495d"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="b903ba17"/>
+      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="83eb81ce"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="e4eed2a3"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>

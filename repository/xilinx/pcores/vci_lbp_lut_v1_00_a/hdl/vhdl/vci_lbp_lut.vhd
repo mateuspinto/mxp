@@ -1,5 +1,5 @@
 -- vci_lbp_lut.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 
 -- synthesis library vci_lbp_lut_lib
 library IEEE;

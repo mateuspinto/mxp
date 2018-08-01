@@ -1,5 +1,5 @@
 -- vci_convolve.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- This custom instruction serves as a template for general convolve filters.
@@ -22,23 +22,23 @@ use IEEE.numeric_std.all;
 
 entity vci_convolve is
   generic (
-    VCI_LANES : positive := 4;
+    VCI_LANES : positive := 16;
 
     CONJOINED_MULTIPLIES      : natural range 0 to 1  := 1;
-    DOUBLE_CLOCKED_MULTIPLIES : natural range 0 to 1  := 0;
-    FXP_BITS                  : natural range 0 to 32 := 7;
+    DOUBLE_CLOCKED_MULTIPLIES : natural range 0 to 1  := 1;
+    FXP_BITS                  : natural range 0 to 32 := 3;
 
     INPUT_SIZE_BYTES      : positive range 1 to 4     := 1;
     OUTPUT_SIZE_BYTES     : positive range 1 to 4     := 2;
-    COEFFICIENT_SIZE_BITS : positive range 1 to 32    := 16;
-    MAX_COEFFICIENTS      : positive range 2 to 32768 := 1024;
+    COEFFICIENT_SIZE_BITS : positive range 1 to 32    := 12;
+    MAX_COEFFICIENTS      : positive range 2 to 32768 := 256;
     FILTER_WIDTH          : positive                  := 3;
     FILTER_HEIGHT         : positive                  := 3;
-    FILTER_COPIES         : positive                  := 1;
+    FILTER_COPIES         : positive                  := 13;
     COEFFICIENT_COPIES    : positive range 1 to 256   := 1;
-    FILTER_STAGES         : positive range 3 to 16    := 5;
-    INPUT_REGISTER_STAGES : natural range 0 to 16     := 1;
-    ADD_TREE_STAGES       : natural range 0 to 16     := 2
+    FILTER_STAGES         : positive range 3 to 16    := 3;
+    INPUT_REGISTER_STAGES : natural range 0 to 16     := 0;
+    ADD_TREE_STAGES       : natural range 0 to 16     := 1
     );
   port (
     vci_clk    : in std_logic;
@@ -173,7 +173,7 @@ architecture rtl of vci_convolve is
 
   constant OUTPUT_SIZE_BITS     : positive := OUTPUT_SIZE_BYTES*8;
   constant CONVOLVE_OUTPUT_BITS : positive := INPUT_SIZE_BITS+COEFFICIENT_SIZE_BITS+log2(FILTER_WIDTH*FILTER_HEIGHT);
-  constant SUM_OUTPUT_BITS      : positive := INPUT_SIZE_BITS+COEFFICIENT_SIZE_BITS+log2((FILTER_WIDTH*FILTER_HEIGHT*4)+1);
+  constant SUM_OUTPUT_BITS      : positive := INPUT_SIZE_BITS+COEFFICIENT_SIZE_BITS+log2((FILTER_WIDTH*FILTER_HEIGHT*8)+1);
 
   --Arrays for the input data.  Read in one line of data per valid cycle.
   type data_in_array is array (natural range <>) of std_logic_vector(INPUT_ROW_SIZE_BITS-1 downto 0);
@@ -181,15 +181,25 @@ architecture rtl of vci_convolve is
   signal data_in_b : data_in_array(FILTER_HEIGHT-1 downto 0);
   signal data_in_c : data_in_array(FILTER_HEIGHT-1 downto 0);
   signal data_in_d : data_in_array(FILTER_HEIGHT-1 downto 0);
+  signal data_in_e : data_in_array(FILTER_HEIGHT-1 downto 0);
+  signal data_in_f : data_in_array(FILTER_HEIGHT-1 downto 0);
+  signal data_in_g : data_in_array(FILTER_HEIGHT-1 downto 0);
+  signal data_in_h : data_in_array(FILTER_HEIGHT-1 downto 0);
 
   type data_out_array is array (natural range <>) of signed(CONVOLVE_OUTPUT_BITS-1 downto 0);
   signal data_out_a : data_out_array(FILTER_COPIES-1 downto 0);
   signal data_out_b : data_out_array(FILTER_COPIES-1 downto 0);
   signal data_out_c : data_out_array(FILTER_COPIES-1 downto 0);
   signal data_out_d : data_out_array(FILTER_COPIES-1 downto 0);
+  signal data_out_e : data_out_array(FILTER_COPIES-1 downto 0);
+  signal data_out_f : data_out_array(FILTER_COPIES-1 downto 0);
+  signal data_out_g : data_out_array(FILTER_COPIES-1 downto 0);
+  signal data_out_h : data_out_array(FILTER_COPIES-1 downto 0);
 
-  type sum_rounded_array is array (natural range <>) of signed(SUM_OUTPUT_BITS-1 downto 0);
-  signal data_out_sum_rounded : sum_rounded_array(FILTER_COPIES-1 downto 0);
+  type sum_array is array (natural range <>) of signed(SUM_OUTPUT_BITS-1 downto 0);
+  signal data_out_sum_abcd    : sum_array(FILTER_COPIES-1 downto 0);
+  signal data_out_sum_efgh    : sum_array(FILTER_COPIES-1 downto 0);
+  signal data_out_sum_rounded : sum_array(FILTER_COPIES-1 downto 0);
 
   type saturated_thresholded_array is array (natural range <>) of signed(OUTPUT_SIZE_BITS-1 downto 0);
   signal data_out_saturated_thresholded : saturated_thresholded_array(FILTER_COPIES-1 downto 0);
@@ -213,13 +223,21 @@ begin
   --May use less than the full input row depending on configuration
   element_gen : for gelement in INPUT_ROW_SIZE_ELEMENTS-1 downto 0 generate
     data_in_a(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
-      vci_data_a((((2*gelement)+1)*INPUT_SIZE_BITS)-1 downto 2*gelement*INPUT_SIZE_BITS);
+      vci_data_a((((4*gelement)+1)*INPUT_SIZE_BITS)-1 downto 4*gelement*INPUT_SIZE_BITS);
     data_in_b(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
-      vci_data_b((((2*gelement)+1)*INPUT_SIZE_BITS)-1 downto 2*gelement*INPUT_SIZE_BITS);
+      vci_data_b((((4*gelement)+1)*INPUT_SIZE_BITS)-1 downto 4*gelement*INPUT_SIZE_BITS);
     data_in_c(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
-      vci_data_a((((2*gelement)+2)*INPUT_SIZE_BITS)-1 downto ((2*gelement)+1)*INPUT_SIZE_BITS);
+      vci_data_a((((4*gelement)+2)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+1)*INPUT_SIZE_BITS);
     data_in_d(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
-      vci_data_b((((2*gelement)+2)*INPUT_SIZE_BITS)-1 downto ((2*gelement)+1)*INPUT_SIZE_BITS);
+      vci_data_b((((4*gelement)+2)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+1)*INPUT_SIZE_BITS);
+    data_in_e(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
+      vci_data_a((((4*gelement)+3)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+2)*INPUT_SIZE_BITS);
+    data_in_f(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
+      vci_data_b((((4*gelement)+3)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+2)*INPUT_SIZE_BITS);
+    data_in_g(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
+      vci_data_a((((4*gelement)+4)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+3)*INPUT_SIZE_BITS);
+    data_in_h(0)(((gelement+1)*INPUT_SIZE_BITS)-1 downto gelement*INPUT_SIZE_BITS) <=
+      vci_data_b((((4*gelement)+4)*INPUT_SIZE_BITS)-1 downto ((4*gelement)+3)*INPUT_SIZE_BITS);
   end generate element_gen;
 
   process (read_coefficient_index, vci_valid, row, last_row_per_coefficient, last_coefficient, vci_reset) is
@@ -254,6 +272,10 @@ begin
         data_in_b(data_in_b'left downto 1) <= data_in_b(data_in_b'left-1 downto 0);
         data_in_c(data_in_c'left downto 1) <= data_in_c(data_in_c'left-1 downto 0);
         data_in_d(data_in_d'left downto 1) <= data_in_d(data_in_d'left-1 downto 0);
+        data_in_e(data_in_e'left downto 1) <= data_in_e(data_in_e'left-1 downto 0);
+        data_in_f(data_in_f'left downto 1) <= data_in_f(data_in_f'left-1 downto 0);
+        data_in_g(data_in_g'left downto 1) <= data_in_g(data_in_g'left-1 downto 0);
+        data_in_h(data_in_h'left downto 1) <= data_in_h(data_in_h'left-1 downto 0);
 
         row <= row + to_unsigned(1, row'length);
         if row = last_row_per_coefficient then
@@ -317,22 +339,38 @@ begin
     signal coefficients_in_b : coefficient_array(FILTER_HEIGHT-1 downto 0);
     signal coefficients_in_c : coefficient_array(FILTER_HEIGHT-1 downto 0);
     signal coefficients_in_d : coefficient_array(FILTER_HEIGHT-1 downto 0);
+    signal coefficients_in_e : coefficient_array(FILTER_HEIGHT-1 downto 0);
+    signal coefficients_in_f : coefficient_array(FILTER_HEIGHT-1 downto 0);
+    signal coefficients_in_g : coefficient_array(FILTER_HEIGHT-1 downto 0);
+    signal coefficients_in_h : coefficient_array(FILTER_HEIGHT-1 downto 0);
 
     signal coefficients_in_a_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal coefficients_in_b_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal coefficients_in_c_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal coefficients_in_d_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal coefficients_in_e_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal coefficients_in_f_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal coefficients_in_g_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal coefficients_in_h_flat : std_logic_vector((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
 
     signal data_in_a_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal data_in_b_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal data_in_c_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
     signal data_in_d_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal data_in_e_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal data_in_f_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal data_in_g_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
+    signal data_in_h_flat : std_logic_vector((((FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY)*INPUT_SIZE_BITS*FILTER_HEIGHT)-1 downto 0);
 
     --Outputs from the convolution
     signal data_out_a_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
     signal data_out_b_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
     signal data_out_c_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
     signal data_out_d_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
+    signal data_out_e_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
+    signal data_out_f_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
+    signal data_out_g_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
+    signal data_out_h_flat : std_logic_vector((FILTER_COPIES_THIS_COEFFICIENT_COPY*CONVOLVE_OUTPUT_BITS)-1 downto 0);
 
     constant INPUT_COPY_ROW_SIZE_ELEMENTS : positive := (FILTER_WIDTH-1)+FILTER_COPIES_THIS_COEFFICIENT_COPY;
     constant INPUT_COPY_ROW_SIZE_BYTES    : positive := INPUT_COPY_ROW_SIZE_ELEMENTS*INPUT_SIZE_BYTES;
@@ -412,6 +450,74 @@ begin
           data_out => coefficients_in_d(grow)
           );
 
+      the_coefficient_ram_e : sp_ram
+        generic map (
+          WIDTH        => FILTER_WIDTH*COEFFICIENT_SIZE_BITS,
+          DEPTH        => MAX_COEFFICIENTS,
+          ADDRESS_BITS => log2(MAX_COEFFICIENTS)
+          )
+        port map (
+          clk => vci_clk,
+
+          address => coefficient_index,
+
+          write_enable => coefficient_ram_we(grow),
+          data_in      => vci_data_a((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*3)-1 downto FILTER_WIDTH*COEFFICIENT_SIZE_BITS*2),
+
+          data_out => coefficients_in_e(grow)
+          );
+
+      the_coefficient_ram_f : sp_ram
+        generic map (
+          WIDTH        => FILTER_WIDTH*COEFFICIENT_SIZE_BITS,
+          DEPTH        => MAX_COEFFICIENTS,
+          ADDRESS_BITS => log2(MAX_COEFFICIENTS)
+          )
+        port map (
+          clk => vci_clk,
+
+          address => coefficient_index,
+
+          write_enable => coefficient_ram_we(grow),
+          data_in      => vci_data_b((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*3)-1 downto FILTER_WIDTH*COEFFICIENT_SIZE_BITS*2),
+
+          data_out => coefficients_in_f(grow)
+          );
+
+      the_coefficient_ram_g : sp_ram
+        generic map (
+          WIDTH        => FILTER_WIDTH*COEFFICIENT_SIZE_BITS,
+          DEPTH        => MAX_COEFFICIENTS,
+          ADDRESS_BITS => log2(MAX_COEFFICIENTS)
+          )
+        port map (
+          clk => vci_clk,
+
+          address => coefficient_index,
+
+          write_enable => coefficient_ram_we(grow),
+          data_in      => vci_data_a((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*4)-1 downto FILTER_WIDTH*COEFFICIENT_SIZE_BITS*3),
+
+          data_out => coefficients_in_g(grow)
+          );
+
+      the_coefficient_ram_h : sp_ram
+        generic map (
+          WIDTH        => FILTER_WIDTH*COEFFICIENT_SIZE_BITS,
+          DEPTH        => MAX_COEFFICIENTS,
+          ADDRESS_BITS => log2(MAX_COEFFICIENTS)
+          )
+        port map (
+          clk => vci_clk,
+
+          address => coefficient_index,
+
+          write_enable => coefficient_ram_we(grow),
+          data_in      => vci_data_b((FILTER_WIDTH*COEFFICIENT_SIZE_BITS*4)-1 downto FILTER_WIDTH*COEFFICIENT_SIZE_BITS*3),
+
+          data_out => coefficients_in_h(grow)
+          );
+
       data_in_a_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
         data_in_a(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
       data_in_b_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
@@ -420,6 +526,18 @@ begin
         data_in_c(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
       data_in_d_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
         data_in_d(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
+
+      data_in_e_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
+        data_in_e(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
+
+      data_in_f_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
+        data_in_f(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
+
+      data_in_g_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
+        data_in_g(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
+
+      data_in_h_flat(((grow+1)*INPUT_COPY_ROW_SIZE_BITS)-1 downto grow*INPUT_COPY_ROW_SIZE_BITS) <=
+        data_in_h(grow)((((FILTER_WIDTH-1)+FILTER_COPY_END)*INPUT_SIZE_BITS)-1 downto FILTER_COPY_START*INPUT_SIZE_BITS);
 
       coefficients_in_a_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
                              grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
@@ -433,6 +551,18 @@ begin
       coefficients_in_d_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
                              grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
         coefficients_in_d(grow);
+      coefficients_in_e_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
+                             grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
+        coefficients_in_e(grow);
+      coefficients_in_f_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
+                             grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
+        coefficients_in_f(grow);
+      coefficients_in_g_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
+                             grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
+        coefficients_in_g(grow);
+      coefficients_in_h_flat(((grow+1)*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS))-1 downto
+                             grow*(FILTER_WIDTH*COEFFICIENT_SIZE_BITS)) <=
+        coefficients_in_h(grow);
     end generate flatten_gen;
 
     convolve_filter_a : convolve_filter
@@ -551,11 +681,131 @@ begin
         data_out_flat => data_out_d_flat
         );
 
+    convolve_filter_e : convolve_filter
+      generic map (
+        INPUT_SIZE_BYTES      => INPUT_SIZE_BYTES,
+        FILTER_WIDTH          => FILTER_WIDTH,
+        FILTER_HEIGHT         => FILTER_HEIGHT,
+        FILTER_COPIES         => FILTER_COPIES_THIS_COEFFICIENT_COPY,
+        COEFFICIENT_SIZE_BITS => COEFFICIENT_SIZE_BITS,
+        CONVOLVE_OUTPUT_BITS  => CONVOLVE_OUTPUT_BITS,
+
+        CONJOINED_MULTIPLIES      => CONJOINED_MULTIPLIES,
+        DOUBLE_CLOCKED_MULTIPLIES => DOUBLE_CLOCKED_MULTIPLIES,
+        FXP_BITS                  => FXP_BITS,
+
+        CONVOLVE_STAGES       => FILTER_STAGES-1,
+        INPUT_REGISTER_STAGES => INPUT_REGISTER_STAGES,
+        ADD_TREE_STAGES       => ADD_TREE_STAGES
+        )
+      port map (
+        clk    => vci_clk,
+        clk_2x => vci_clk_2x,
+        reset  => vci_reset,
+
+        coefficients_in_flat => coefficients_in_e_flat,
+
+        data_in_flat => data_in_e_flat,
+
+        data_out_flat => data_out_e_flat
+        );
+
+    convolve_filter_f : convolve_filter
+      generic map (
+        INPUT_SIZE_BYTES      => INPUT_SIZE_BYTES,
+        FILTER_WIDTH          => FILTER_WIDTH,
+        FILTER_HEIGHT         => FILTER_HEIGHT,
+        FILTER_COPIES         => FILTER_COPIES_THIS_COEFFICIENT_COPY,
+        COEFFICIENT_SIZE_BITS => COEFFICIENT_SIZE_BITS,
+        CONVOLVE_OUTPUT_BITS  => CONVOLVE_OUTPUT_BITS,
+
+        CONJOINED_MULTIPLIES      => CONJOINED_MULTIPLIES,
+        DOUBLE_CLOCKED_MULTIPLIES => DOUBLE_CLOCKED_MULTIPLIES,
+        FXP_BITS                  => FXP_BITS,
+
+        CONVOLVE_STAGES       => FILTER_STAGES-1,
+        INPUT_REGISTER_STAGES => INPUT_REGISTER_STAGES,
+        ADD_TREE_STAGES       => ADD_TREE_STAGES
+        )
+      port map (
+        clk    => vci_clk,
+        clk_2x => vci_clk_2x,
+        reset  => vci_reset,
+
+        coefficients_in_flat => coefficients_in_f_flat,
+
+        data_in_flat => data_in_f_flat,
+
+        data_out_flat => data_out_f_flat
+        );
+
+    convolve_filter_g : convolve_filter
+      generic map (
+        INPUT_SIZE_BYTES      => INPUT_SIZE_BYTES,
+        FILTER_WIDTH          => FILTER_WIDTH,
+        FILTER_HEIGHT         => FILTER_HEIGHT,
+        FILTER_COPIES         => FILTER_COPIES_THIS_COEFFICIENT_COPY,
+        COEFFICIENT_SIZE_BITS => COEFFICIENT_SIZE_BITS,
+        CONVOLVE_OUTPUT_BITS  => CONVOLVE_OUTPUT_BITS,
+
+        CONJOINED_MULTIPLIES      => CONJOINED_MULTIPLIES,
+        DOUBLE_CLOCKED_MULTIPLIES => DOUBLE_CLOCKED_MULTIPLIES,
+        FXP_BITS                  => FXP_BITS,
+
+        CONVOLVE_STAGES       => FILTER_STAGES-1,
+        INPUT_REGISTER_STAGES => INPUT_REGISTER_STAGES,
+        ADD_TREE_STAGES       => ADD_TREE_STAGES
+        )
+      port map (
+        clk    => vci_clk,
+        clk_2x => vci_clk_2x,
+        reset  => vci_reset,
+
+        coefficients_in_flat => coefficients_in_g_flat,
+
+        data_in_flat => data_in_g_flat,
+
+        data_out_flat => data_out_g_flat
+        );
+
+    convolve_filter_h : convolve_filter
+      generic map (
+        INPUT_SIZE_BYTES      => INPUT_SIZE_BYTES,
+        FILTER_WIDTH          => FILTER_WIDTH,
+        FILTER_HEIGHT         => FILTER_HEIGHT,
+        FILTER_COPIES         => FILTER_COPIES_THIS_COEFFICIENT_COPY,
+        COEFFICIENT_SIZE_BITS => COEFFICIENT_SIZE_BITS,
+        CONVOLVE_OUTPUT_BITS  => CONVOLVE_OUTPUT_BITS,
+
+        CONJOINED_MULTIPLIES      => CONJOINED_MULTIPLIES,
+        DOUBLE_CLOCKED_MULTIPLIES => DOUBLE_CLOCKED_MULTIPLIES,
+        FXP_BITS                  => FXP_BITS,
+
+        CONVOLVE_STAGES       => FILTER_STAGES-1,
+        INPUT_REGISTER_STAGES => INPUT_REGISTER_STAGES,
+        ADD_TREE_STAGES       => ADD_TREE_STAGES
+        )
+      port map (
+        clk    => vci_clk,
+        clk_2x => vci_clk_2x,
+        reset  => vci_reset,
+
+        coefficients_in_flat => coefficients_in_h_flat,
+
+        data_in_flat => data_in_h_flat,
+
+        data_out_flat => data_out_h_flat
+        );
+
     filter_copy_gen : for gfilter_copy in FILTER_COPIES_THIS_COEFFICIENT_COPY-1 downto 0 generate
       data_out_a(FILTER_COPY_START+gfilter_copy) <= signed(data_out_a_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
       data_out_b(FILTER_COPY_START+gfilter_copy) <= signed(data_out_b_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
       data_out_c(FILTER_COPY_START+gfilter_copy) <= signed(data_out_c_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
       data_out_d(FILTER_COPY_START+gfilter_copy) <= signed(data_out_d_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
+      data_out_e(FILTER_COPY_START+gfilter_copy) <= signed(data_out_e_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
+      data_out_f(FILTER_COPY_START+gfilter_copy) <= signed(data_out_f_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
+      data_out_g(FILTER_COPY_START+gfilter_copy) <= signed(data_out_g_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
+      data_out_h(FILTER_COPY_START+gfilter_copy) <= signed(data_out_h_flat(((gfilter_copy+1)*CONVOLVE_OUTPUT_BITS)-1 downto gfilter_copy*CONVOLVE_OUTPUT_BITS));
     end generate filter_copy_gen;
   end generate coefficient_copy_gen;
 
@@ -563,17 +813,23 @@ begin
     sum_round_proc : process (vci_clk) is
     begin  -- process sum_round_proc
       if vci_clk'event and vci_clk = '1' then  -- rising clock edge
-        data_out_sum_rounded(gfilter_copy) <= resize(signed(data_out_a(gfilter_copy)), SUM_OUTPUT_BITS) +
-                                              resize(signed(data_out_b(gfilter_copy)), SUM_OUTPUT_BITS) +
-                                              resize(signed(data_out_c(gfilter_copy)), SUM_OUTPUT_BITS) +
-                                              resize(signed(data_out_d(gfilter_copy)), SUM_OUTPUT_BITS) +
-                                              one_half_signed_fxp(FXP_BITS, SUM_OUTPUT_BITS);
+        data_out_sum_abcd(gfilter_copy) <= resize(signed(data_out_a(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_b(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_c(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_d(gfilter_copy)), SUM_OUTPUT_BITS);
+        data_out_sum_efgh(gfilter_copy) <= resize(signed(data_out_e(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_f(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_g(gfilter_copy)), SUM_OUTPUT_BITS) +
+                                           resize(signed(data_out_h(gfilter_copy)), SUM_OUTPUT_BITS);
       end if;
     end process sum_round_proc;
+    data_out_sum_rounded(gfilter_copy) <= (data_out_sum_abcd(gfilter_copy) +
+                                           data_out_sum_efgh(gfilter_copy) +
+                                           one_half_signed_fxp(FXP_BITS, SUM_OUTPUT_BITS));
 
     data_out_saturated_thresholded(gfilter_copy) <=
-      saturate_threshold_signed(data_out_sum_rounded(gfilter_copy)(data_out_sum_rounded(gfilter_copy)'left downto FXP_BITS),
-                                OUTPUT_SIZE_BITS);
+      saturate_threshold_signed(
+        data_out_sum_rounded(gfilter_copy)(data_out_sum_rounded(gfilter_copy)'left downto FXP_BITS), OUTPUT_SIZE_BITS);
 
     --Actual data to be written back
     vci_data_out(((gfilter_copy+1)*OUTPUT_SIZE_BITS)-1 downto
@@ -604,11 +860,11 @@ begin
 -----------------------------------------------------------------------------
 -- Assertions to make sure constants are valid
 -----------------------------------------------------------------------------
-  assert VCI_LANES*32 >= FILTER_WIDTH*COEFFICIENT_SIZE_BITS*2
+  assert VCI_LANES*32 >= FILTER_WIDTH*COEFFICIENT_SIZE_BITS*4
     report "VCI_LANES*32 (" &
     positive'image(VCI_LANES*32) &
-    ") must be greater than or equal to FILTER_WIDTH*COEFFICIENT_SIZE_BITS*2 (" &
-    positive'image(FILTER_WIDTH*COEFFICIENT_SIZE_BITS*2) &
+    ") must be greater than or equal to FILTER_WIDTH*COEFFICIENT_SIZE_BITS*4 (" &
+    positive'image(FILTER_WIDTH*COEFFICIENT_SIZE_BITS*4) &
     ")."
     severity failure;
 
@@ -630,12 +886,12 @@ begin
     ") must be greater than 1."
     severity failure;
 
-  assert VCI_LANES*4 >= (FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*2)
+  assert VCI_LANES*4 >= (FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*4)
     report "VCI_LANES (" &
     positive'image(VCI_LANES) &
     " is not wide enough for the requested filter configuration.  " &
-    "VCI_LANES*4 must be greater than or equal to (FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*2) (" &
-    natural'image((FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*2)) &
+    "VCI_LANES*4 must be greater than or equal to (FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*4) (" &
+    natural'image((FILTER_WIDTH+(FILTER_COPIES-1))*(INPUT_SIZE_BYTES*4)) &
     ")."
     severity failure;
 
@@ -645,15 +901,6 @@ begin
     " is not wide enough for the requested filter configuration.  " &
     "VCI_LANES*4 must be greater than or equal to (FILTER_WIDTH+(FILTER_COPIES-1))*OUTPUT_SIZE_BYTES (" &
     natural'image((FILTER_WIDTH+(FILTER_COPIES-1))*OUTPUT_SIZE_BYTES) &
-    ")."
-    severity failure;
-
-  assert VCI_LANES*32 >= FILTER_WIDTH*COEFFICIENT_SIZE_BITS
-    report "VCI_LANES (" &
-    positive'image(VCI_LANES) &
-    " is not wide enough for the requested filter configuration.  " &
-    "VCI_LANES*32 must be greater than or equal to FILTER_WIDTH*COEFFICIENT_SIZE_BITS (" &
-    natural'image(FILTER_WIDTH*COEFFICIENT_SIZE_BITS) &
     ")."
     severity failure;
 

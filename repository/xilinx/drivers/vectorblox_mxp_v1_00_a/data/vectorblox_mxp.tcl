@@ -30,6 +30,8 @@ proc generate {drv_handle} {
         "C_S_AXI_BASEADDR" \
         "C_S_AXI_HIGHADDR" \
         "VECTOR_LANES" \
+        "UNPOPULATED_ALU_LANES" \
+        "UNPOPULATED_MULTIPLIER_LANES" \
         "MAX_MASKED_WAVES" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \
@@ -98,6 +100,8 @@ proc generate {drv_handle} {
         "C_S_AXI_BASEADDR" \
         "C_S_AXI_HIGHADDR" \
         "VECTOR_LANES" \
+        "UNPOPULATED_ALU_LANES" \
+        "UNPOPULATED_MULTIPLIER_LANES" \
         "MAX_MASKED_WAVES" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \
@@ -239,6 +243,8 @@ proc generate {drv_handle} {
         "C_S_AXI_BASEADDR" \
         "C_S_AXI_HIGHADDR" \
         "VECTOR_LANES" \
+        "UNPOPULATED_ALU_LANES" \
+        "UNPOPULATED_MULTIPLIER_LANES" \
         "MAX_MASKED_WAVES" \
         "SCRATCHPAD_KB" \
         "C_M_AXI_DATA_WIDTH" \

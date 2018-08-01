@@ -9,8 +9,8 @@
       <spirit:name>S_VCI</spirit:name>
       <spirit:displayName>S_VCI</spirit:displayName>
       <spirit:description>Vector Custom Instruction Slave</spirit:description>
-      <spirit:busType spirit:vendor="vectorblox.com" spirit:library="interface" spirit:name="vci" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="vectorblox.com" spirit:library="interface" spirit:name="vci_rtl" spirit:version="1.0"/>
+      <spirit:busType spirit:vendor="vectorblox.com" spirit:library="interface" spirit:name="vci" spirit:version="1.1"/>
+      <spirit:abstractionType spirit:vendor="vectorblox.com" spirit:library="interface" spirit:name="vci_rtl" spirit:version="1.1"/>
       <spirit:slave/>
       <spirit:portMaps>
         <spirit:portMap>
@@ -39,14 +39,6 @@
         </spirit:portMap>
         <spirit:portMap>
           <spirit:logicalPort>
-            <spirit:name>VCI_SELECT</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>vci_select</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-        <spirit:portMap>
-          <spirit:logicalPort>
             <spirit:name>VCI_SIGNED</spirit:name>
           </spirit:logicalPort>
           <spirit:physicalPort>
@@ -67,6 +59,14 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>vci_vector_start</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>VCI_VECTOR_END</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>vci_vector_end</spirit:name>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -236,21 +236,8 @@
         <spirit:name>vci_valid</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic</spirit:typeName>
-              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>vci_select</spirit:name>
-        <spirit:wire>
-          <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long" spirit:resolve="immediate">1</spirit:left>
+            <spirit:left spirit:format="long" spirit:resolve="immediate">0</spirit:left>
             <spirit:right spirit:format="long" spirit:resolve="immediate">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -294,6 +281,19 @@
       </spirit:port>
       <spirit:port>
         <spirit:name>vci_vector_start</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>vci_vector_end</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:wireTypeDefs>

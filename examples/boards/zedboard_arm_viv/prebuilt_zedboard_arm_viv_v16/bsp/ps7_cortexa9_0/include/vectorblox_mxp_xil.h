@@ -49,9 +49,11 @@
 // The fields of a vbx_mxp_t instance struct are derived from these values.
 typedef struct {
 	u16  device_id;
-	u32  baseaddr;
-	u32  highaddr;
+	size_t  baseaddr;
+	size_t  highaddr;
 	u16  vector_lanes;
+	u16  unpopulated_alu_lanes;
+	u16  unpopulated_multiplier_lanes;
 	u32  max_masked_waves;
 	u32  scratchpad_kb;
 	u16  memory_width_bits;
@@ -60,7 +62,7 @@ typedef struct {
 	u8   fxp_half_frac_bits;
 	u8   fxp_byte_frac_bits;
 	u32  core_freq;
-	u32  instr_port_addr;
+	size_t  instr_port_addr;
 	u8   vector_custom_instructions;
 	u16  vci_0_lanes;
 	u8   vci_0_opcode_start;

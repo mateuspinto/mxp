@@ -46,11 +46,8 @@
 #include "vbw_buffer.h"
 #include "vbw_mtx_xp.h"
 #include <assert.h>
-#include "vbx_common.h"
+#include <algorithm>
 
-#ifndef min
-#define min(x,y) ((x)<(y) ? (x) : (y))
-#endif
 
 //simple scalar version for testing. should be moved to libscalar.a
 template<typename vbx_mm_t>
@@ -166,7 +163,7 @@ int vbw_mtx_mm_trans_ext( vbx_mm_t *out, vbx_mm_t *in1,  int rows1, int cols1, v
 	//how many rows of in2_trans can we fit?
 	sp_free = vbx_sp_getfree();
 	int rows_of_2=sp_free/(sizeof(vbx_sp_t)*cols2*2); //multiply by two is for double buffering
-	rows_of_2=min(rows_of_2,rows2);
+	rows_of_2=std::min(rows_of_2,rows2);
 	if(rows_of_2 == 0){//cant fit any rows
 		vbx_sp_pop();
 		return VBW_ERROR_SP_ALLOC_FAILED;

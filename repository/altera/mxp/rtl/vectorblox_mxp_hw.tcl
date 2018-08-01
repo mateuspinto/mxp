@@ -107,9 +107,11 @@ proc fileset_sim_vhdl_callback {entity_name} {
 proc common_add_files {entity_name fileset} {
     # puts "entity_name = $entity_name"
 
-    set vector_lanes               [get_parameter_value VECTOR_LANES]
-    set vector_custom_instructions [get_parameter_value VECTOR_CUSTOM_INSTRUCTIONS]
-    set max_vci_depth_without_flush [get_parameter_value MAX_VCI_DEPTH_WITHOUT_FLUSH]
+    set vector_lanes                 [get_parameter_value VECTOR_LANES]
+    set unpopulated_alu_lanes        [get_parameter_value UNPOPULATED_ALU_LANES]
+    set unpopulated_multiplier_lanes [get_parameter_value UNPOPULATED_MULTIPLIER_LANES]
+    set vector_custom_instructions   [get_parameter_value VECTOR_CUSTOM_INSTRUCTIONS]
+    set max_vci_depth_without_flush  [get_parameter_value MAX_VCI_DEPTH_WITHOUT_FLUSH]
     for {set opcode 0} {$opcode < 16} {incr opcode} {
 		  set vcustom[set opcode]_depth 0
 		  set vcustom[set opcode]_lanes 0
@@ -243,6 +245,22 @@ set_parameter_property VECTOR_LANES DESCRIPTION [concat \
 set_parameter_property VECTOR_LANES ALLOWED_RANGES {1 2 4 8 16 32 64 128 256}
 set_parameter_property VECTOR_LANES HDL_PARAMETER true
 
+add_parameter UNPOPULATED_ALU_LANES INTEGER 0
+set_parameter_property UNPOPULATED_ALU_LANES DISPLAY_NAME "Number of Unpopulated ALU Lanes"
+set_parameter_property UNPOPULATED_ALU_LANES DESCRIPTION [concat \
+                                                              "The number of unpopulated ALU Lanes (reduce to save LUTs at the expense of lower performance on non multiply/shift/VCI instructions). " \
+                                                              "This must be less than the number of VECTOR_LANES, and when MAX_MASKED_WAVES is non-zero UNPOPULATED_ALU_LANES must be 0."]
+set_parameter_property UNPOPULATED_ALU_LANES ALLOWED_RANGES 0:255
+set_parameter_property UNPOPULATED_ALU_LANES HDL_PARAMETER true
+
+add_parameter UNPOPULATED_MULTIPLIER_LANES INTEGER 0
+set_parameter_property UNPOPULATED_MULTIPLIER_LANES DISPLAY_NAME "Number of Unpopulated MULTIPLIER Lanes"
+set_parameter_property UNPOPULATED_MULTIPLIER_LANES DESCRIPTION [concat \
+                                                              "The number of unpopulated MULTIPLIER Lanes (reduce to save DSPs at the expense of lower multiply/shift performance). " \
+                                                              "This must be less than the number of VECTOR_LANES."]
+set_parameter_property UNPOPULATED_MULTIPLIER_LANES ALLOWED_RANGES 0:255
+set_parameter_property UNPOPULATED_MULTIPLIER_LANES HDL_PARAMETER true
+
 add_parameter MEMORY_WIDTH_LANES INTEGER 1
 set_parameter_property MEMORY_WIDTH_LANES DISPLAY_NAME "Number of Memory Lanes (DMA Bus Width)"
 set_parameter_property MEMORY_WIDTH_LANES DESCRIPTION [concat \
@@ -364,14 +382,13 @@ set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS ALLOWED_RANGES \
 set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS GROUP $vci_grp
 set_parameter_property VECTOR_CUSTOM_INSTRUCTIONS HDL_PARAMETER true
 
-add_parameter MAX_VCI_DEPTH_WITHOUT_FLUSH NATURAL 2
+add_parameter MAX_VCI_DEPTH_WITHOUT_FLUSH NATURAL 4
 set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DISPLAY_NAME "Max VCI Depth Without Pipeline Flush"
-set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DEFAULT_VALUE 2
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DEFAULT_VALUE 4
 set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH DESCRIPTION [concat \
 																						 "Maximum Vector Custom Instruction (VCI) depth without pipeline flush.  Any longer pipeline VCIs will cause a pipeline flush after each execution."]
-set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH ALLOWED_RANGES 0:256
+set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH ALLOWED_RANGES 2:256
 set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH GROUP $vci_grp
-set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH VISIBLE false
 set_parameter_property MAX_VCI_DEPTH_WITHOUT_FLUSH HDL_PARAMETER true
 
 
@@ -669,11 +686,11 @@ add_interface_port vcp vcp_data2            data2             Input  32
 add_interface_port vcp vcp_instruction      instruction       Input  41
 add_interface_port vcp vcp_valid_instr      valid_instr       Input  1
 add_interface_port vcp vcp_ready            ready             Output 1
+add_interface_port vcp vcp_illegal          illegal           Output 1
 add_interface_port vcp vcp_writeback_data   writeback_data    Output 32
 add_interface_port vcp vcp_writeback_en     writeback_en      Output 1
 add_interface_port vcp vcp_alu_data1        alu_data1         Output 32
 add_interface_port vcp vcp_alu_data2        alu_data2         Output 32
-add_interface_port vcp vcp_alu_used         alu_used          Output 1
 add_interface_port vcp vcp_alu_source_valid alu_source_valid  Output 1
 add_interface_port vcp vcp_alu_result       alu_result        Input  32
 add_interface_port vcp vcp_alu_result_valid alu_result_valid  Input  1
@@ -930,6 +947,18 @@ proc elaboration_callback {} {
     set vector_lanes [get_parameter_value VECTOR_LANES]
     if {![is_pow2 $vector_lanes]} {
         send_message Error "The number of vector lanes is not a power of two."
+        set params_valid false
+    }
+
+    set unpopulated_alu_lanes [get_parameter_value UNPOPULATED_ALU_LANES]
+    if {$unpopulated_alu_lanes >= $vector_lanes} {
+        send_message Error "The number of unpopulated ALU lanes must be less than the number of vector lanes."
+        set params_valid false
+    }
+
+    set unpopulated_multiplier_lanes [get_parameter_value UNPOPULATED_MULTIPLIER_LANES]
+    if {$unpopulated_multiplier_lanes >= $vector_lanes} {
+        send_message Error "The number of unpopulated MULTIPLIER lanes must be less than the number of vector lanes."
         set params_valid false
     }
 
@@ -1314,7 +1343,7 @@ proc elaboration_callback {} {
 
     set scratchpad_waves [expr $scratchpad_size/($vector_lanes*4)]
     set max_masked_waves [get_parameter_value MAX_MASKED_WAVES]
-    if {![is_pow2 $max_masked_waves]} {
+    if {($max_masked_waves > 0) && (![is_pow2 $max_masked_waves])} {
         send_message Error "The number of masked waves is not a power of two."
         set params_valid false
     }
@@ -1323,6 +1352,12 @@ proc elaboration_callback {} {
 										  "is larger than the depth of the scratchpad ($scratchpad_waves waves)."]
         set params_valid false
     }
+    if {($max_masked_waves > 0) && ($unpopulated_alu_lanes > 0)} {
+        send_message Error [concat "UNPOPULATED_ALU_LANES ($unpopulated_alu_lanes) must be 0 when MAX_MASKED_WAVES ($max_masked_waves) " \
+                                "is non-zero."]
+        set params_valid false
+    }
+    
 
     set vector_bytes [expr $vector_lanes * 4]
 
@@ -1331,6 +1366,8 @@ proc elaboration_callback {} {
     ######################################################################
     # Set CMacros.
     set_module_assignment embeddedsw.CMacro.VECTOR_LANES $vector_lanes
+    set_module_assignment embeddedsw.CMacro.UNPOPULATED_ALU_LANES $unpopulated_alu_lanes
+    set_module_assignment embeddedsw.CMacro.UNPOPULATED_MULTIPLIER_LANES $unpopulated_multiplier_lanes
     # Convert true/false to 1/0.
     set_module_assignment embeddedsw.CMacro.VECTOR_CUSTOM_INSTRUCTIONS $vector_custom_instructions
     for {set opcode 0} {$opcode < 16} {incr opcode} {

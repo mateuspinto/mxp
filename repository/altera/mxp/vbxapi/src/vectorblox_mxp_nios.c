@@ -67,5 +67,3 @@ void _vectorblox_mxp_init( vbx_mxp_dev_t *dev )
 	alt_llist_insert( &vbx_mxp_list, &dev->llist );
 	_vbx_init( &(dev->mxp) );
 }
-
-

@@ -62,6 +62,7 @@
 {
 	uint32_t t;
 	VBX_INSTR_SINGLE((((VBX_OP_SYNC) << (VBX_OPCODE_SHIFT)) | (VBX_OP_EXT)),t);
+	(void)t;
 }
 
 __attribute__((always_inline)) inline static void _vbx_dma_to_host( void *EXT, vbx_void_t *INT, int LENGTH )

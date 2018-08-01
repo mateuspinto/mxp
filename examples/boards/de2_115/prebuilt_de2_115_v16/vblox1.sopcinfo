@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="vblox1" kind="vblox1" version="1.0" fabric="QSYS">
  <!-- Format version 17.1 590 (Future versions may contain additional information.) -->
- <!-- 2018.03.12.12:29:11 -->
+ <!-- 2018.08.03.17:18:10 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1520882950</value>
+  <value>1533341890</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -356,7 +356,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK0_MULTIPLY_BY">
    <type>java.lang.String</type>
-   <value>12</value>
+   <value>2</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -364,7 +364,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK1_MULTIPLY_BY">
    <type>java.lang.String</type>
-   <value>24</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -372,7 +372,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK2_MULTIPLY_BY">
    <type>java.lang.String</type>
-   <value>12</value>
+   <value>2</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -380,7 +380,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK3_MULTIPLY_BY">
    <type>java.lang.String</type>
-   <value>4</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -468,7 +468,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK0_DIVIDE_BY">
    <type>java.lang.String</type>
-   <value>5</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -476,7 +476,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK1_DIVIDE_BY">
    <type>java.lang.String</type>
-   <value>5</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -484,7 +484,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK2_DIVIDE_BY">
    <type>java.lang.String</type>
-   <value>5</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -596,7 +596,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLK2_PHASE_SHIFT">
    <type>java.lang.String</type>
-   <value>-35</value>
+   <value>-1500</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1348,7 +1348,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="HIDDEN_CONSTANTS">
    <type>java.lang.String</type>
-   <value>CT#CLK2_DIVIDE_BY 5 CT#PORT_clk5 PORT_UNUSED CT#PORT_clk4 PORT_UNUSED CT#PORT_clk3 PORT_USED CT#PORT_clk2 PORT_USED CT#PORT_clk1 PORT_USED CT#PORT_clk0 PORT_USED CT#CLK0_MULTIPLY_BY 12 CT#PORT_SCANWRITE PORT_UNUSED CT#PORT_SCANACLR PORT_UNUSED CT#PORT_PFDENA PORT_UNUSED CT#CLK3_DUTY_CYCLE 50 CT#CLK3_DIVIDE_BY 5 CT#PORT_PLLENA PORT_UNUSED CT#PORT_SCANDATA PORT_UNUSED CT#CLK3_PHASE_SHIFT 0 CT#PORT_SCANCLKENA PORT_UNUSED CT#WIDTH_CLOCK 5 CT#PORT_SCANDATAOUT PORT_UNUSED CT#LPM_TYPE altpll CT#PLL_TYPE AUTO CT#CLK0_PHASE_SHIFT 0 CT#CLK1_DUTY_CYCLE 50 CT#PORT_PHASEDONE PORT_UNUSED CT#OPERATION_MODE NORMAL CT#PORT_CONFIGUPDATE PORT_UNUSED CT#CLK1_MULTIPLY_BY 24 CT#COMPENSATE_CLOCK CLK0 CT#PORT_CLKSWITCH PORT_UNUSED CT#INCLK0_INPUT_FREQUENCY 20000 CT#PORT_SCANDONE PORT_UNUSED CT#PORT_CLKLOSS PORT_UNUSED CT#PORT_INCLK1 PORT_UNUSED CT#AVALON_USE_SEPARATE_SYSCLK YES CT#PORT_INCLK0 PORT_USED CT#PORT_clkena5 PORT_UNUSED CT#PORT_clkena4 PORT_UNUSED CT#PORT_clkena3 PORT_UNUSED CT#PORT_clkena2 PORT_UNUSED CT#PORT_clkena1 PORT_UNUSED CT#PORT_clkena0 PORT_UNUSED CT#CLK1_PHASE_SHIFT 0 CT#PORT_ARESET PORT_USED CT#BANDWIDTH_TYPE AUTO CT#CLK2_MULTIPLY_BY 12 CT#INTENDED_DEVICE_FAMILY {Cyclone IV E} CT#PORT_SCANREAD PORT_UNUSED CT#CLK2_DUTY_CYCLE 50 CT#PORT_PHASESTEP PORT_UNUSED CT#PORT_SCANCLK PORT_UNUSED CT#PORT_CLKBAD1 PORT_UNUSED CT#PORT_CLKBAD0 PORT_UNUSED CT#PORT_FBIN PORT_UNUSED CT#PORT_PHASEUPDOWN PORT_UNUSED CT#PORT_extclk3 PORT_UNUSED CT#PORT_extclk2 PORT_UNUSED CT#PORT_extclk1 PORT_UNUSED CT#PORT_PHASECOUNTERSELECT PORT_UNUSED CT#PORT_extclk0 PORT_UNUSED CT#PORT_ACTIVECLOCK PORT_UNUSED CT#CLK2_PHASE_SHIFT -35 CT#CLK0_DUTY_CYCLE 50 CT#CLK0_DIVIDE_BY 5 CT#CLK1_DIVIDE_BY 5 CT#CLK3_MULTIPLY_BY 4 CT#PORT_LOCKED PORT_USED</value>
+   <value>CT#CLK2_DIVIDE_BY 1 CT#PORT_clk5 PORT_UNUSED CT#PORT_clk4 PORT_UNUSED CT#PORT_clk3 PORT_USED CT#PORT_clk2 PORT_USED CT#PORT_clk1 PORT_USED CT#PORT_clk0 PORT_USED CT#CLK0_MULTIPLY_BY 2 CT#PORT_SCANWRITE PORT_UNUSED CT#PORT_SCANACLR PORT_UNUSED CT#PORT_PFDENA PORT_UNUSED CT#CLK3_DUTY_CYCLE 50 CT#CLK3_DIVIDE_BY 5 CT#PORT_PLLENA PORT_UNUSED CT#PORT_SCANDATA PORT_UNUSED CT#CLK3_PHASE_SHIFT 0 CT#PORT_SCANCLKENA PORT_UNUSED CT#WIDTH_CLOCK 5 CT#PORT_SCANDATAOUT PORT_UNUSED CT#LPM_TYPE altpll CT#PLL_TYPE AUTO CT#CLK0_PHASE_SHIFT 0 CT#CLK1_DUTY_CYCLE 50 CT#PORT_PHASEDONE PORT_UNUSED CT#OPERATION_MODE NORMAL CT#PORT_CONFIGUPDATE PORT_UNUSED CT#CLK1_MULTIPLY_BY 4 CT#COMPENSATE_CLOCK CLK0 CT#PORT_CLKSWITCH PORT_UNUSED CT#INCLK0_INPUT_FREQUENCY 20000 CT#PORT_SCANDONE PORT_UNUSED CT#PORT_CLKLOSS PORT_UNUSED CT#PORT_INCLK1 PORT_UNUSED CT#AVALON_USE_SEPARATE_SYSCLK YES CT#PORT_INCLK0 PORT_USED CT#PORT_clkena5 PORT_UNUSED CT#PORT_clkena4 PORT_UNUSED CT#PORT_clkena3 PORT_UNUSED CT#PORT_clkena2 PORT_UNUSED CT#PORT_clkena1 PORT_UNUSED CT#PORT_clkena0 PORT_UNUSED CT#CLK1_PHASE_SHIFT 0 CT#PORT_ARESET PORT_USED CT#BANDWIDTH_TYPE AUTO CT#CLK2_MULTIPLY_BY 2 CT#INTENDED_DEVICE_FAMILY {Cyclone IV E} CT#PORT_SCANREAD PORT_UNUSED CT#CLK2_DUTY_CYCLE 50 CT#PORT_PHASESTEP PORT_UNUSED CT#PORT_SCANCLK PORT_UNUSED CT#PORT_CLKBAD1 PORT_UNUSED CT#PORT_CLKBAD0 PORT_UNUSED CT#PORT_FBIN PORT_UNUSED CT#PORT_PHASEUPDOWN PORT_UNUSED CT#PORT_extclk3 PORT_UNUSED CT#PORT_extclk2 PORT_UNUSED CT#PORT_extclk1 PORT_UNUSED CT#PORT_PHASECOUNTERSELECT PORT_UNUSED CT#PORT_extclk0 PORT_UNUSED CT#PORT_ACTIVECLOCK PORT_UNUSED CT#CLK2_PHASE_SHIFT -1500 CT#CLK0_DUTY_CYCLE 50 CT#CLK0_DIVIDE_BY 1 CT#CLK1_DIVIDE_BY 1 CT#CLK3_MULTIPLY_BY 1 CT#PORT_LOCKED PORT_USED</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -1356,7 +1356,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="HIDDEN_PRIVATES">
    <type>java.lang.String</type>
-   <value>PT#GLOCKED_FEATURE_ENABLED 0 PT#SPREAD_FEATURE_ENABLED 0 PT#BANDWIDTH_FREQ_UNIT MHz PT#CUR_DEDICATED_CLK c0 PT#INCLK0_FREQ_EDIT 50.000 PT#BANDWIDTH_PRESET Low PT#PLL_LVDS_PLL_CHECK 0 PT#BANDWIDTH_USE_PRESET 0 PT#AVALON_USE_SEPARATE_SYSCLK YES PT#OUTPUT_FREQ_UNIT3 MHz PT#PLL_ENHPLL_CHECK 0 PT#OUTPUT_FREQ_UNIT2 MHz PT#OUTPUT_FREQ_UNIT1 MHz PT#OUTPUT_FREQ_UNIT0 MHz PT#PHASE_RECONFIG_FEATURE_ENABLED 1 PT#CREATE_CLKBAD_CHECK 0 PT#CLKSWITCH_CHECK 0 PT#INCLK1_FREQ_EDIT 100.000 PT#NORMAL_MODE_RADIO 1 PT#SRC_SYNCH_COMP_RADIO 0 PT#PLL_ARESET_CHECK 1 PT#LONG_SCAN_RADIO 1 PT#SCAN_FEATURE_ENABLED 1 PT#USE_CLK3 1 PT#USE_CLK2 1 PT#PHASE_RECONFIG_INPUTS_CHECK 0 PT#USE_CLK1 1 PT#USE_CLK0 1 PT#PRIMARY_CLK_COMBO inclk0 PT#BANDWIDTH 1.000 PT#GLOCKED_COUNTER_EDIT_CHANGED 1 PT#PLL_FASTPLL_CHECK 0 PT#SPREAD_FREQ_UNIT KHz PT#LVDS_PHASE_SHIFT_UNIT3 deg PT#PLL_AUTOPLL_CHECK 1 PT#LVDS_PHASE_SHIFT_UNIT2 deg PT#OUTPUT_FREQ_MODE3 1 PT#LVDS_PHASE_SHIFT_UNIT1 deg PT#OUTPUT_FREQ_MODE2 1 PT#LVDS_PHASE_SHIFT_UNIT0 deg PT#OUTPUT_FREQ_MODE1 1 PT#SWITCHOVER_FEATURE_ENABLED 0 PT#MIG_DEVICE_SPEED_GRADE Any PT#OUTPUT_FREQ_MODE0 1 PT#BANDWIDTH_FEATURE_ENABLED 1 PT#INCLK0_FREQ_UNIT_COMBO MHz PT#ZERO_DELAY_RADIO 0 PT#OUTPUT_FREQ3 40.00000000 PT#OUTPUT_FREQ2 120.00000000 PT#OUTPUT_FREQ1 240.00000000 PT#OUTPUT_FREQ0 120.00000000 PT#SHORT_SCAN_RADIO 0 PT#LVDS_MODE_DATA_RATE_DIRTY 0 PT#CUR_FBIN_CLK c0 PT#PLL_ADVANCED_PARAM_CHECK 0 PT#CLKBAD_SWITCHOVER_CHECK 0 PT#PHASE_SHIFT_STEP_ENABLED_CHECK 0 PT#DEVICE_SPEED_GRADE Any PT#PLL_FBMIMIC_CHECK 0 PT#LVDS_MODE_DATA_RATE {Not Available} PT#LOCKED_OUTPUT_CHECK 1 PT#SPREAD_PERCENT 0.500 PT#PHASE_SHIFT3 0.00000000 PT#PHASE_SHIFT2 -1.50000000 PT#DIV_FACTOR3 100 PT#PHASE_SHIFT1 0.00000000 PT#DIV_FACTOR2 10 PT#PHASE_SHIFT0 0.00000000 PT#DIV_FACTOR1 5 PT#DIV_FACTOR0 10 PT#CNX_NO_COMPENSATE_RADIO 0 PT#USE_CLKENA3 0 PT#USE_CLKENA2 0 PT#USE_CLKENA1 0 PT#USE_CLKENA0 0 PT#CREATE_INCLK1_CHECK 0 PT#GLOCK_COUNTER_EDIT 1048575 PT#INCLK1_FREQ_UNIT_COMBO MHz PT#EFF_OUTPUT_FREQ_VALUE3 40.000000 PT#EFF_OUTPUT_FREQ_VALUE2 120.000000 PT#EFF_OUTPUT_FREQ_VALUE1 240.000000 PT#EFF_OUTPUT_FREQ_VALUE0 120.000000 PT#SPREAD_FREQ 50.000 PT#USE_MIL_SPEED_GRADE 0 PT#EXPLICIT_SWITCHOVER_COUNTER 0 PT#STICKY_CLK3 1 PT#STICKY_CLK2 1 PT#STICKY_CLK1 1 PT#STICKY_CLK0 1 PT#EXT_FEEDBACK_RADIO 0 PT#MIRROR_CLK3 0 PT#MIRROR_CLK2 0 PT#MIRROR_CLK1 0 PT#MIRROR_CLK0 0 PT#SWITCHOVER_COUNT_EDIT 1 PT#SELF_RESET_LOCK_LOSS 0 PT#PLL_PFDENA_CHECK 0 PT#INT_FEEDBACK__MODE_RADIO 1 PT#INCLK1_FREQ_EDIT_CHANGED 1 PT#CLKLOSS_CHECK 0 PT#SYNTH_WRAPPER_GEN_POSTFIX 0 PT#PHASE_SHIFT_UNIT3 deg PT#PHASE_SHIFT_UNIT2 deg PT#PHASE_SHIFT_UNIT1 deg PT#PHASE_SHIFT_UNIT0 deg PT#BANDWIDTH_USE_AUTO 1 PT#HAS_MANUAL_SWITCHOVER 1 PT#MULT_FACTOR3 27 PT#MULT_FACTOR2 27 PT#MULT_FACTOR1 27 PT#MULT_FACTOR0 27 PT#SPREAD_USE 0 PT#GLOCKED_MODE_CHECK 0 PT#DUTY_CYCLE3 50.00000000 PT#DUTY_CYCLE2 50.00000000 PT#DUTY_CYCLE1 50.00000000 PT#SACN_INPUTS_CHECK 0 PT#DUTY_CYCLE0 50.00000000 PT#INTENDED_DEVICE_FAMILY {Cyclone IV E} PT#PLL_TARGET_HARCOPY_CHECK 0 PT#INCLK1_FREQ_UNIT_CHANGED 1 PT#RECONFIG_FILE ALTPLL1342056137825533.mif PT#ACTIVECLK_CHECK 0</value>
+   <value>PT#GLOCKED_FEATURE_ENABLED 0 PT#SPREAD_FEATURE_ENABLED 0 PT#BANDWIDTH_FREQ_UNIT MHz PT#CUR_DEDICATED_CLK c0 PT#INCLK0_FREQ_EDIT 50.000 PT#BANDWIDTH_PRESET Low PT#PLL_LVDS_PLL_CHECK 0 PT#BANDWIDTH_USE_PRESET 0 PT#AVALON_USE_SEPARATE_SYSCLK YES PT#OUTPUT_FREQ_UNIT3 MHz PT#PLL_ENHPLL_CHECK 0 PT#OUTPUT_FREQ_UNIT2 MHz PT#OUTPUT_FREQ_UNIT1 MHz PT#OUTPUT_FREQ_UNIT0 MHz PT#PHASE_RECONFIG_FEATURE_ENABLED 1 PT#CREATE_CLKBAD_CHECK 0 PT#CLKSWITCH_CHECK 0 PT#INCLK1_FREQ_EDIT 100.000 PT#NORMAL_MODE_RADIO 1 PT#SRC_SYNCH_COMP_RADIO 0 PT#PLL_ARESET_CHECK 1 PT#LONG_SCAN_RADIO 1 PT#SCAN_FEATURE_ENABLED 1 PT#USE_CLK3 1 PT#USE_CLK2 1 PT#PHASE_RECONFIG_INPUTS_CHECK 0 PT#USE_CLK1 1 PT#USE_CLK0 1 PT#PRIMARY_CLK_COMBO inclk0 PT#BANDWIDTH 1.000 PT#GLOCKED_COUNTER_EDIT_CHANGED 1 PT#PLL_FASTPLL_CHECK 0 PT#SPREAD_FREQ_UNIT KHz PT#LVDS_PHASE_SHIFT_UNIT3 deg PT#PLL_AUTOPLL_CHECK 1 PT#LVDS_PHASE_SHIFT_UNIT2 deg PT#OUTPUT_FREQ_MODE3 1 PT#LVDS_PHASE_SHIFT_UNIT1 deg PT#OUTPUT_FREQ_MODE2 1 PT#LVDS_PHASE_SHIFT_UNIT0 deg PT#OUTPUT_FREQ_MODE1 1 PT#SWITCHOVER_FEATURE_ENABLED 0 PT#MIG_DEVICE_SPEED_GRADE Any PT#OUTPUT_FREQ_MODE0 1 PT#BANDWIDTH_FEATURE_ENABLED 1 PT#INCLK0_FREQ_UNIT_COMBO MHz PT#ZERO_DELAY_RADIO 0 PT#OUTPUT_FREQ3 10.00000000 PT#OUTPUT_FREQ2 100.00000000 PT#OUTPUT_FREQ1 200.00000000 PT#OUTPUT_FREQ0 100.00000000 PT#SHORT_SCAN_RADIO 0 PT#LVDS_MODE_DATA_RATE_DIRTY 0 PT#CUR_FBIN_CLK c0 PT#PLL_ADVANCED_PARAM_CHECK 0 PT#CLKBAD_SWITCHOVER_CHECK 0 PT#PHASE_SHIFT_STEP_ENABLED_CHECK 0 PT#DEVICE_SPEED_GRADE Any PT#PLL_FBMIMIC_CHECK 0 PT#LVDS_MODE_DATA_RATE {Not Available} PT#LOCKED_OUTPUT_CHECK 1 PT#SPREAD_PERCENT 0.500 PT#PHASE_SHIFT3 0.00000000 PT#PHASE_SHIFT2 -1.50000000 PT#DIV_FACTOR3 5 PT#PHASE_SHIFT1 0.00000000 PT#DIV_FACTOR2 1 PT#PHASE_SHIFT0 0.00000000 PT#DIV_FACTOR1 1 PT#DIV_FACTOR0 1 PT#CNX_NO_COMPENSATE_RADIO 0 PT#USE_CLKENA3 0 PT#USE_CLKENA2 0 PT#USE_CLKENA1 0 PT#USE_CLKENA0 0 PT#CREATE_INCLK1_CHECK 0 PT#GLOCK_COUNTER_EDIT 1048575 PT#INCLK1_FREQ_UNIT_COMBO MHz PT#EFF_OUTPUT_FREQ_VALUE3 10.000000 PT#EFF_OUTPUT_FREQ_VALUE2 100.000000 PT#EFF_OUTPUT_FREQ_VALUE1 200.000000 PT#EFF_OUTPUT_FREQ_VALUE0 100.000000 PT#SPREAD_FREQ 50.000 PT#USE_MIL_SPEED_GRADE 0 PT#EXPLICIT_SWITCHOVER_COUNTER 0 PT#STICKY_CLK3 1 PT#STICKY_CLK2 1 PT#STICKY_CLK1 1 PT#STICKY_CLK0 1 PT#MIRROR_CLK3 0 PT#EXT_FEEDBACK_RADIO 0 PT#MIRROR_CLK2 0 PT#MIRROR_CLK1 0 PT#SWITCHOVER_COUNT_EDIT 1 PT#MIRROR_CLK0 0 PT#SELF_RESET_LOCK_LOSS 0 PT#PLL_PFDENA_CHECK 0 PT#INT_FEEDBACK__MODE_RADIO 1 PT#INCLK1_FREQ_EDIT_CHANGED 1 PT#SYNTH_WRAPPER_GEN_POSTFIX 0 PT#CLKLOSS_CHECK 0 PT#PHASE_SHIFT_UNIT3 deg PT#PHASE_SHIFT_UNIT2 ns PT#PHASE_SHIFT_UNIT1 deg PT#PHASE_SHIFT_UNIT0 deg PT#BANDWIDTH_USE_AUTO 1 PT#HAS_MANUAL_SWITCHOVER 1 PT#MULT_FACTOR3 1 PT#MULT_FACTOR2 2 PT#MULT_FACTOR1 4 PT#MULT_FACTOR0 2 PT#SPREAD_USE 0 PT#GLOCKED_MODE_CHECK 0 PT#DUTY_CYCLE3 50.00000000 PT#DUTY_CYCLE2 50.00000000 PT#SACN_INPUTS_CHECK 0 PT#DUTY_CYCLE1 50.00000000 PT#INTENDED_DEVICE_FAMILY {Cyclone IV E} PT#DUTY_CYCLE0 50.00000000 PT#PLL_TARGET_HARCOPY_CHECK 0 PT#INCLK1_FREQ_UNIT_CHANGED 1 PT#RECONFIG_FILE ALTPLL1342056137825533.mif PT#ACTIVECLK_CHECK 0</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -1372,7 +1372,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="HIDDEN_IS_NUMERIC">
    <type>java.lang.String</type>
-   <value>IN#WIDTH_CLOCK 1 IN#CLK0_DUTY_CYCLE 1 IN#CLK2_DIVIDE_BY 1 IN#PLL_TARGET_HARCOPY_CHECK 1 IN#CLK3_DIVIDE_BY 1 IN#CLK1_MULTIPLY_BY 1 IN#CLK3_DUTY_CYCLE 1 IN#SWITCHOVER_COUNT_EDIT 1 IN#INCLK0_INPUT_FREQUENCY 1 IN#PLL_LVDS_PLL_CHECK 1 IN#PLL_AUTOPLL_CHECK 1 IN#PLL_FASTPLL_CHECK 1 IN#CLK1_DUTY_CYCLE 1 IN#PLL_ENHPLL_CHECK 1 IN#CLK2_MULTIPLY_BY 1 IN#DIV_FACTOR3 1 IN#DIV_FACTOR2 1 IN#DIV_FACTOR1 1 IN#DIV_FACTOR0 1 IN#LVDS_MODE_DATA_RATE_DIRTY 1 IN#CLK2_DUTY_CYCLE 1 IN#GLOCK_COUNTER_EDIT 1 IN#CLK0_DIVIDE_BY 1 IN#CLK3_MULTIPLY_BY 1 IN#MULT_FACTOR3 1 IN#MULT_FACTOR2 1 IN#MULT_FACTOR1 1 IN#MULT_FACTOR0 1 IN#CLK0_MULTIPLY_BY 1 IN#USE_MIL_SPEED_GRADE 1 IN#CLK1_DIVIDE_BY 1</value>
+   <value>IN#WIDTH_CLOCK 1 IN#CLK0_DUTY_CYCLE 1 IN#CLK2_DIVIDE_BY 1 IN#PLL_TARGET_HARCOPY_CHECK 1 IN#CLK3_DIVIDE_BY 1 IN#CLK1_MULTIPLY_BY 1 IN#CLK3_DUTY_CYCLE 1 IN#SWITCHOVER_COUNT_EDIT 1 IN#INCLK0_INPUT_FREQUENCY 1 IN#PLL_LVDS_PLL_CHECK 1 IN#PLL_AUTOPLL_CHECK 1 IN#PLL_FASTPLL_CHECK 1 IN#CLK1_DUTY_CYCLE 1 IN#PLL_ENHPLL_CHECK 1 IN#CLK2_MULTIPLY_BY 1 IN#DIV_FACTOR3 1 IN#DIV_FACTOR2 1 IN#DIV_FACTOR1 1 IN#DIV_FACTOR0 1 IN#LVDS_MODE_DATA_RATE_DIRTY 1 IN#GLOCK_COUNTER_EDIT 1 IN#CLK2_DUTY_CYCLE 1 IN#CLK0_DIVIDE_BY 1 IN#CLK3_MULTIPLY_BY 1 IN#MULT_FACTOR3 1 IN#MULT_FACTOR2 1 IN#MULT_FACTOR1 1 IN#MULT_FACTOR0 1 IN#CLK0_MULTIPLY_BY 1 IN#USE_MIL_SPEED_GRADE 1 IN#CLK1_DIVIDE_BY 1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -1388,7 +1388,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="HIDDEN_IF_PORTS">
    <type>java.lang.String</type>
-   <value>IF#locked {output 0} IF#reset {input 0} IF#clk {input 0} IF#readdata {output 32} IF#write {input 0} IF#phasedone {output 0} IF#c3 {output 0} IF#c2 {output 0} IF#address {input 2} IF#c1 {output 0} IF#c0 {output 0} IF#writedata {input 32} IF#read {input 0} IF#areset {input 0} IF#inclk0 {input 0}</value>
+   <value>IF#locked {output 0} IF#reset {input 0} IF#clk {input 0} IF#readdata {output 32} IF#write {input 0} IF#phasedone {output 0} IF#c3 {output 0} IF#address {input 2} IF#c2 {output 0} IF#c1 {output 0} IF#c0 {output 0} IF#writedata {input 32} IF#read {input 0} IF#areset {input 0} IF#inclk0 {input 0}</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -1413,7 +1413,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="AUTO_INCLK_INTERFACE_CLOCK_RATE">
    <type>java.lang.Long</type>
-   <value>40000000</value>
+   <value>10000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -1484,7 +1484,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>40000000</value>
+    <value>10000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -1964,7 +1964,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>long</type>
-    <value>120000000</value>
+    <value>100000000</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -2020,6 +2020,12 @@ parameters are a RESULT of the module parameters. -->
    </port>
    <clockDomainMember>
     <isBridge>false</isBridge>
+    <moduleName>mm_bridge_0</moduleName>
+    <slaveName>clk</slaveName>
+    <name>mm_bridge_0.clk</name>
+   </clockDomainMember>
+   <clockDomainMember>
+    <isBridge>false</isBridge>
     <moduleName>sdram</moduleName>
     <slaveName>clk</slaveName>
     <name>sdram.clk</name>
@@ -2029,12 +2035,6 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>cpu</moduleName>
     <slaveName>clk</slaveName>
     <name>cpu.clk</name>
-   </clockDomainMember>
-   <clockDomainMember>
-    <isBridge>false</isBridge>
-    <moduleName>mm_bridge_0</moduleName>
-    <slaveName>clk</slaveName>
-    <name>mm_bridge_0.clk</name>
    </clockDomainMember>
    <clockDomainMember>
     <isBridge>false</isBridge>
@@ -2063,7 +2063,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>long</type>
-    <value>240000000</value>
+    <value>200000000</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -2138,7 +2138,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>long</type>
-    <value>120000000</value>
+    <value>100000000</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -2207,7 +2207,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>long</type>
-    <value>40000000</value>
+    <value>10000000</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -2681,7 +2681,7 @@ parameters are a RESULT of the module parameters. -->
    </port>
   </interface>
  </module>
- <module name="cpu" kind="altera_nios2_gen2" version="17.1" path="cpu">
+ <module name="cpu" kind="altera_nios2_qsys" version="16.1" path="cpu">
   <!-- Describes a single module. Module parameters are
 the requested settings for a module instance. -->
   <assignment>
@@ -2697,12 +2697,8 @@ the requested settings for a module instance. -->
    <value>0x08080020</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.CMacro.CPU_ARCH_NIOS2_R1</name>
-   <value></value>
-  </assignment>
-  <assignment>
    <name>embeddedsw.CMacro.CPU_FREQ</name>
-   <value>120000000u</value>
+   <value>100000000u</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.CPU_ID_SIZE</name>
@@ -2721,10 +2717,6 @@ the requested settings for a module instance. -->
    <value>29</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.CMacro.DCACHE_BYPASS_MASK</name>
-   <value>0x80000000</value>
-  </assignment>
-  <assignment>
    <name>embeddedsw.CMacro.DCACHE_LINE_SIZE</name>
    <value>32</value>
   </assignment>
@@ -2739,14 +2731,6 @@ the requested settings for a module instance. -->
   <assignment>
    <name>embeddedsw.CMacro.EXCEPTION_ADDR</name>
    <value>0x00000020</value>
-  </assignment>
-  <assignment>
-   <name>embeddedsw.CMacro.FLASH_ACCELERATOR_LINES</name>
-   <value>0</value>
-  </assignment>
-  <assignment>
-   <name>embeddedsw.CMacro.FLASH_ACCELERATOR_LINE_SIZE</name>
-   <value>0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.FLUSHDA_SUPPORTED</name>
@@ -2770,14 +2754,6 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.HAS_DEBUG_STUB</name>
-   <value></value>
-  </assignment>
-  <assignment>
-   <name>embeddedsw.CMacro.HAS_EXTRA_EXCEPTION_INFO</name>
-   <value></value>
-  </assignment>
-  <assignment>
-   <name>embeddedsw.CMacro.HAS_ILLEGAL_INSTRUCTION_EXCEPTION</name>
    <value></value>
   </assignment>
   <assignment>
@@ -2809,16 +2785,8 @@ the requested settings for a module instance. -->
    <value>0</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.CMacro.OCI_VERSION</name>
-   <value>1</value>
-  </assignment>
-  <assignment>
    <name>embeddedsw.CMacro.RESET_ADDR</name>
    <value>0x00000000</value>
-  </assignment>
-  <assignment>
-   <name>embeddedsw.configuration.DataCacheVictimBufImpl</name>
-   <value>ram</value>
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.HDLSimCachesCleared</name>
@@ -2830,7 +2798,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.breakSlave</name>
-   <value>cpu.debug_mem_slave</value>
+   <value>cpu.jtag_debug_module</value>
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.cpuArchitecture</name>
@@ -2854,7 +2822,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
-   <value>altr,nios2-1.1</value>
+   <value>altr,nios2-1.0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.group</name>
@@ -2865,28 +2833,28 @@ the requested settings for a module instance. -->
    <value>nios2</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.altr,exception-addr</name>
+   <name>embeddedsw.dts.params.ALTR,exception-addr</name>
    <value>0x00000020</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.altr,has-initda</name>
+   <name>embeddedsw.dts.params.ALTR,has-initda</name>
    <value>1</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.altr,has-mul</name>
+   <name>embeddedsw.dts.params.ALTR,has-mul</name>
    <value>1</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.altr,implementation</name>
+   <name>embeddedsw.dts.params.ALTR,implementation</name>
    <value>"fast"</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.altr,reset-addr</name>
+   <name>embeddedsw.dts.params.ALTR,reset-addr</name>
    <value>0x00000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.clock-frequency</name>
-   <value>120000000u</value>
+   <value>100000000u</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.dcache-line-size</name>
@@ -2908,22 +2876,6 @@ the requested settings for a module instance. -->
    <name>embeddedsw.dts.vendor</name>
    <value>altr</value>
   </assignment>
-  <parameter name="tmr_enabled">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_disable_tmr_inj">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="setting_showUnpublishedSettings">
    <type>boolean</type>
    <value>false</value>
@@ -2940,7 +2892,63 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
+  <parameter name="setting_preciseSlaveAccessErrorException">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
   <parameter name="setting_preciseIllegalMemAccessException">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_preciseDivisionErrorException">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>false</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_performanceCounter">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_illegalMemAccessDetection">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_illegalInstructionsTrap">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_fullWaveformSignals">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_extraExceptionInfo">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
@@ -2956,7 +2964,7 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_exportdebuginfo">
+  <parameter name="setting_debugSimGen">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
@@ -2965,6 +2973,14 @@ the requested settings for a module instance. -->
    <valid>true</valid>
   </parameter>
   <parameter name="setting_clearXBitsLDNonBypass">
+   <type>boolean</type>
+   <value>true</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_bit31BypassDCache">
    <type>boolean</type>
    <value>true</value>
    <derived>false</derived>
@@ -2996,14 +3012,6 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="register_file_por">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="setting_asic_synopsys_translate_on_off">
    <type>boolean</type>
    <value>false</value>
@@ -3012,47 +3020,15 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_asic_third_party_synthesis">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_asic_add_scan_mode_input">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_oci_version">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_fast_register_read">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_exportHostDebugPort">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="setting_oci_export_jtag_signals">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_bhtIndexPcOnly">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
@@ -3076,28 +3052,12 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="io_regionbase">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="io_regionsize">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_support31bitdcachebypass">
+  <parameter name="setting_allowFullAddressRange">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>true</visible>
+   <visible>false</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="setting_activateTrace">
@@ -3105,15 +3065,15 @@ the requested settings for a module instance. -->
    <value>true</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>true</visible>
+   <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_allow_break_inst">
+  <parameter name="setting_activateTrace_user">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>false</visible>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="setting_activateTestEndChecker">
@@ -3132,17 +3092,17 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_disableocitrace">
+  <parameter name="setting_activateMonitors">
    <type>boolean</type>
-   <value>false</value>
+   <value>true</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_activateMonitors">
+  <parameter name="setting_activateModelChecker">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -3170,6 +3130,14 @@ the requested settings for a module instance. -->
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="muldiv_divider">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="mpu_useLimit">
@@ -3204,6 +3172,54 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
+  <parameter name="manuallyAssignCpuID">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="debug_triggerArming">
+   <type>boolean</type>
+   <value>true</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="debug_embeddedPLL">
+   <type>boolean</type>
+   <value>true</value>
+   <derived>false</derived>
+   <enabled>false</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="debug_debugReqSignals">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="debug_assignJtagInstanceID">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="dcache_omitDataMaster">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
   <parameter name="cpuReset">
    <type>boolean</type>
    <value>false</value>
@@ -3221,14 +3237,6 @@ the requested settings for a module instance. -->
    <valid>true</valid>
   </parameter>
   <parameter name="setting_removeRAMinit">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_tmr_output_disable">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
@@ -3268,6 +3276,14 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
+  <parameter name="debug_jtagInstanceID">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+  </parameter>
   <parameter name="resetOffset">
    <type>int</type>
    <value>0</value>
@@ -3288,27 +3304,27 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>0</value>
    <derived>false</derived>
-   <enabled>true</enabled>
+   <enabled>false</enabled>
    <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="cpuID_stored">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="breakOffset">
    <type>int</type>
    <value>32</value>
    <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
+   <enabled>false</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="userDefinedSettings">
-   <type>java.lang.String</type>
-   <value></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tracefilename">
    <type>java.lang.String</type>
    <value></value>
    <derived>false</derived>
@@ -3344,6 +3360,14 @@ the requested settings for a module instance. -->
    <type>java.lang.String</type>
    <value>cpu.jtag_debug_module</value>
    <derived>false</derived>
+   <enabled>false</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="setting_perfCounterWidth">
+   <type>int</type>
+   <value>32</value>
+   <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
    <valid>true</valid>
@@ -3356,12 +3380,12 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_branchpredictiontype">
+  <parameter name="setting_branchPredictionType">
    <type>java.lang.String</type>
-   <value>Dynamic</value>
+   <value>Automatic</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>true</visible>
+   <visible>false</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="setting_bhtPtrSz">
@@ -3369,76 +3393,12 @@ the requested settings for a module instance. -->
    <value>8</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="cpuArchRev">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="stratix_dspblock_shift_mul">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="shifterType">
+  <parameter name="muldiv_multiplierType">
    <type>java.lang.String</type>
-   <value>fast_le_shift</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="multiplierType">
-   <type>java.lang.String</type>
-   <value>mul_fast32</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="mul_shift_choice">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="mul_32_impl">
-   <type>int</type>
-   <value>2</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="mul_64_impl">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="shift_rot_impl">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="dividerType">
-   <type>java.lang.String</type>
-   <value>no_div</value>
+   <value>EmbeddedMulFast</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -3516,22 +3476,6 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="fa_cache_line">
-   <type>int</type>
-   <value>2</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="fa_cache_linesize">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="icache_tagramBlockType">
    <type>java.lang.String</type>
    <value>Automatic</value>
@@ -3580,6 +3524,22 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
+  <parameter name="debug_level">
+   <type>java.lang.String</type>
+   <value>Level1</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="debug_OCIOnchipTrace">
+   <type>java.lang.String</type>
+   <value>_128</value>
+   <derived>false</derived>
+   <enabled>false</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
   <parameter name="dcache_size">
    <type>int</type>
    <value>4096</value>
@@ -3612,15 +3572,15 @@ the requested settings for a module instance. -->
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_exportvectors">
-   <type>boolean</type>
-   <value>false</value>
+  <parameter name="dcache_lineSize">
+   <type>int</type>
+   <value>32</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>false</visible>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="setting_usedesignware">
+  <parameter name="setting_exportvectors">
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
@@ -3662,7 +3622,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="setting_dc_ecc_present">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -3670,7 +3630,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="setting_itcm_ecc_present">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -3678,7 +3638,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="setting_dtcm_ecc_present">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -3700,14 +3660,6 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="ocimem_ramInit">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="mmu_ramBlockType">
    <type>java.lang.String</type>
    <value>Automatic</value>
@@ -3719,318 +3671,6 @@ the requested settings for a module instance. -->
   <parameter name="bht_ramBlockType">
    <type>java.lang.String</type>
    <value>Automatic</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="cdx_enabled">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="mpx_enabled">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_enabled">
-   <type>boolean</type>
-   <value>true</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_triggerArming">
-   <type>boolean</type>
-   <value>true</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_debugReqSignals">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_assignJtagInstanceID">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_jtagInstanceID">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_OCIOnchipTrace">
-   <type>java.lang.String</type>
-   <value>_128</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_hwbreakpoint">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_datatrigger">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_traceType">
-   <type>java.lang.String</type>
-   <value>none</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_traceStorage">
-   <type>java.lang.String</type>
-   <value>onchip_trace</value>
-   <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="master_addr_map">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="instruction_master_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="instruction_master_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="flash_instruction_master_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="flash_instruction_master_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="data_master_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="data_master_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_0_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_0_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_1_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_1_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_2_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_2_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_3_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_instruction_master_3_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_0_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_0_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_1_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_1_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_2_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_2_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_3_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="tightly_coupled_data_master_3_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="instruction_master_high_performance_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="instruction_master_high_performance_paddr_size">
-   <type>long</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="data_master_high_performance_paddr_base">
-   <type>int</type>
-   <value>0</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="data_master_high_performance_paddr_size">
-   <type>long</type>
-   <value>0</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -4057,7 +3697,7 @@ the requested settings for a module instance. -->
    <value>134742048</value>
    <derived>true</derived>
    <enabled>true</enabled>
-   <visible>false</visible>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="mmu_TLBMissExcAbsAddr">
@@ -4084,33 +3724,9 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="breakSlave_derived">
-   <type>java.lang.String</type>
-   <value>cpu.debug_mem_slave</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="dcache_lineSize_derived">
    <type>int</type>
    <value>32</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_ioregionBypassDCache">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="setting_bit31BypassDCache">
-   <type>boolean</type>
-   <value>true</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -4132,38 +3748,6 @@ the requested settings for a module instance. -->
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
-  <parameter name="debug_onchiptrace">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_offchiptrace">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_insttrace">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="debug_datatrace">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>true</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-  </parameter>
   <parameter name="instAddrWidth">
    <type>int</type>
    <value>29</value>
@@ -4173,16 +3757,6 @@ the requested settings for a module instance. -->
    <valid>true</valid>
    <sysinfo_type>ADDRESS_WIDTH</sysinfo_type>
    <sysinfo_arg>instruction_master</sysinfo_arg>
-  </parameter>
-  <parameter name="faAddrWidth">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_WIDTH</sysinfo_type>
-   <sysinfo_arg>flash_instruction_master</sysinfo_arg>
   </parameter>
   <parameter name="dataAddrWidth">
    <type>int</type>
@@ -4274,29 +3848,9 @@ the requested settings for a module instance. -->
    <sysinfo_type>ADDRESS_WIDTH</sysinfo_type>
    <sysinfo_arg>tightly_coupled_instruction_master_3</sysinfo_arg>
   </parameter>
-  <parameter name="dataMasterHighPerformanceAddrWidth">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_WIDTH</sysinfo_type>
-   <sysinfo_arg>data_master_high_performance</sysinfo_arg>
-  </parameter>
-  <parameter name="instructionMasterHighPerformanceAddrWidth">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_WIDTH</sysinfo_type>
-   <sysinfo_arg>instruction_master_high_performance</sysinfo_arg>
-  </parameter>
   <parameter name="instSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='vbx1.scratchpad_slave' start='0x8000000' end='0x8010000' type='vectorblox_mxp.scratchpad_slave' /><slave name='cpu.debug_mem_slave' start='0x8080000' end='0x8080800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='timestamp_timer.s1' start='0x10800080' end='0x108000C0' type='altera_avalon_timer.s1' /><slave name='altpll_0.pll_slave' start='0x10800100' end='0x10800110' type='altpll.pll_slave' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10800160' end='0x10800168' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' /><slave name='vbx1.scratchpad_slave' start='0x8000000' end='0x8010000' /><slave name='cpu.jtag_debug_module' start='0x8080000' end='0x8080800' /><slave name='timestamp_timer.s1' start='0x10800080' end='0x108000C0' /><slave name='altpll_0.pll_slave' start='0x10800100' end='0x10800110' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10800160' end='0x10800168' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -4304,25 +3858,63 @@ the requested settings for a module instance. -->
    <sysinfo_type>ADDRESS_MAP</sysinfo_type>
    <sysinfo_arg>instruction_master</sysinfo_arg>
   </parameter>
-  <parameter name="faSlaveMapParam">
-   <type>java.lang.String</type>
-   <value></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_MAP</sysinfo_type>
-   <sysinfo_arg>flash_instruction_master</sysinfo_arg>
-  </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='vbx1.scratchpad_slave' start='0x8000000' end='0x8010000' type='vectorblox_mxp.scratchpad_slave' /><slave name='cpu.debug_mem_slave' start='0x8080000' end='0x8080800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='timestamp_timer.s1' start='0x10800080' end='0x108000C0' type='altera_avalon_timer.s1' /><slave name='altpll_0.pll_slave' start='0x10800100' end='0x10800110' type='altpll.pll_slave' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10800160' end='0x10800168' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='sdram.s1' start='0x0' end='0x8000000' /><slave name='vbx1.scratchpad_slave' start='0x8000000' end='0x8010000' /><slave name='cpu.jtag_debug_module' start='0x8080000' end='0x8080800' /><slave name='timestamp_timer.s1' start='0x10800080' end='0x108000C0' /><slave name='altpll_0.pll_slave' start='0x10800100' end='0x10800110' /><slave name='jtag_uart.avalon_jtag_slave' start='0x10800160' end='0x10800168' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
    <valid>true</valid>
    <sysinfo_type>ADDRESS_MAP</sysinfo_type>
    <sysinfo_arg>data_master</sysinfo_arg>
+  </parameter>
+  <parameter name="clockFrequency">
+   <type>long</type>
+   <value>100000000</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+   <sysinfo_type>CLOCK_RATE</sysinfo_type>
+   <sysinfo_arg>clk</sysinfo_arg>
+  </parameter>
+  <parameter name="deviceFamilyName">
+   <type>java.lang.String</type>
+   <value>CYCLONEIVE</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+   <sysinfo_type>DEVICE_FAMILY</sysinfo_type>
+  </parameter>
+  <parameter name="internalIrqMaskSystemInfo">
+   <type>long</type>
+   <value>258</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+   <sysinfo_type>INTERRUPTS_USED</sysinfo_type>
+   <sysinfo_arg>d_irq</sysinfo_arg>
+  </parameter>
+  <parameter name="customInstSlavesSystemInfo">
+   <type>java.lang.String</type>
+   <value><![CDATA[<info><slave name="vectorblox_ncs_shim_0" baseAddress="0" addressSpan="1" clockCycleType="VARIABLE" /></info>]]></value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+   <sysinfo_type>CUSTOM_INSTRUCTION_SLAVES</sysinfo_type>
+   <sysinfo_arg>custom_instruction_master</sysinfo_arg>
+  </parameter>
+  <parameter name="deviceFeaturesSystemInfo">
+   <type>java.lang.String</type>
+   <value>ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 0 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 1 EMUL 1 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 1 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 0 FPP_COMPLETELY_PLACES_AND_ROUTES_PERIPHERY 0 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 0 HARDCOPY 0 HAS_18_BIT_MULTS 0 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 0 HAS_ADVANCED_IO_INVERTED_CORNER 0 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 0 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 0 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 1 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 0 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 0 HAS_DDB_FDI_SUPPORT 0 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 1 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 1 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 0 HAS_ERROR_DETECTION_SUPPORT 0 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 0 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 0 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 0 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 0 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NADDER_STYLE_CLOCKING 0 HAS_NADDER_STYLE_FF 0 HAS_NADDER_STYLE_LCELL_COMB 0 HAS_NEW_CDB_NAME_FOR_M20K_SCLR 0 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 1 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 0 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PDN_MODEL_STATUS 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 0 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 1 HAS_POWER_BINNING_LIMITS_DATA 0 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 0 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 0 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 0 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 1 HAS_SYNTHESIS_ON_ATOMS 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 1 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 0 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 1 HAS_VCCPD_POWER_RAIL 0 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 0 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 1 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_BARE_DIE 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_REVE_SILICON 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 1 M10K_MEMORY 0 M144K_MEMORY 0 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 1 MLAB_MEMORY 0 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RESTRICT_PARTIAL_RECONFIG 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 0 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 0 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 0 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_LICENSE_FREE_PARTIAL_RECONFIG 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 0 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 SUPPORT_HIGH_SPEED_HPS 0 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 0 TRANSCEIVER_6G_BLOCK 0 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 0 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>false</visible>
+   <valid>true</valid>
+   <sysinfo_type>DEVICE_FEATURES</sysinfo_type>
   </parameter>
   <parameter name="tightlyCoupledDataMaster0MapParam">
    <type>java.lang.String</type>
@@ -4404,142 +3996,6 @@ the requested settings for a module instance. -->
    <sysinfo_type>ADDRESS_MAP</sysinfo_type>
    <sysinfo_arg>tightly_coupled_instruction_master_3</sysinfo_arg>
   </parameter>
-  <parameter name="dataMasterHighPerformanceMapParam">
-   <type>java.lang.String</type>
-   <value></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_MAP</sysinfo_type>
-   <sysinfo_arg>data_master_high_performance</sysinfo_arg>
-  </parameter>
-  <parameter name="instructionMasterHighPerformanceMapParam">
-   <type>java.lang.String</type>
-   <value></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>ADDRESS_MAP</sysinfo_type>
-   <sysinfo_arg>instruction_master_high_performance</sysinfo_arg>
-  </parameter>
-  <parameter name="clockFrequency">
-   <type>long</type>
-   <value>120000000</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CLOCK_RATE</sysinfo_type>
-   <sysinfo_arg>clk</sysinfo_arg>
-  </parameter>
-  <parameter name="deviceFamilyName">
-   <type>java.lang.String</type>
-   <value>CYCLONEIVE</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>DEVICE_FAMILY</sysinfo_type>
-  </parameter>
-  <parameter name="internalIrqMaskSystemInfo">
-   <type>long</type>
-   <value>258</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>INTERRUPTS_USED</sysinfo_type>
-   <sysinfo_arg>irq</sysinfo_arg>
-  </parameter>
-  <parameter name="customInstSlavesSystemInfo">
-   <type>java.lang.String</type>
-   <value><![CDATA[<info><slave name="vectorblox_ncs_shim_0" baseAddress="0" addressSpan="1" clockCycleType="VARIABLE" /></info>]]></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CUSTOM_INSTRUCTION_SLAVES</sysinfo_type>
-   <sysinfo_arg>custom_instruction_master</sysinfo_arg>
-  </parameter>
-  <parameter name="customInstSlavesSystemInfo_nios_a">
-   <type>java.lang.String</type>
-   <value><![CDATA[<info/>]]></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CUSTOM_INSTRUCTION_SLAVES</sysinfo_type>
-   <sysinfo_arg>custom_instruction_master_a</sysinfo_arg>
-  </parameter>
-  <parameter name="customInstSlavesSystemInfo_nios_b">
-   <type>java.lang.String</type>
-   <value><![CDATA[<info/>]]></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CUSTOM_INSTRUCTION_SLAVES</sysinfo_type>
-   <sysinfo_arg>custom_instruction_master_b</sysinfo_arg>
-  </parameter>
-  <parameter name="customInstSlavesSystemInfo_nios_c">
-   <type>java.lang.String</type>
-   <value><![CDATA[<info/>]]></value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CUSTOM_INSTRUCTION_SLAVES</sysinfo_type>
-   <sysinfo_arg>custom_instruction_master_c</sysinfo_arg>
-  </parameter>
-  <parameter name="deviceFeaturesSystemInfo">
-   <type>java.lang.String</type>
-   <value>ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 0 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 1 EMUL 1 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 1 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 1 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 0 FPP_COMPLETELY_PLACES_AND_ROUTES_PERIPHERY 0 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 0 HARDCOPY 0 HAS_18_BIT_MULTS 0 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 0 HAS_ADVANCED_IO_INVERTED_CORNER 0 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 0 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 0 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 1 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 1 HAS_BSDL_FILE_GENERATION 1 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 0 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 0 HAS_DDB_FDI_SUPPORT 0 HAS_DESIGN_ANALYZER_SUPPORT 1 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 1 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 1 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 0 HAS_ERROR_DETECTION_SUPPORT 0 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 1 HAS_FPGA_XCHANGE_SUPPORT 1 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 0 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 0 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 1 HAS_HSSI_POWER_CALCULATOR 0 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 1 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 0 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NADDER_STYLE_CLOCKING 0 HAS_NADDER_STYLE_FF 0 HAS_NADDER_STYLE_LCELL_COMB 0 HAS_NEW_CDB_NAME_FOR_M20K_SCLR 0 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 1 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 0 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PDN_MODEL_STATUS 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 0 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 1 HAS_POWER_BINNING_LIMITS_DATA 0 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 0 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 0 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 0 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 1 HAS_SYNTHESIS_ON_ATOMS 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 1 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 0 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 1 HAS_VCCPD_POWER_RAIL 0 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 0 HAS_XIBISO_WRITER_SUPPORT 1 IFP_USE_LEGACY_IO_CHECKER 0 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 1 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_BARE_DIE 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_REVE_SILICON 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 1 M10K_MEMORY 0 M144K_MEMORY 0 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 1 MLAB_MEMORY 0 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 1 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 1 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 1 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RESTRICT_PARTIAL_RECONFIG 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 0 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 0 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 0 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_LICENSE_FREE_PARTIAL_RECONFIG 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 0 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 SUPPORT_HIGH_SPEED_HPS 0 TMV_RUN_CUSTOMIZABLE_VIEWER 1 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 0 TRANSCEIVER_6G_BLOCK 0 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 0 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 0 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 1 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>DEVICE_FEATURES</sysinfo_type>
-  </parameter>
-  <parameter name="AUTO_DEVICE">
-   <type>java.lang.String</type>
-   <value>EP4CE115F29C7</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>DEVICE</sysinfo_type>
-  </parameter>
-  <parameter name="AUTO_DEVICE_SPEEDGRADE">
-   <type>java.lang.String</type>
-   <value>7</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>DEVICE_SPEEDGRADE</sysinfo_type>
-  </parameter>
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN">
-   <type>java.lang.Integer</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>CLOCK_DOMAIN</sysinfo_type>
-   <sysinfo_arg>clk</sysinfo_arg>
-  </parameter>
-  <parameter name="AUTO_CLK_RESET_DOMAIN">
-   <type>java.lang.Integer</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>false</visible>
-   <valid>true</valid>
-   <sysinfo_type>RESET_DOMAIN</sysinfo_type>
-   <sysinfo_arg>clk</sysinfo_arg>
-  </parameter>
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
    <value>UNKNOWN</value>
@@ -4602,7 +4058,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>120000000</value>
+    <value>100000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -4617,7 +4073,7 @@ parameters are a RESULT of the module parameters. -->
     <role>clk</role>
    </port>
   </interface>
-  <interface name="reset" kind="reset_sink" version="17.1">
+  <interface name="reset_n" kind="reset_sink" version="17.1">
    <!-- The connection points exposed by a module instance for the
 particular module parameters. Connection points and their
 parameters are a RESULT of the module parameters. -->
@@ -4718,7 +4174,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value>reset</value>
+    <value>reset_n</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -4989,7 +4445,7 @@ parameters are a RESULT of the module parameters. -->
     <role>readdatavalid</role>
    </port>
    <port>
-    <name>debug_mem_slave_debugaccess_to_roms</name>
+    <name>jtag_debug_module_debugaccess_to_roms</name>
     <direction>Output</direction>
     <width>1</width>
     <role>debugaccess</role>
@@ -5037,8 +4493,8 @@ parameters are a RESULT of the module parameters. -->
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>cpu</moduleName>
-    <slaveName>debug_mem_slave</slaveName>
-    <name>cpu.debug_mem_slave</name>
+    <slaveName>jtag_debug_module</slaveName>
+    <name>cpu.jtag_debug_module</name>
     <baseAddress>134742016</baseAddress>
     <span>2048</span>
    </memoryBlock>
@@ -5105,7 +4561,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value>reset</value>
+    <value>reset_n</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -5368,8 +4824,8 @@ parameters are a RESULT of the module parameters. -->
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>cpu</moduleName>
-    <slaveName>debug_mem_slave</slaveName>
-    <name>cpu.debug_mem_slave</name>
+    <slaveName>jtag_debug_module</slaveName>
+    <name>cpu.jtag_debug_module</name>
     <baseAddress>134742016</baseAddress>
     <span>2048</span>
    </memoryBlock>
@@ -5422,7 +4878,7 @@ parameters are a RESULT of the module parameters. -->
     <span>134217728</span>
    </memoryBlock>
   </interface>
-  <interface name="irq" kind="interrupt_receiver" version="17.1">
+  <interface name="d_irq" kind="interrupt_receiver" version="17.1">
    <!-- The connection points exposed by a module instance for the
 particular module parameters. Connection points and their
 parameters are a RESULT of the module parameters. -->
@@ -5444,7 +4900,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value>reset</value>
+    <value>reset_n</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -5485,7 +4941,7 @@ parameters are a RESULT of the module parameters. -->
    <type>interrupt</type>
    <isStart>true</isStart>
    <port>
-    <name>irq</name>
+    <name>d_irq</name>
     <direction>Input</direction>
     <width>32</width>
     <role>irq</role>
@@ -5505,7 +4961,7 @@ parameters are a RESULT of the module parameters. -->
     <interruptNumber>8</interruptNumber>
    </interrupt>
   </interface>
-  <interface name="debug_reset_request" kind="reset_source" version="17.1">
+  <interface name="jtag_debug_module_reset" kind="reset_source" version="17.1">
    <!-- The connection points exposed by a module instance for the
 particular module parameters. Connection points and their
 parameters are a RESULT of the module parameters. -->
@@ -5560,19 +5016,23 @@ parameters are a RESULT of the module parameters. -->
    <type>reset</type>
    <isStart>true</isStart>
    <port>
-    <name>debug_reset_request</name>
+    <name>jtag_debug_module_resetrequest</name>
     <direction>Output</direction>
     <width>1</width>
     <role>reset</role>
    </port>
   </interface>
-  <interface name="debug_mem_slave" kind="avalon_slave" version="17.1">
+  <interface name="jtag_debug_module" kind="avalon_slave" version="17.1">
    <!-- The connection points exposed by a module instance for the
 particular module parameters. Connection points and their
 parameters are a RESULT of the module parameters. -->
    <assignment>
     <name>embeddedsw.configuration.hideDevice</name>
     <value>1</value>
+   </assignment>
+   <assignment>
+    <name>embeddedsw.configuration.isMemoryDevice</name>
+    <value>true</value>
    </assignment>
    <assignment>
     <name>qsys.ui.connect</name>
@@ -5628,7 +5088,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value>reset</value>
+    <value>reset_n</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -5644,7 +5104,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="bridgedAddressOffset">
     <type>java.math.BigInteger</type>
-    <value>0</value>
+    <value></value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -5724,7 +5184,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="isMemoryDevice">
     <type>boolean</type>
-    <value>false</value>
+    <value>true</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -5893,49 +5353,49 @@ parameters are a RESULT of the module parameters. -->
    <type>avalon</type>
    <isStart>false</isStart>
    <port>
-    <name>debug_mem_slave_address</name>
+    <name>jtag_debug_module_address</name>
     <direction>Input</direction>
     <width>9</width>
     <role>address</role>
    </port>
    <port>
-    <name>debug_mem_slave_byteenable</name>
+    <name>jtag_debug_module_byteenable</name>
     <direction>Input</direction>
     <width>4</width>
     <role>byteenable</role>
    </port>
    <port>
-    <name>debug_mem_slave_debugaccess</name>
+    <name>jtag_debug_module_debugaccess</name>
     <direction>Input</direction>
     <width>1</width>
     <role>debugaccess</role>
    </port>
    <port>
-    <name>debug_mem_slave_read</name>
+    <name>jtag_debug_module_read</name>
     <direction>Input</direction>
     <width>1</width>
     <role>read</role>
    </port>
    <port>
-    <name>debug_mem_slave_readdata</name>
+    <name>jtag_debug_module_readdata</name>
     <direction>Output</direction>
     <width>32</width>
     <role>readdata</role>
    </port>
    <port>
-    <name>debug_mem_slave_waitrequest</name>
+    <name>jtag_debug_module_waitrequest</name>
     <direction>Output</direction>
     <width>1</width>
     <role>waitrequest</role>
    </port>
    <port>
-    <name>debug_mem_slave_write</name>
+    <name>jtag_debug_module_write</name>
     <direction>Input</direction>
     <width>1</width>
     <role>write</role>
    </port>
    <port>
-    <name>debug_mem_slave_writedata</name>
+    <name>jtag_debug_module_writedata</name>
     <direction>Input</direction>
     <width>32</width>
     <role>writedata</role>
@@ -6257,7 +5717,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="clkFreq">
    <type>long</type>
-   <value>40000000</value>
+   <value>10000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6360,7 +5820,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>40000000</value>
+    <value>10000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -6950,7 +6410,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="BURSTCOUNT_WIDTH">
    <type>int</type>
-   <value>3</value>
+   <value>1</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6958,7 +6418,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="MAX_BURST_SIZE">
    <type>int</type>
-   <value>4</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -7461,7 +6921,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>s0_burstcount</name>
     <direction>Input</direction>
-    <width>3</width>
+    <width>1</width>
     <role>burstcount</role>
    </port>
    <port>
@@ -7784,7 +7244,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>m0_burstcount</name>
     <direction>Output</direction>
-    <width>3</width>
+    <width>1</width>
     <role>burstcount</role>
    </port>
    <port>
@@ -7826,8 +7286,8 @@ parameters are a RESULT of the module parameters. -->
    <memoryBlock>
     <isBridge>false</isBridge>
     <moduleName>cpu</moduleName>
-    <slaveName>debug_mem_slave</slaveName>
-    <name>cpu.debug_mem_slave</name>
+    <slaveName>jtag_debug_module</slaveName>
+    <name>cpu.jtag_debug_module</name>
     <baseAddress>524288</baseAddress>
     <span>2048</span>
    </memoryBlock>
@@ -7932,7 +7392,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="COMMAND_FIFO_DEPTH">
    <type>int</type>
-   <value>2</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -7940,7 +7400,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="RESPONSE_FIFO_DEPTH">
    <type>int</type>
-   <value>2</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -8344,7 +7804,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="maximumPendingReadTransactions">
     <type>int</type>
-    <value>4</value>
+    <value>8</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -9238,7 +8698,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="clockRate">
    <type>long</type>
-   <value>120000000</value>
+   <value>100000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -9341,7 +8801,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>120000000</value>
+    <value>100000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -9905,11 +9365,11 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.FREQ</name>
-   <value>40000000</value>
+   <value>10000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.LOAD_VALUE</name>
-   <value>39999</value>
+   <value>9999</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.MULT</name>
@@ -9953,7 +9413,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.clock-frequency</name>
-   <value>40000000</value>
+   <value>10000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -10025,7 +9485,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="systemFrequency">
    <type>long</type>
-   <value>40000000</value>
+   <value>10000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -10067,7 +9527,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="loadValue">
    <type>java.lang.String</type>
-   <value>39999</value>
+   <value>9999</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -10159,7 +9619,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>40000000</value>
+    <value>10000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -10675,7 +10135,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.CORE_FREQ</name>
-   <value>120000000</value>
+   <value>100000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.FIXED_POINT_SUPPORT</name>
@@ -10710,8 +10170,16 @@ the requested settings for a module instance. -->
    <value>1</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.CMacro.VCUSTOM0_LANES</name>
+   <name>embeddedsw.CMacro.UNPOPULATED_ALU_LANES</name>
    <value>0</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.CMacro.UNPOPULATED_MULTIPLIER_LANES</name>
+   <value>0</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.CMacro.VCUSTOM0_LANES</name>
+   <value>1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.VCUSTOM0_UID</name>
@@ -10839,7 +10307,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.VECTOR_CUSTOM_INSTRUCTIONS</name>
-   <value>0</value>
+   <value>1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.VECTOR_LANES</name>
@@ -10848,6 +10316,22 @@ the requested settings for a module instance. -->
   <parameter name="VECTOR_LANES">
    <type>int</type>
    <value>16</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="UNPOPULATED_ALU_LANES">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="UNPOPULATED_MULTIPLIER_LANES">
+   <type>int</type>
+   <value>0</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -10927,7 +10411,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="VECTOR_CUSTOM_INSTRUCTIONS">
    <type>int</type>
-   <value>0</value>
+   <value>1</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -10938,15 +10422,15 @@ the requested settings for a module instance. -->
    <value>2</value>
    <derived>false</derived>
    <enabled>true</enabled>
-   <visible>false</visible>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_0_UID">
    <type>int</type>
    <value>-1</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCUSTOM0_DEPTH">
@@ -10961,24 +10445,24 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>1</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_0_OPCODE_START">
    <type>int</type>
    <value>0</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_0_FUNCTIONS">
    <type>int</type>
    <value>1</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_0_OPCODE_END">
@@ -10993,8 +10477,8 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>0</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_0_FUNCTION_1_DEPTH">
@@ -11121,8 +10605,8 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>0</value>
    <derived>false</derived>
-   <enabled>false</enabled>
-   <visible>false</visible>
+   <enabled>true</enabled>
+   <visible>true</visible>
    <valid>true</valid>
   </parameter>
   <parameter name="VCI_1_UID">
@@ -13025,7 +12509,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CORE_CLK_RATE">
    <type>int</type>
-   <value>120000000</value>
+   <value>100000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -13035,7 +12519,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CORE_CLK_2X_RATE">
    <type>int</type>
-   <value>240000000</value>
+   <value>200000000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -14002,7 +13486,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>120000000</value>
+    <value>100000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -14063,7 +13547,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="clockRate">
     <type>java.lang.Long</type>
-    <value>240000000</value>
+    <value>200000000</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -14121,6 +13605,304 @@ parameters are a RESULT of the module parameters. -->
     <direction>Input</direction>
     <width>1</width>
     <role>reset</role>
+   </port>
+  </interface>
+  <interface name="vci_0_conduit" kind="conduit_end" version="17.1">
+   <!-- The connection points exposed by a module instance for the
+particular module parameters. Connection points and their
+parameters are a RESULT of the module parameters. -->
+   <parameter name="associatedClock">
+    <type>java.lang.String</type>
+    <value></value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="associatedReset">
+    <type>java.lang.String</type>
+    <value></value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="deviceFamily">
+    <type>java.lang.String</type>
+    <value>UNKNOWN</value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="generateLegacySim">
+    <type>boolean</type>
+    <value>false</value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <type>conduit</type>
+   <isStart>false</isStart>
+   <port>
+    <name>vci_0_clk</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_reset</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_valid</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_signed</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_opsize</name>
+    <direction>Output</direction>
+    <width>2</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_vector_start</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_vector_end</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_byte_valid</name>
+    <direction>Output</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_data_a</name>
+    <direction>Output</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_flag_a</name>
+    <direction>Output</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_data_b</name>
+    <direction>Output</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_flag_b</name>
+    <direction>Output</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_data_out</name>
+    <direction>Input</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_flag_out</name>
+    <direction>Input</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_0_byteenable</name>
+    <direction>Input</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+  </interface>
+ </module>
+ <module
+   name="vci_a_implies_b_0"
+   kind="vci_a_implies_b"
+   version="1.0"
+   path="vci_a_implies_b_0">
+  <!-- Describes a single module. Module parameters are
+the requested settings for a module instance. -->
+  <parameter name="VCI_UID">
+   <type>int</type>
+   <value>2147418113</value>
+   <derived>false</derived>
+   <enabled>false</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="VCI_LANES">
+   <type>int</type>
+   <value>1</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="deviceFamily">
+   <type>java.lang.String</type>
+   <value>UNKNOWN</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="generateLegacySim">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <interface name="conduit_end" kind="conduit_end" version="17.1">
+   <!-- The connection points exposed by a module instance for the
+particular module parameters. Connection points and their
+parameters are a RESULT of the module parameters. -->
+   <parameter name="associatedClock">
+    <type>java.lang.String</type>
+    <value></value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="associatedReset">
+    <type>java.lang.String</type>
+    <value></value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="deviceFamily">
+    <type>java.lang.String</type>
+    <value>UNKNOWN</value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <parameter name="generateLegacySim">
+    <type>boolean</type>
+    <value>false</value>
+    <derived>false</derived>
+    <enabled>true</enabled>
+    <visible>true</visible>
+    <valid>true</valid>
+   </parameter>
+   <type>conduit</type>
+   <isStart>false</isStart>
+   <port>
+    <name>vci_clk</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_reset</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_valid</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_signed</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_opsize</name>
+    <direction>Input</direction>
+    <width>2</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_vector_start</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_vector_end</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_byte_valid</name>
+    <direction>Input</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_data_a</name>
+    <direction>Input</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_flag_a</name>
+    <direction>Input</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_data_b</name>
+    <direction>Input</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_flag_b</name>
+    <direction>Input</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_data_out</name>
+    <direction>Output</direction>
+    <width>32</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_flag_out</name>
+    <direction>Output</direction>
+    <width>4</width>
+    <role>export</role>
+   </port>
+   <port>
+    <name>vci_byteenable</name>
+    <direction>Output</direction>
+    <width>4</width>
+    <role>export</role>
    </port>
   </interface>
  </module>
@@ -14533,11 +14315,11 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>avalon_jtag_slave</endConnectionPoint>
  </connection>
  <connection
-   name="mm_bridge_0.m0/cpu.debug_mem_slave"
+   name="mm_bridge_0.m0/cpu.jtag_debug_module"
    kind="avalon"
    version="17.1"
    start="mm_bridge_0.m0"
-   end="cpu.debug_mem_slave">
+   end="cpu.jtag_debug_module">
   <parameter name="arbitrationPriority">
    <type>int</type>
    <value>1</value>
@@ -14581,7 +14363,7 @@ parameters are a RESULT of the module parameters. -->
   <startModule>mm_bridge_0</startModule>
   <startConnectionPoint>m0</startConnectionPoint>
   <endModule>cpu</endModule>
-  <endConnectionPoint>debug_mem_slave</endConnectionPoint>
+  <endConnectionPoint>jtag_debug_module</endConnectionPoint>
  </connection>
  <connection
    name="mm_clock_crossing_bridge_0.m0/altpll_0.pll_slave"
@@ -14737,6 +14519,33 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>scratchpad_slave</endConnectionPoint>
  </connection>
  <connection
+   name="altpll_0.c0/mm_bridge_0.clk"
+   kind="clock"
+   version="17.1"
+   start="altpll_0.c0"
+   end="mm_bridge_0.clk">
+  <parameter name="deviceFamily">
+   <type>java.lang.String</type>
+   <value>UNKNOWN</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="generateLegacySim">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <startModule>altpll_0</startModule>
+  <startConnectionPoint>c0</startConnectionPoint>
+  <endModule>mm_bridge_0</endModule>
+  <endConnectionPoint>clk</endConnectionPoint>
+ </connection>
+ <connection
    name="altpll_0.c0/sdram.clk"
    kind="clock"
    version="17.1"
@@ -14788,33 +14597,6 @@ parameters are a RESULT of the module parameters. -->
   <startModule>altpll_0</startModule>
   <startConnectionPoint>c0</startConnectionPoint>
   <endModule>cpu</endModule>
-  <endConnectionPoint>clk</endConnectionPoint>
- </connection>
- <connection
-   name="altpll_0.c0/mm_bridge_0.clk"
-   kind="clock"
-   version="17.1"
-   start="altpll_0.c0"
-   end="mm_bridge_0.clk">
-  <parameter name="deviceFamily">
-   <type>java.lang.String</type>
-   <value>UNKNOWN</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="generateLegacySim">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <startModule>altpll_0</startModule>
-  <startConnectionPoint>c0</startConnectionPoint>
-  <endModule>mm_bridge_0</endModule>
   <endConnectionPoint>clk</endConnectionPoint>
  </connection>
  <connection
@@ -15034,10 +14816,77 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>inclk0</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.irq/jtag_uart.irq"
+   name="vci_a_implies_b_0.conduit_end/vbx1.vci_0_conduit"
+   kind="conduit"
+   version="17.1"
+   start="vci_a_implies_b_0.conduit_end"
+   end="vbx1.vci_0_conduit">
+  <parameter name="endPort">
+   <type>com.altera.entityinterfaces.IPort</type>
+   <value></value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="endPortLSB">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="startPort">
+   <type>com.altera.entityinterfaces.IPort</type>
+   <value></value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="startPortLSB">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="width">
+   <type>int</type>
+   <value>0</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="deviceFamily">
+   <type>java.lang.String</type>
+   <value>UNKNOWN</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="generateLegacySim">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <startModule>vci_a_implies_b_0</startModule>
+  <startConnectionPoint>conduit_end</startConnectionPoint>
+  <endModule>vbx1</endModule>
+  <endConnectionPoint>vci_0_conduit</endConnectionPoint>
+ </connection>
+ <connection
+   name="cpu.d_irq/jtag_uart.irq"
    kind="interrupt"
    version="17.1"
-   start="cpu.irq"
+   start="cpu.d_irq"
    end="jtag_uart.irq">
   <parameter name="irqNumber">
    <type>int</type>
@@ -15064,15 +14913,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>irq</startConnectionPoint>
+  <startConnectionPoint>d_irq</startConnectionPoint>
   <endModule>jtag_uart</endModule>
   <endConnectionPoint>irq</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.irq/timestamp_timer.irq"
+   name="cpu.d_irq/timestamp_timer.irq"
    kind="interrupt"
    version="17.1"
-   start="cpu.irq"
+   start="cpu.d_irq"
    end="timestamp_timer.irq">
   <parameter name="irqNumber">
    <type>int</type>
@@ -15099,7 +14948,7 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>irq</startConnectionPoint>
+  <startConnectionPoint>d_irq</startConnectionPoint>
   <endModule>timestamp_timer</endModule>
   <endConnectionPoint>irq</endConnectionPoint>
  </connection>
@@ -15252,33 +15101,6 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>m0_reset</endConnectionPoint>
  </connection>
  <connection
-   name="clk_50.clk_reset/cpu.reset"
-   kind="reset"
-   version="17.1"
-   start="clk_50.clk_reset"
-   end="cpu.reset">
-  <parameter name="deviceFamily">
-   <type>java.lang.String</type>
-   <value>UNKNOWN</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="generateLegacySim">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <startModule>clk_50</startModule>
-  <startConnectionPoint>clk_reset</startConnectionPoint>
-  <endModule>cpu</endModule>
-  <endConnectionPoint>reset</endConnectionPoint>
- </connection>
- <connection
    name="clk_50.clk_reset/mm_bridge_0.reset"
    kind="reset"
    version="17.1"
@@ -15387,6 +15209,33 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>reset</endConnectionPoint>
  </connection>
  <connection
+   name="clk_50.clk_reset/cpu.reset_n"
+   kind="reset"
+   version="17.1"
+   start="clk_50.clk_reset"
+   end="cpu.reset_n">
+  <parameter name="deviceFamily">
+   <type>java.lang.String</type>
+   <value>UNKNOWN</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="generateLegacySim">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <startModule>clk_50</startModule>
+  <startConnectionPoint>clk_reset</startConnectionPoint>
+  <endModule>cpu</endModule>
+  <endConnectionPoint>reset_n</endConnectionPoint>
+ </connection>
+ <connection
    name="clk_50.clk_reset/mm_clock_crossing_bridge_0.s0_reset"
    kind="reset"
    version="17.1"
@@ -15414,10 +15263,10 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>s0_reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/vbx1.core_reset"
+   name="cpu.jtag_debug_module_reset/vbx1.core_reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="vbx1.core_reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15436,15 +15285,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>vbx1</endModule>
   <endConnectionPoint>core_reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/altpll_0.inclk_interface_reset"
+   name="cpu.jtag_debug_module_reset/altpll_0.inclk_interface_reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="altpll_0.inclk_interface_reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15463,15 +15312,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>altpll_0</endModule>
   <endConnectionPoint>inclk_interface_reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/mm_clock_crossing_bridge_0.m0_reset"
+   name="cpu.jtag_debug_module_reset/mm_clock_crossing_bridge_0.m0_reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="mm_clock_crossing_bridge_0.m0_reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15490,15 +15339,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>mm_clock_crossing_bridge_0</endModule>
   <endConnectionPoint>m0_reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/jtag_uart.reset"
+   name="cpu.jtag_debug_module_reset/jtag_uart.reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="jtag_uart.reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15517,15 +15366,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>jtag_uart</endModule>
   <endConnectionPoint>reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/sdram.reset"
+   name="cpu.jtag_debug_module_reset/sdram.reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="sdram.reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15544,42 +15393,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>sdram</endModule>
   <endConnectionPoint>reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/cpu.reset"
+   name="cpu.jtag_debug_module_reset/timestamp_timer.reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
-   end="cpu.reset">
-  <parameter name="deviceFamily">
-   <type>java.lang.String</type>
-   <value>UNKNOWN</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="generateLegacySim">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
-  <endModule>cpu</endModule>
-  <endConnectionPoint>reset</endConnectionPoint>
- </connection>
- <connection
-   name="cpu.debug_reset_request/timestamp_timer.reset"
-   kind="reset"
-   version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="timestamp_timer.reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15598,15 +15420,15 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>timestamp_timer</endModule>
   <endConnectionPoint>reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/mm_bridge_0.reset"
+   name="cpu.jtag_debug_module_reset/mm_bridge_0.reset"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
    end="mm_bridge_0.reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15625,15 +15447,42 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>mm_bridge_0</endModule>
   <endConnectionPoint>reset</endConnectionPoint>
  </connection>
  <connection
-   name="cpu.debug_reset_request/mm_clock_crossing_bridge_0.s0_reset"
+   name="cpu.jtag_debug_module_reset/cpu.reset_n"
    kind="reset"
    version="17.1"
-   start="cpu.debug_reset_request"
+   start="cpu.jtag_debug_module_reset"
+   end="cpu.reset_n">
+  <parameter name="deviceFamily">
+   <type>java.lang.String</type>
+   <value>UNKNOWN</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <parameter name="generateLegacySim">
+   <type>boolean</type>
+   <value>false</value>
+   <derived>false</derived>
+   <enabled>true</enabled>
+   <visible>true</visible>
+   <valid>true</valid>
+  </parameter>
+  <startModule>cpu</startModule>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
+  <endModule>cpu</endModule>
+  <endConnectionPoint>reset_n</endConnectionPoint>
+ </connection>
+ <connection
+   name="cpu.jtag_debug_module_reset/mm_clock_crossing_bridge_0.s0_reset"
+   kind="reset"
+   version="17.1"
+   start="cpu.jtag_debug_module_reset"
    end="mm_clock_crossing_bridge_0.s0_reset">
   <parameter name="deviceFamily">
    <type>java.lang.String</type>
@@ -15652,7 +15501,7 @@ parameters are a RESULT of the module parameters. -->
    <valid>true</valid>
   </parameter>
   <startModule>cpu</startModule>
-  <startConnectionPoint>debug_reset_request</startConnectionPoint>
+  <startConnectionPoint>jtag_debug_module_reset</startConnectionPoint>
   <endModule>mm_clock_crossing_bridge_0</endModule>
   <endConnectionPoint>s0_reset</endConnectionPoint>
  </connection>
@@ -15697,7 +15546,7 @@ parameters are a RESULT of the module parameters. -->
   <version>17.1</version>
  </plugin>
  <plugin>
-  <instanceCount>3</instanceCount>
+  <instanceCount>5</instanceCount>
   <name>conduit_end</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IMutableConnectionPoint</subtype>
@@ -15746,11 +15595,11 @@ parameters are a RESULT of the module parameters. -->
  </plugin>
  <plugin>
   <instanceCount>1</instanceCount>
-  <name>altera_nios2_gen2</name>
+  <name>altera_nios2_qsys</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>Nios II Processor</displayName>
-  <version>17.1</version>
+  <displayName>Nios II (Classic) Processor</displayName>
+  <version>16.1</version>
  </plugin>
  <plugin>
   <instanceCount>5</instanceCount>
@@ -15849,6 +15698,14 @@ parameters are a RESULT of the module parameters. -->
   <version>17.1</version>
  </plugin>
  <plugin>
+  <instanceCount>1</instanceCount>
+  <name>vci_a_implies_b</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IModule</subtype>
+  <displayName>MXP CI: A -&gt; B</displayName>
+  <version>1.0</version>
+ </plugin>
+ <plugin>
   <instanceCount>12</instanceCount>
   <name>avalon</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
@@ -15862,6 +15719,14 @@ parameters are a RESULT of the module parameters. -->
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IConnection</subtype>
   <displayName>Clock Connection</displayName>
+  <version>17.1</version>
+ </plugin>
+ <plugin>
+  <instanceCount>1</instanceCount>
+  <name>conduit</name>
+  <type>com.altera.entityinterfaces.IElementClass</type>
+  <subtype>com.altera.entityinterfaces.IConnection</subtype>
+  <displayName>Conduit Connection</displayName>
   <version>17.1</version>
  </plugin>
  <plugin>

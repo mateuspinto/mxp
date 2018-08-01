@@ -38,6 +38,8 @@
 #ifndef __VBXX_HPP
 #define __VBXX_HPP
 #define ENUM_PARAM vbx_enum_t *v_enum __attribute__((unused))
+#define MY_MAX(a,b) ((a)>(b) ? (a) : (b))
+
 
 __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op, vbx_byte_t *v_out, vbx_byte_t *v_in1, vbx_byte_t *v_in2 ){
 	switch(v_op)
@@ -42139,7 +42141,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -42286,7 +42288,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -42433,7 +42435,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -42580,7 +42582,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -42727,7 +42729,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -42874,7 +42876,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43021,7 +43023,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43168,7 +43170,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBBBUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBBBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBBBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBBBUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43315,7 +43317,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43462,7 +43464,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43609,7 +43611,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43756,7 +43758,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -43903,7 +43905,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44050,7 +44052,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44197,7 +44199,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44344,7 +44346,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHBUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHBUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44491,7 +44493,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44638,7 +44640,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44785,7 +44787,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -44932,7 +44934,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45079,7 +45081,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45226,7 +45228,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45373,7 +45375,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45520,7 +45522,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWBUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWBUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWBUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWBUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45667,7 +45669,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45814,7 +45816,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -45961,7 +45963,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46108,7 +46110,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46255,7 +46257,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46402,7 +46404,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46549,7 +46551,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46696,7 +46698,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBHHUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBHHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBHHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBHHUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46843,7 +46845,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -46990,7 +46992,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47137,7 +47139,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47284,7 +47286,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47431,7 +47433,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47578,7 +47580,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47725,7 +47727,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -47872,7 +47874,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHHHUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHHHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHHHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHHHUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48019,7 +48021,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48166,7 +48168,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48313,7 +48315,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48460,7 +48462,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48607,7 +48609,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48754,7 +48756,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -48901,7 +48903,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49048,7 +49050,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWHUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWHUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWHUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWHUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49195,7 +49197,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49342,7 +49344,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49489,7 +49491,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49636,7 +49638,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49783,7 +49785,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -49930,7 +49932,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50077,7 +50079,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50224,7 +50226,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVBWWUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVBWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVBWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVBWWUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50371,7 +50373,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50518,7 +50520,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50665,7 +50667,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50812,7 +50814,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -50959,7 +50961,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51106,7 +51108,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51253,7 +51255,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51400,7 +51402,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVHWWUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVHWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVHWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVHWWUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51547,7 +51549,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWSSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWSSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51694,7 +51696,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWUSS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWUSS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51841,7 +51843,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWSUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWSUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWSUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWSUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -51988,7 +51990,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWUUS,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWUUS,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWUUS,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWUUS,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -52135,7 +52137,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWSSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWSSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -52282,7 +52284,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWUSU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWUSU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -52429,7 +52431,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWSUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWSUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWSUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWSUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -52576,7 +52578,7 @@ __attribute__((always_inline)) static inline void vbxx(int modify, vinstr_t v_op
 	vbxasm(modify, SVWWWUUU,VMUL, v_out, (1<<s_in2), v_in1);
 		break;
 	case VSHR:
-		if(s_in2){vbxasm(modify, SVWWWUUU,VMULHI,v_out,(1<<((max(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
+		if(s_in2){vbxasm(modify, SVWWWUUU,VMULHI,v_out,(1<<((MY_MAX(sizeof(*v_out),sizeof(*v_in1))*8)-(s_in2))),v_in1);}
 	else {vbxasm(modify, SVWWWUUU,VADD, v_out, 0, v_in1);};
 		break;
 	case VMOV:
@@ -58872,5 +58874,7 @@ void vbxx_masked_acc(vinstr_t VINSTR,D* DEST,A SRCA,B SRCB)
 	vbxx(MOD_MASKED | MOD_NONE,VINSTR,DEST,(ta)SRCA,(tb)SRCB);
 }
 
+#undef MY_MAX
 #undef ENUM_PARAM
+
 #endif // __VBXX_HPP

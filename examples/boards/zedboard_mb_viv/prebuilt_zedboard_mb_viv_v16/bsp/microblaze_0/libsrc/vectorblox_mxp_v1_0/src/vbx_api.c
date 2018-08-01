@@ -86,7 +86,7 @@ void _vbx_init( vbx_mxp_t *this_mxp )
 #endif
 	}
 #endif
-
+	this_mxp->sp=this_mxp->scratchpad_addr;
 #if VBX_USE_GLOBAL_MXP_PTR
 	// Must be set before any MXP instructions can be issued!
 	VBX_SET_THIS_MXP(this_mxp);

@@ -1,5 +1,5 @@
 -- dual_read_ram_behav.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 --
 -- Behavioural implementation of 2 read 1 write RAM
 

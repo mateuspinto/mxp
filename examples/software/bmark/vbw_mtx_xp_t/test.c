@@ -237,9 +237,9 @@ int main(void)
 	int M = TEST_ROWS_MAX;
 	int N = TEST_COLS_MAX;
 
-	int PRINT_LENGTH = min( N, MAX_PRINT_LENGTH );
+	int PRINT_LENGTH = MIN( N, MAX_PRINT_LENGTH );
 	int PRINT_COLS = PRINT_LENGTH;
-	int PRINT_ROWS = min( M,MAX_PRINT_LENGTH );
+	int PRINT_ROWS = MIN( M,MAX_PRINT_LENGTH );
 
 	double scalar_time, vector_time;
 	int errors=0;

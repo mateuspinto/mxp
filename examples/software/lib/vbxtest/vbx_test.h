@@ -175,7 +175,8 @@ int vbx_zynq_set_instr_port_device_memory();
 #endif
 
 // --------------------------------------------------------
-
+#define MIN(a,b) ((a)<(b)?(a):(b))
+#define MAX(a,b) ((b)<(a)?(a):(b))
 #ifdef __cplusplus
 }
 #endif

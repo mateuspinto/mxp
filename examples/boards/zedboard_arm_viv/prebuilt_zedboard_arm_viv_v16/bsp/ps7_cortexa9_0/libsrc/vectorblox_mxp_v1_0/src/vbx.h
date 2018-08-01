@@ -69,7 +69,7 @@ extern "C" {
 //figure out target from builtin compilier defines
 #if defined(__nios2__)
 #  define NIOS_STANDALONE 1
-#elif defined(__arm__)
+#elif defined(__arm__) || defined(__ARM_ARCH_ISA_A64)
 #  if defined(linux)
 #    define ARM_LINUX 1
 #  elif !defined(XILINX)

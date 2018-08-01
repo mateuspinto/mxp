@@ -871,7 +871,9 @@ int vbx_test_init()
 {
 	//initialize with 4 lanes,and 64kb of sp memory
 	//word,half,byte fraction bits 16,15,4 respectively
-	vbxsim_init(4,256,256,16,15,4);
+	//0 unpopulated alus
+	//0 unpopulated multipliers
+	vbxsim_init(4,256,256,16,15,4,0,0);
 	return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -893,8 +895,11 @@ XTmrCtr vbx_test_tmr_inst;
 #include "xpseudo_asm.h"
 #include "xil_mmu.h"
 
-extern u32 MMUTable;
-
+extern intptr_t MMUTable;
+#if __ARM_ARCH_ISA_A64
+extern intptr_t MMUTableL1;
+#include "bspconfig.h"
+#endif
 ///////////////////////////////////////////////////////////////////////////
 // For API compatibility, we want to be able to access main memory in an
 // uncached manner from the ARM CPU by e.g. setting bit 31 of the address
@@ -907,8 +912,45 @@ extern u32 MMUTable;
 // strongly-ordered. (Was experiencing unexpected behaviour when attrs set to
 // normal, non-cacheable.)
 // Based in Xil_SetTlbAttributes() in xil_mmu.c.
+
 int vbx_zynq_remap_ddr_uncached()
 {
+	//Xil_SetTlbAttributes(, STORNG_ORDERED);
+#if __ARM_ARCH_ISA_A64
+	intptr_t addr;
+	u64 attrib = STRONG_ORDERED;
+	u64 *ptr;
+	u64 section;
+	const u64 BLOCK_SIZE_1GB = 0x40000000U;
+
+	//Take the top memory 4-7GB and map it into the bottom 0-3 GB
+
+	int blocks=4;
+
+	for (int b=0; b<blocks ; ++b) {
+		addr = (4+b)*BLOCK_SIZE_1GB ;
+		// Index into translation table
+		section = addr / BLOCK_SIZE_1GB;
+		ptr = &MMUTableL1 + section;
+		// Map to physical addresses in range 0x0 to 0x1fff_ffff,
+		// i.e. clear bit 31.
+		intptr_t phys_addr=addr &0xFFFFFFFFLL;
+		*ptr = (phys_addr & (~(BLOCK_SIZE_1GB-1))) | attrib;
+		addr += BLOCK_SIZE_1GB;
+	}
+
+	Xil_DCacheFlush();
+
+	if (EL3 == 1)
+		mtcptlbi(ALLE3);
+	else if (EL1_NONSECURE == 1)
+		mtcptlbi(VMALLE1);
+
+	dsb(); /* ensure completion of the BP and TLB invalidation */
+	isb(); /* synchronize context on this processor */
+
+
+#else //ARM32
 	u32 addr;
 	// Section descriptor bits 19:0 for
 	// normal, outer and inner noncacheable memory region:
@@ -948,7 +990,7 @@ int vbx_zynq_remap_ddr_uncached()
 
 	dsb(); /* ensure completion of the BP and TLB invalidation */
 	isb(); /* synchronize context on this processor */
-
+#endif
 	return XST_SUCCESS;
 }
 
@@ -972,7 +1014,7 @@ int vbx_zynq_set_instr_port_device_memory()
 	// shareable device:
 	//   S=b0 TEX=b000 AP=b11, C=b0, B=b1 => 0xC06
 	Xil_SetTlbAttributes(XPAR_VECTORBLOX_MXP_0_S_AXI_INSTR_BASEADDR,
-	                     0xc06);
+	                     DEVICE_MEMORY);
 	return XST_SUCCESS;
 }
 #endif // ARM_XIL_STANDALONE
@@ -980,7 +1022,11 @@ int vbx_zynq_set_instr_port_device_memory()
 int vbx_test_init()
 {
 #if (ARM_XIL_STANDALONE && VBX_USE_A9_PMU_TIMER)
-	u32 tmrctr_freq_hz = XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ/2;
+#ifdef XPAR_CPU_CORTEXA53_0_TIMESTAMP_CLK_FREQ
+	u32 tmrctr_freq_hz = XPAR_CPU_CORTEXA53_0_TIMESTAMP_CLK_FREQ;
+#else
+	u32 tmrctr_freq_hz = COUNTS_PER_SECOND/2;
+#endif
 #else
 	u16 tmrctr_dev_id  = XPAR_TMRCTR_0_DEVICE_ID;
 	u32 tmrctr_freq_hz = XPAR_TMRCTR_0_CLOCK_FREQ_HZ;
@@ -998,12 +1044,7 @@ int vbx_test_init()
 	// On Zynq, redirect accesses in the range 0x8000_0000-0x9fff_ffff
 	// to be uncached access to DDR in the range 0x0-0x1fff_ffff.
 	vbx_zynq_remap_ddr_uncached();
-
-#if VBX_USE_AXI_INSTR_PORT_NORMAL_MEMORY
-	vbx_zynq_set_instr_port_normal_uncached();
-#elif VBX_USE_AXI_INSTR_PORT_DEVICE_MEMORY
 	vbx_zynq_set_instr_port_device_memory();
-#endif
 #endif//ARM_STANDALONE
 
 #if (ARM_XIL_STANDALONE && VBX_USE_A9_PMU_TIMER)

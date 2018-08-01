@@ -36,13 +36,13 @@
  */
 
 
-#if __MICROBLAZE__ || __ARM_ARCH_7A__
+
 
 #include "vbx_copyright.h"
 VBXCOPYRIGHT( vectorblox_mxp_xil )
-
-#include "xparameters.h"
 #include "vbx.h"
+
+#if MB_STANDALONE || ARM_XIL_STANDALONE
 #include "vectorblox_mxp.h"
 
 extern VectorBlox_MXP_Config VectorBlox_MXP_ConfigTable[];
@@ -140,6 +140,8 @@ int VectorBlox_MXP_Initialize(vbx_mxp_t* mxp, u16 device_id) {
 	mxp->dma_alignment_bytes = (short) (cfg->memory_width_bits / 8);
 	mxp->scratchpad_alignment_bytes = (short) (cfg->vector_lanes * 4);
 	mxp->vector_lanes = (short) (cfg->vector_lanes);
+	mxp->unpopulated_alu_lanes = (short) (cfg->unpopulated_alu_lanes);
+	mxp->unpopulated_multiplier_lanes = (short) (cfg->unpopulated_multiplier_lanes);
 
 	mxp->vector_custom_instructions = (char) (cfg->vector_custom_instructions);
 	mxp->vcustom0_lanes  = (short) 0;

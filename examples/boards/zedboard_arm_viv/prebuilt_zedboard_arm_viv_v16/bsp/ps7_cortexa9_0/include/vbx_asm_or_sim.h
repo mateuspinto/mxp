@@ -75,7 +75,7 @@ extern "C" {
 #include "vbx_asm_nios.h"
 #elif defined(__MICROBLAZE__)
 #include "vbx_asm_mb.h"
-#elif defined(__arm__)
+#elif  ARM_LINUX ||  ARM_ALT_STANDALONE ||  ARM_XIL_STANDALONE
 #include "vbx_asm_arm.h"
 #elif ORCA_STANDALONE
 #include "vbx_asm_orca.h"

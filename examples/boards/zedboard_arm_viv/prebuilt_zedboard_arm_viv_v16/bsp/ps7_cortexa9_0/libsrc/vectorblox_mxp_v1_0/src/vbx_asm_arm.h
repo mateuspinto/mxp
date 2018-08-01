@@ -64,26 +64,33 @@ extern "C" {
 
 
 #if ARM_XIL_STANDALONE
-
+#if __ARM_ARCH_ISA_A64
+//for 64bit arm we use the bottom 4Gigs as cached,
+//and the next 4 gigs as uncached
+#define VBX_DCACHE_BYPASS_MASK  0x0FfffffffLL
+#define VBX_DCACHE_BYPASS_VAL   0x100000000LL
+#else
 // Assume that cacheable shared memory in the 1GB range 0x0-0x3fff_ffff
 // can also be accessed in an uncached manner by the ARM CPU via the
 // in the range 0x8000_0000-0xbfff_ffff (i.e. by setting address bit 31 to 1).
 #define VBX_DCACHE_BYPASS_MASK  0x7fffffff
 #define VBX_DCACHE_BYPASS_VAL   0x80000000
+#endif
 #define VBX_DCACHE_NOBYPASS_VAL 0x00000000
 
+
 #define VBX_DMA_ADDR(x,len)	  \
-	(( ((uint32_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
+	(( ((size_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
 
 #define VBX_UNCACHED_ADDR(x) \
-	(( ((uint32_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_BYPASS_VAL)
+	(( ((size_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_BYPASS_VAL)
 #define VBX_CACHED_ADDR(x)   \
-	(( ((uint32_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
+	(( ((size_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
 #elif ARM_ALT_STANDALONE
 #define VBX_DCACHE_BYPASS_MASK  0x3FFFFFFF
 #define VBX_DCACHE_NOBYPASS_VAL 0x00000000
 #define VBX_DMA_ADDR(x,len)	  \
-	(( ((uint32_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
+	(( ((size_t) (x)) & VBX_DCACHE_BYPASS_MASK) | VBX_DCACHE_NOBYPASS_VAL)
 
 #else
 //linux
@@ -111,10 +118,7 @@ extern "C" {
 //
 // load/store ASM macros from standalone_v3_09_a/src/xpseudo_asm_gcc.h
 //
-#define vbx_getw(val) __asm__ __volatile__(\
-                          "ldr        %0,[%1]"\
-                          : "=r" (val) : "r" (VBX_INSTR_PORT_ADDR)\
-                      )
+#define vbx_getw(val) ((val)=(*(volatile uint32_t*)(VBX_INSTR_PORT_ADDR)))
 
 #define vbx_getw_dummy() ({unsigned long rval;\
                            __asm__ __volatile__(\
@@ -123,10 +127,7 @@ extern "C" {
                            );\
                           })
 
-#define vbx_putw(val) __asm__ __volatile__(\
-                        "str  %0,[%1]\n"\
-                        : : "r" (val), "r" (VBX_INSTR_PORT_ADDR)\
-                      )
+#define vbx_putw(val) ((*(volatile uint32_t*)(VBX_INSTR_PORT_ADDR)) =(val) )
 
 #if VBX_USE_AXI_INSTR_PORT_ADDR_INCR && VBX_USE_GLOBAL_MXP_PTR
 
@@ -215,6 +216,10 @@ extern "C" {
 // Instruction port must be mapped to device or strongly-ordered memory
 // (to prevent merging of writes to the same address).
 
+//on 64bit arm the compiler complains about casting directly to
+//uint32_t so first cast to size_t
+#define CAST_TO_PTR32(v) ((uint32_t)(size_t)(v))
+
 #if VBX_USE_AXI_INSTR_PORT_VST
 
 #include "arm_neon.h"
@@ -224,10 +229,10 @@ extern "C" {
 		uint32x4_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (VBX_INSTR_PORT_ADDR); \
 		__v__ = vdupq_n_u32(0); \
-		__v__ = vsetq_lane_u32((uint32_t) (W0), __v__, 0); \
-		__v__ = vsetq_lane_u32((uint32_t) (W1), __v__, 1); \
-		__v__ = vsetq_lane_u32((uint32_t) (W2), __v__, 2); \
-		__v__ = vsetq_lane_u32((uint32_t) (W3), __v__, 3); \
+		__v__ = vsetq_lane_u32(CAST_TO_PTR32(W0), __v__, 0); \
+		__v__ = vsetq_lane_u32(CAST_TO_PTR32(W1), __v__, 1); \
+		__v__ = vsetq_lane_u32(CAST_TO_PTR32(W2), __v__, 2); \
+		__v__ = vsetq_lane_u32(CAST_TO_PTR32(W3), __v__, 3); \
 		vst1q_u32((uint32_t *) __p__, __v__); \
 	}while(0)
 
@@ -236,8 +241,8 @@ extern "C" {
 		uint32x2_t __v__; \
 		volatile uint32_t *__p__ = (volatile uint32_t *) (VBX_INSTR_PORT_ADDR); \
 		__v__ = vdup_n_u32(0); \
-		__v__ = vset_lane_u32((uint32_t) (W0), __v__, 0); \
-		__v__ = vset_lane_u32((uint32_t) (W1), __v__, 1); \
+		__v__ = vset_lane_u32(CAST_TO_PTR32(W0), __v__, 0); \
+		__v__ = vset_lane_u32(CAST_TO_PTR32(W1), __v__, 1); \
 		vst1_u32((uint32_t *) __p__, __v__); \
 	}while(0)
 
@@ -262,7 +267,9 @@ extern "C" {
 #define VBX_INSTR_SINGLE(W0, RETURN_VAR) \
 	do{ \
 		vbx_putw((W0)); \
+    __asm__ __volatile__("" : : : "memory"); \
 		vbx_getw((RETURN_VAR)); \
+    __asm__ __volatile__("" : : : "memory"); \
 	}while(0)
 
 #endif // !(VBX_USE_AXI_INSTR_PORT_ADDR_INCR && VBX_USE_GLOBAL_MXP_PTR)

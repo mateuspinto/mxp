@@ -104,6 +104,8 @@ typedef struct {
 	short       dma_alignment_bytes;
 	short       scratchpad_alignment_bytes;
 	short       vector_lanes; ///< Num of 32-bit vector lanes
+	short       unpopulated_alu_lanes; ///< Num of vector lanes without (non-multiplier) ALUs
+	short       unpopulated_multiplier_lanes; ///< Num of vector lanes without multipliers
 	short       vcustom0_lanes; ///<Num of lanes on VCUSTOM0
 	short       vcustom1_lanes; ///<Num of lanes on VCUSTOM1
 	short       vcustom2_lanes; ///<Num of lanes on VCUSTOM2

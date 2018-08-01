@@ -4022,7 +4022,7 @@
       <xilinx:xpmLibraries>
         <xilinx:xpmLibrary>XPM_MEMORY</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:coreRevision>0</xilinx:coreRevision>
+      <xilinx:coreRevision>1</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.BRAM_PORTA.MASTER_TYPE" xilinx:valueSource="user" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.BRAM_PORTA.MEM_ECC" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
@@ -4051,10 +4051,10 @@
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2017.3.1</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="52ed1045"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="a1d35893"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="ea267366"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="3cede360"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="3dea8d14"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="9d445d56"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="e35db4a0"/>

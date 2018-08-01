@@ -1594,7 +1594,7 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
   <spirit:vendorExtensions>
     <xilinx:coreExtensions>
       <xilinx:displayName>AXI Timer</xilinx:displayName>
-      <xilinx:coreRevision>16</xilinx:coreRevision>
+      <xilinx:coreRevision>19</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.ADDR_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.S_AXI.ARUSER_WIDTH" xilinx:valueSource="constant" xilinx:valuePermission="bd"/>
@@ -1628,10 +1628,10 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2017.3.1</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="a57ff70f"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="ab9e1c93"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="d6898821"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="e4b8806c"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="6f0580a9"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="639400a9"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="aab87bc9"/>

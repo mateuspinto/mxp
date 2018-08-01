@@ -4277,18 +4277,18 @@
         </spirit:portMap>
         <spirit:portMap>
           <spirit:logicalPort>
-            <spirit:name>INSTRUCTION</spirit:name>
+            <spirit:name>ILLEGAL</spirit:name>
           </spirit:logicalPort>
           <spirit:physicalPort>
-            <spirit:name>vcp_instruction</spirit:name>
+            <spirit:name>vcp_illegal</spirit:name>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
           <spirit:logicalPort>
-            <spirit:name>ALU_USED</spirit:name>
+            <spirit:name>INSTRUCTION</spirit:name>
           </spirit:logicalPort>
           <spirit:physicalPort>
-            <spirit:name>vcp_alu_used</spirit:name>
+            <spirit:name>vcp_instruction</spirit:name>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -4608,6 +4608,25 @@
         </spirit:vendorExtensions>
       </spirit:port>
       <spirit:port>
+        <spirit:name>vcp_illegal</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.vcp_illegal">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
         <spirit:name>vcp_writeback_data</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
@@ -4691,25 +4710,6 @@
           <xilinx:portInfo>
             <xilinx:enablement>
               <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.vcp_alu_data2">false</xilinx:isEnabled>
-            </xilinx:enablement>
-          </xilinx:portInfo>
-        </spirit:vendorExtensions>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>vcp_alu_used</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic</spirit:typeName>
-              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-        <spirit:vendorExtensions>
-          <xilinx:portInfo>
-            <xilinx:enablement>
-              <xilinx:isEnabled xilinx:id="PORT_ENABLEMENT.vcp_alu_used">false</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -12254,6 +12254,16 @@
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.VECTOR_LANES">4</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>UNPOPULATED_ALU_LANES</spirit:name>
+        <spirit:displayName>Number of Unpopulated ALU Lanes</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.UNPOPULATED_ALU_LANES">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>UNPOPULATED_MULTIPLIER_LANES</spirit:name>
+        <spirit:displayName>Number of Unpopulated MULTIPLIER Lanes</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>SCRATCHPAD_KB</spirit:name>
         <spirit:displayName>Scratchpad Size in KB</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.SCRATCHPAD_KB">64</spirit:value>
@@ -12297,6 +12307,11 @@
         <spirit:name>VECTOR_CUSTOM_INSTRUCTIONS</spirit:name>
         <spirit:displayName>Number of Vector Custom Instruction (VCI) Ports</spirit:displayName>
         <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>MAX_VCI_DEPTH_WITHOUT_FLUSH</spirit:name>
+        <spirit:displayName>Maxiumum VCI depth without pipeline flush</spirit:displayName>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH" spirit:minimum="3" spirit:maximum="256" spirit:rangeType="long">5</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>VCI_0_LANES</spirit:name>
@@ -13120,6 +13135,16 @@
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.VECTOR_LANES" spirit:choiceRef="choice_list_85010fde" spirit:order="10200" spirit:configGroups="1 UnGrouped">4</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
+      <spirit:name>UNPOPULATED_ALU_LANES</spirit:name>
+      <spirit:displayName>Number of Unpopulated ALU Lanes</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.UNPOPULATED_ALU_LANES" spirit:minimum="0" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>UNPOPULATED_MULTIPLIER_LANES</spirit:name>
+      <spirit:displayName>Number of Unpopulated Multiplier Lanes</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES" spirit:minimum="0" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
       <spirit:name>Component_Name</spirit:name>
       <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Component_Name" spirit:order="1">system_vectorblox_mxp_arm_0_0</spirit:value>
     </spirit:parameter>
@@ -13159,6 +13184,11 @@
       <spirit:name>VECTOR_CUSTOM_INSTRUCTIONS</spirit:name>
       <spirit:displayName>Number of Vector Custom Instruction (VCI) Ports</spirit:displayName>
       <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS" spirit:choiceRef="choice_list_8526b8a0" spirit:order="10700" spirit:configGroups="1 UnGrouped">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>MAX_VCI_DEPTH_WITHOUT_FLUSH</spirit:name>
+      <spirit:displayName>Maxiumum VCI depth without pipeline flush</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH" spirit:minimum="3" spirit:maximum="256" spirit:rangeType="long">5</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C_INSTR_PORT_TYPE</spirit:name>

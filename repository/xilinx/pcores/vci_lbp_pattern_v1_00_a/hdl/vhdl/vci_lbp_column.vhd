@@ -1,5 +1,5 @@
 -- vci_lbp_column.vhd
--- Copyright (C) 2014 VectorBlox Computing, Inc.
+-- Copyright (C) 2014-2018 VectorBlox Computing, Inc.
 
 library IEEE;
 use IEEE.std_logic_1164.all;

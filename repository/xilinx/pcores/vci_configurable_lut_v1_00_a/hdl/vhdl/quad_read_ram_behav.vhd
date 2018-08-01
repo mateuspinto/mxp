@@ -1,5 +1,5 @@
 -- quad_read_ram_behav.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 --
 -- Behavioural implementation of 4 read 2 write RAM by double clocking a 2 read
 -- 1 write RAM.  Data comes out after 2 clock cycles of the 1x clock.

@@ -23,6 +23,14 @@
 
 /******************************************************************/
 
+/* Platform specific definitions */
+#define PLATFORM_ZYNQ
+ 
+/* Definitions for sleep timer configuration */
+#define XSLEEP_TIMER_IS_DEFAULT_TIMER
+ 
+ 
+/******************************************************************/
 
 /* Definitions for peripheral PS7_DDR_0 */
 #define XPAR_PS7_DDR_0_S_AXI_BASEADDR 0x00100000
@@ -94,6 +102,7 @@
 #define XPAR_PS7_ETHERNET_0_ENET_SLCR_100MBPS_DIV1 5
 #define XPAR_PS7_ETHERNET_0_ENET_SLCR_10MBPS_DIV0 8
 #define XPAR_PS7_ETHERNET_0_ENET_SLCR_10MBPS_DIV1 50
+#define XPAR_PS7_ETHERNET_0_ENET_TSU_CLK_FREQ_HZ 0
 
 
 /******************************************************************/
@@ -110,6 +119,7 @@
 #define XPAR_XEMACPS_0_ENET_SLCR_100Mbps_DIV1 5
 #define XPAR_XEMACPS_0_ENET_SLCR_10Mbps_DIV0 8
 #define XPAR_XEMACPS_0_ENET_SLCR_10Mbps_DIV1 50
+#define XPAR_XEMACPS_0_ENET_TSU_CLK_FREQ_HZ 0
 
 
 /******************************************************************/
@@ -433,6 +443,8 @@
 #define XPAR_VECTORBLOX_MXP_ARM_0_S_AXI_BASEADDR 0xB0000000
 #define XPAR_VECTORBLOX_MXP_ARM_0_S_AXI_HIGHADDR 0xB000FFFF
 #define XPAR_VECTORBLOX_MXP_ARM_0_VECTOR_LANES 16
+#define XPAR_VECTORBLOX_MXP_ARM_0_UNPOPULATED_ALU_LANES 0
+#define XPAR_VECTORBLOX_MXP_ARM_0_UNPOPULATED_MULTIPLIER_LANES 0
 #define XPAR_VECTORBLOX_MXP_ARM_0_MAX_MASKED_WAVES 256
 #define XPAR_VECTORBLOX_MXP_ARM_0_SCRATCHPAD_KB 64
 #define XPAR_VECTORBLOX_MXP_ARM_0_M_AXI_DATA_WIDTH 64
@@ -499,6 +511,8 @@
 #define XPAR_VECTORBLOX_MXP_0_S_AXI_BASEADDR 0xB0000000
 #define XPAR_VECTORBLOX_MXP_0_S_AXI_HIGHADDR 0xB000FFFF
 #define XPAR_VECTORBLOX_MXP_0_VECTOR_LANES 16
+#define XPAR_VECTORBLOX_MXP_0_UNPOPULATED_ALU_LANES 0
+#define XPAR_VECTORBLOX_MXP_0_UNPOPULATED_MULTIPLIER_LANES 0
 #define XPAR_VECTORBLOX_MXP_0_MAX_MASKED_WAVES 256
 #define XPAR_VECTORBLOX_MXP_0_SCRATCHPAD_KB 64
 #define XPAR_VECTORBLOX_MXP_0_M_AXI_DATA_WIDTH 64
@@ -601,4 +615,12 @@
 
 /******************************************************************/
 
+/* Xilinx FAT File System Library (XilFFs) User Settings */
+#define FILE_SYSTEM_INTERFACE_SD
+#define FILE_SYSTEM_USE_LFN
+#define FILE_SYSTEM_USE_MKFS
+#define FILE_SYSTEM_NUM_LOGIC_VOL 2
+#define FILE_SYSTEM_USE_STRFUNC 0
+#define FILE_SYSTEM_SET_FS_RPATH 0
+#define FILE_SYSTEM_WORD_ACCESS
 #endif  /* end of protection macro */

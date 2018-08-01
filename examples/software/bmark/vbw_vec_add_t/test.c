@@ -89,14 +89,13 @@ double test_scalar( vbx_mm_t *scalar_out, vbx_mm_t *scalar_in1, vbx_mm_t *scalar
 int main(void)
 {
 	vbx_test_init();
-
 	vbx_mxp_t *this_mxp = VBX_GET_THIS_MXP();
 	const int VBX_SCRATCHPAD_SIZE = this_mxp->scratchpad_size;
 	const int required_vectors = 4;
 
 	int N = VBX_SCRATCHPAD_SIZE / sizeof(vbx_mm_t) / required_vectors;
 
-	int PRINT_LENGTH = min( N, MAX_PRINT_LENGTH );
+	int PRINT_LENGTH = N< MAX_PRINT_LENGTH ? N:MAX_PRINT_LENGTH;
 
 	double scalar_time;
 	int errors=0;

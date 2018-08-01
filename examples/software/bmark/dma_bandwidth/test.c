@@ -44,7 +44,6 @@ VBXCOPYRIGHT( test_dma_bandwidth )
 #include <stdlib.h>
 
 #include "vbx.h"
-#include "vbx_common.h"
 #include "vbx_test.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -106,7 +105,7 @@ int dma_bandwidth_test()
 
 
 	vbx_mxp_print_params();
-	debug(scratchpad_size);
+
 	for(i=0;i<scratchpad_size;i++){
 		v_buf[i]=i;
 	}

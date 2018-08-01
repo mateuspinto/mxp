@@ -32,7 +32,7 @@ extern "C" {
 	}else{ orca_asm("",VMODE,VINSTR,DEST,SRCA,SRCB); } \
 
 #define VBX_GET(reg_num,reg_value)	  \
-	asm volatile("vbx_get %z0,%z0"::"rJ"(reg_value),"rJ"(reg_num));
+	asm volatile("vbx_get %z0,%z1":"=rJ"(reg_value):"rJ"(reg_num));
 #define VBX_GET_MASK(mask_status)
 
 	static inline void _vbx_sync()

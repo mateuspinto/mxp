@@ -52,7 +52,6 @@ extern "C" {
 #endif
 
 #include "vbx_extern.h"
-#include "vbx_common.h"
 
 #define VBX_REG_MXPCPU       16
 

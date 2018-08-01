@@ -3866,7 +3866,7 @@
       <xilinx:xpmLibraries>
         <xilinx:xpmLibrary>XPM_CDC</xilinx:xpmLibrary>
       </xilinx:xpmLibraries>
-      <xilinx:coreRevision>13</xilinx:coreRevision>
+      <xilinx:coreRevision>16</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MI_CLK.ASSOCIATED_BUSIF" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.MI_CLK.ASSOCIATED_RESET" xilinx:valuePermission="bd"/>
@@ -3947,9 +3947,9 @@
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2017.3.1</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2018.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="b96317db"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="aa47ed2f"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="feed09ad"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="5f9a31f4"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="99129be2"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="9de7b80f"/>

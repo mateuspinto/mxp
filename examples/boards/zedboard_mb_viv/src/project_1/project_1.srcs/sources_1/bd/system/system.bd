@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xCC6CFA53809FFAAC" bd:device="xc7z020clg484-1" bd:isValidated="true" bd:synthFlowMode="Hierarchical" bd:tool_version="2017.3.1" bd:top="system" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xCC6CFA53809FFAAC" bd:device="xc7z020clg484-1" bd:isValidated="true" bd:synthFlowMode="Hierarchical" bd:tool_version="2018.2" bd:top="system" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -212,7 +212,7 @@
       </spirit:componentInstance>
       <spirit:componentInstance>
         <spirit:instanceName>clk_wiz_0</spirit:instanceName>
-        <spirit:componentRef spirit:library="ip" spirit:name="clk_wiz" spirit:vendor="xilinx.com" spirit:version="5.4"/>
+        <spirit:componentRef spirit:library="ip" spirit:name="clk_wiz" spirit:vendor="xilinx.com" spirit:version="6.0"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">system_clk_wiz_0_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="CLKOUT2_USED">true</spirit:configurableElementValue>
@@ -285,6 +285,7 @@
           <spirit:configurableElementValue spirit:referenceId="C_FSL_LINKS">1</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_ICACHE_HIGHADDR">0x000000001FFFFFFF</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_USE_ICACHE">1</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="C_ADDR_TAG_BITS">16</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_ICACHE_LINE_LEN">8</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_ICACHE_ALWAYS_USED">1</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_DCACHE_HIGHADDR">0x000000001FFFFFFF</spirit:configurableElementValue>
@@ -858,13 +859,16 @@
           <spirit:configurableElementValue spirit:referenceId="MULFXP_HALF_FRACTION_BITS">15</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="MULFXP_BYTE_FRACTION_BITS">4</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="MIN_MULTIPLIER_HW">0</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="SCRATCHPAD_KB">64</spirit:configurableElementValue>
-          <spirit:configurableElementValue spirit:referenceId="VECTOR_LANES">2</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="SCRATCHPAD_KB">128</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="VECTOR_LANES">16</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="MEMORY_WIDTH_LANES">2</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="BEATS_PER_BURST">16</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="MAX_MASKED_WAVES">256</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="VECTOR_CUSTOM_INSTRUCTIONS">0</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="MAX_VCI_DEPTH_WITHOUT_FLUSH">5</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_INSTR_PORT_TYPE">1</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="VCI_0_LANES">2</spirit:configurableElementValue>
+          <spirit:configurableElementValue spirit:referenceId="VCUSTOM0_DEPTH">25</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_M_AXI_PROTOCOL">AXI3</spirit:configurableElementValue>
         </spirit:configurableElementValues>
       </spirit:componentInstance>

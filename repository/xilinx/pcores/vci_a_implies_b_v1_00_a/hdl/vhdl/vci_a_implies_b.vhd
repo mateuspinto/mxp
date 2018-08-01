@@ -1,5 +1,5 @@
 -- vci_a_implies_b.vhd
--- Copyright (C) 2014 VectorBlox Computing, Inc.
+-- Copyright (C) 2014-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- This is an introductory custom instruction, meant to show the structure of

@@ -10,6 +10,8 @@ int VectorBlox_MXP_Initialize()
 	//M_AXI_DATA_WIDTH is in bits, convert to bytes
 	the_mxp.dma_alignment_bytes =  VECTORBLOX_MXP_0_SCRATCHPAD_SLAVE_MEMORY_WIDTH_LANES *4;
 	the_mxp.vector_lanes =  VECTORBLOX_MXP_0_SCRATCHPAD_SLAVE_VECTOR_LANES;
+	the_mxp.unpopulated_alu_lanes =  VECTORBLOX_MXP_0_SCRATCHPAD_SLAVE_UNPOPULATED_ALU_LANES;
+	the_mxp.unpopulated_multiplier_lanes =  VECTORBLOX_MXP_0_SCRATCHPAD_SLAVE_UNPOPULATED_MULTIPLIER_LANES;
 	the_mxp.scratchpad_alignment_bytes = the_mxp.vector_lanes * 4;
 
 	the_mxp.vcustom0_lanes =  VECTORBLOX_MXP_0_SCRATCHPAD_SLAVE_VCUSTOM0_LANES;

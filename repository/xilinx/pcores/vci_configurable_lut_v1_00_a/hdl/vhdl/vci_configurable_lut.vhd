@@ -1,5 +1,5 @@
 -- vci_configurable_lut.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- This is a look-up-table (LUT) custom instruction.  The data width is

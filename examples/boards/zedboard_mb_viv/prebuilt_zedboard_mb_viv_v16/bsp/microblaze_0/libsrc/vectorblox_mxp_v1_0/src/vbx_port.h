@@ -265,7 +265,7 @@ typedef XTime vbx_timestamp_t;
 		if( __len__ > 4*VBX_CPU_DCACHE_SIZE ) { \
 			Xil_DCacheFlush(); \
 		} else { \
-			Xil_DCacheFlushRange((u32) (PTR),__len__); \
+			Xil_DCacheFlushRange((intptr_t) (PTR),__len__); \
 		} \
 	} while(0)
 
@@ -276,7 +276,7 @@ typedef XTime vbx_timestamp_t;
 
 	static inline volatile void *vbx_remap_uncached(void *p)
 	{
-		Xil_DCacheFlushRange((u32) p, 1);
+		Xil_DCacheFlushRange((intptr_t) p, 1);
 		return (volatile void *) VBX_UNCACHED_ADDR(p);
 	}
 
@@ -302,7 +302,7 @@ static inline volatile void* vbx_uncached_malloc(size_t size)
 #endif
 			return NULL;
 		}
-		Xil_DCacheFlushRange((u32) p, size);
+		Xil_DCacheFlushRange((intptr_t) p, size);
 		return (volatile void *) VBX_UNCACHED_ADDR(p);
 	}
 
@@ -313,8 +313,7 @@ static inline volatile void* vbx_uncached_malloc(size_t size)
 
 
 	extern unsigned int vbx_timestamp_tmrctr_freq;
-
-#if (__ARM_ARCH_7A__ && VBX_USE_A9_PMU_TIMER)
+#if (ARM_XIL_STANDALONE && VBX_USE_A9_PMU_TIMER)
 
 	static inline void vbx_timestamp_init(u32 freq)
 	{
@@ -343,8 +342,8 @@ static inline volatile void* vbx_uncached_malloc(size_t size)
 		vbx_timestamp_tmrctr = inst_ptr;
 		vbx_timestamp_tmrctr_freq = freq;
 
-		// XTmrCtr_SetOptions(vbx_timestamp_tmrctr, 0,
-		//                    XTC_CASCADE_MODE_OPTION);
+    XTmrCtr_SetOptions(vbx_timestamp_tmrctr, 0,
+                       XTC_CASCADE_MODE_OPTION);
 		XTmrCtr_SetResetValue(vbx_timestamp_tmrctr, 0, 0);
 	}
 

@@ -8,6 +8,8 @@ proc init_gui { IPINST } {
     set Component_Name [ ipgui::add_param  $IPINST  -parent  $Page0  -name Component_Name ]
 
     set VECTOR_LANES [ipgui::add_param $IPINST -parent $Page0 -name VECTOR_LANES -widget comboBox]
+    set UNPOPULATED_ALU_LANES [ipgui::add_param $IPINST -parent $Page0 -name UNPOPULATED_ALU_LANES]
+    set UNPOPULATED_MULTIPLIER_LANES [ipgui::add_param $IPINST -parent $Page0 -name UNPOPULATED_MULTIPLIER_LANES]
     set MEMORY_WIDTH_LANES [ipgui::add_param $IPINST -parent $Page0 -name MEMORY_WIDTH_LANES -widget comboBox]
 
     set C_M_AXI_DATA_WIDTH [ipgui::add_param $IPINST -parent $Page0 -name C_M_AXI_DATA_WIDTH -widget comboBox]
@@ -39,6 +41,10 @@ proc init_gui { IPINST } {
 
     set_property tooltip "The number of vector lanes. Must be a power of 2." \
         $VECTOR_LANES
+    set_property tooltip "The number of unpopulated ALU lanes. Must be less than the number of vector lanes." \
+        $UNPOPULATED_ALU_LANES
+    set_property tooltip "The number of unpopulated multiplier lanes. Must be less than the number of vector lanes." \
+        $UNPOPULATED_MULTIPLIER_LANES
     set_property tooltip [concat \
         "The data bus width of the AXI master interface expressed in " \
         "terms of 32-bit lanes. The number of memory lanes must be a power " \
@@ -132,6 +138,12 @@ proc init_gui { IPINST } {
         "VCI configuration is done on the \"VCI X\" tab"] \
         $VECTOR_CUSTOM_INSTRUCTIONS
 
+    set MAX_VCI_DEPTH_WITHOUT_FLUSH [ipgui::add_param $IPINST -parent $vci_ports -name MAX_VCI_DEPTH_WITHOUT_FLUSH]
+    set_property tooltip [concat \
+                              "Maximum Vector Custom Instruction (VCI) depth without pipeline flush.  " \
+                              "Any longer pipeline VCIs will cause a pipeline flush after each execution."] \
+        $MAX_VCI_DEPTH_WITHOUT_FLUSH
+
     for {set vci 0} {$vci < 16} {incr vci} {
 	set vci_tab[set vci] [ipgui::add_group $IPINST -parent $vci_ports -name "VCI $vci" -layout vertical]
 	set VCI_[set vci]_LANES [ipgui::add_param $IPINST -parent [set vci_tab[set vci]] -name VCI_[set vci]_LANES]
@@ -180,10 +192,23 @@ proc validate_PARAM_VALUE.SCRATCHPAD_KB { PARAM_VALUE.SCRATCHPAD_KB } {
 proc update_PARAM_VALUE.VECTOR_LANES { PARAM_VALUE.VECTOR_LANES } {
 }
 
+proc update_PARAM_VALUE.UNPOPULATED_ALU_LANES { PARAM_VALUE.UNPOPULATED_ALU_LANES } {
+}
+
+proc update_PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES { PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES } {
+}
+
 proc update_PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS { PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS } {
 }
 
 proc validate_PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS { PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS } {
+    return true
+}
+
+proc update_PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH { PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH } {
+}
+
+proc validate_PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH { PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH } {
     return true
 }
 
@@ -254,6 +279,40 @@ proc validate_PARAM_VALUE.VECTOR_LANES { PARAM_VALUE.VECTOR_LANES PARAM_VALUE.ME
                ${PARAM_VALUE.MEMORY_WIDTH_LANES} \
                ${PARAM_VALUE.VECTOR_LANES}]
     return $r
+}
+
+proc validate_PARAM_VALUE.UNPOPULATED_ALU_LANES { PARAM_VALUE.UNPOPULATED_ALU_LANES PARAM_VALUE.VECTOR_LANES PARAM_VALUE.MAX_MASKED_WAVES } {
+    set vector_lanes [get_property value ${PARAM_VALUE.VECTOR_LANES}]
+    set unpopulated_alu_lanes [get_property value ${PARAM_VALUE.UNPOPULATED_ALU_LANES}]
+    set max_masked_waves [get_property value ${PARAM_VALUE.MAX_MASKED_WAVES}]
+    if {($vector_lanes <= $unpopulated_alu_lanes)} {
+        set_property errmsg [concat \
+            "The number of unpopulated ALU lanes ($unpopulated_alu_lanes) " \
+            "must be smaller than the number of vector lanes ($vector_lanes)."] \
+            ${PARAM_VALUE.UNPOPULATED_ALU_LANES}
+        return false
+    }
+    if {($max_masked_waves > 0) && ($unpopulated_alu_lanes > 0)} {
+        set_property errmsg [concat \
+            "The number of unpopulated ALU lanes ($unpopulated_alu_lanes) " \
+            "cannot be non-zero when MAX_MASKED_WAVES ($max_masked_waves) is greater than zero."] \
+            ${PARAM_VALUE.UNPOPULATED_ALU_LANES}
+        return false
+    }
+    return true
+}
+
+proc validate_PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES { PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES PARAM_VALUE.VECTOR_LANES } {
+    set vector_lanes [get_property value ${PARAM_VALUE.VECTOR_LANES}]
+    set unpopulated_multiplier_lanes [get_property value ${PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES}]
+    if {($vector_lanes <= $unpopulated_multiplier_lanes)} {
+        set_property errmsg [concat \
+            "The number of unpopulated multiplier lanes ($unpopulated_multiplier_lanes) " \
+            "must be smaller than the number of vector lanes ($vector_lanes)."] \
+            ${PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES}
+        return false
+    }
+    return true
 }
 
 proc update_PARAM_VALUE.MEMORY_WIDTH_LANES { PARAM_VALUE.MEMORY_WIDTH_LANES } {
@@ -540,6 +599,14 @@ proc update_MODELPARAM_VALUE.VECTOR_LANES { MODELPARAM_VALUE.VECTOR_LANES PARAM_
     set_property value [get_property value ${PARAM_VALUE.VECTOR_LANES}] ${MODELPARAM_VALUE.VECTOR_LANES}
 }
 
+proc update_MODELPARAM_VALUE.UNPOPULATED_ALU_LANES { MODELPARAM_VALUE.UNPOPULATED_ALU_LANES PARAM_VALUE.UNPOPULATED_ALU_LANES } {
+    set_property value [get_property value ${PARAM_VALUE.UNPOPULATED_ALU_LANES}] ${MODELPARAM_VALUE.UNPOPULATED_ALU_LANES}
+}
+
+proc update_MODELPARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES { MODELPARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES } {
+    set_property value [get_property value ${PARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES}] ${MODELPARAM_VALUE.UNPOPULATED_MULTIPLIER_LANES}
+}
+
 proc update_MODELPARAM_VALUE.SCRATCHPAD_KB { MODELPARAM_VALUE.SCRATCHPAD_KB PARAM_VALUE.SCRATCHPAD_KB } {
     set_property value [get_property value ${PARAM_VALUE.SCRATCHPAD_KB}] ${MODELPARAM_VALUE.SCRATCHPAD_KB}
 }
@@ -594,6 +661,10 @@ proc update_MODELPARAM_VALUE.MAX_MASKED_WAVES { MODELPARAM_VALUE.MAX_MASKED_WAVE
 
 proc update_MODELPARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS { MODELPARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS IPINST } {
     set_property value [get_property value ${PARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS}] ${MODELPARAM_VALUE.VECTOR_CUSTOM_INSTRUCTIONS}
+}
+
+proc update_MODELPARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH { MODELPARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH } {
+    set_property value [get_property value ${PARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH}] ${MODELPARAM_VALUE.MAX_VCI_DEPTH_WITHOUT_FLUSH}
 }
 
 #Generate VCI processes procedurally

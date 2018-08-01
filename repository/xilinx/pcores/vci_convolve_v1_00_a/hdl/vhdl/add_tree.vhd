@@ -1,5 +1,5 @@
 -- add_tree.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- This is an add reduction tree with a configurable number of pipeline stages.

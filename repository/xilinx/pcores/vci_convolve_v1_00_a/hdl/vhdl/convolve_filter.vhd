@@ -1,5 +1,5 @@
 -- convolve_filter.vhd
--- Copyright (C) 2015 VectorBlox Computing, Inc.
+-- Copyright (C) 2015-2018 VectorBlox Computing, Inc.
 
 -------------------------------------------------------------------------------
 -- This entity takes in data for (potentially) multiple filter kernel copies.

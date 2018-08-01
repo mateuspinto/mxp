@@ -22,8 +22,6 @@ add_sw_property c_source src/vbx_api.c
 add_sw_property c_source src/vectorblox_mxp_nios.c
 add_sw_property cpp_source src/Vector.cpp
 add_sw_property include_source inc/vendor.h
-add_sw_property include_source inc/vbx_all.h
-add_sw_property include_source inc/vbx_common.h
 add_sw_property include_source inc/vbx_lib.h
 add_sw_property include_source inc/vbx_asm_enc32.h
 add_sw_property include_source inc/vbx_lib_common.h

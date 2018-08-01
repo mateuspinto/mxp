@@ -41,7 +41,7 @@ entity vci_sqrt is
     vci_clk   : in std_logic;
     vci_reset : in std_logic;
 
-    vci_valid  : in std_logic;
+    vci_valid  : in std_logic_vector(0 downto 0);
     vci_signed : in std_logic;
     vci_opsize : in std_logic_vector(1 downto 0);
 

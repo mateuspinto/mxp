@@ -98,7 +98,7 @@ int main(void)
 
 	int N = VBX_SCRATCHPAD_SIZE/sizeof(vbx_word_t)/12;
 	N=1024;
-	int PRINT_LENGTH = min(N, MAX_PRINT_LENGTH);
+	int PRINT_LENGTH = MIN(N, MAX_PRINT_LENGTH);
 
 	double scalar_time;
 	int errors=0;

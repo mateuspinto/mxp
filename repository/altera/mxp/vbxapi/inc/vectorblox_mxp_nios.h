@@ -96,6 +96,7 @@ static vbx_mxp_dev_t dev = \
 		(name##_MEMORY_WIDTH_LANES*4), \
 		(name##_VECTOR_LANES*4), \
 		(name##_VECTOR_LANES), \
+		(name##_UNPOPULATED_ALU_LANES), \
 		(name##_VCUSTOM0_LANES), \
 		(name##_VCUSTOM1_LANES), \
 		(name##_VCUSTOM2_LANES), \

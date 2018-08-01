@@ -112,15 +112,9 @@ $(ELFCHECK): $(ELF)
 
 # Load FPGA bitstream
 .PHONY: pgm
-ifeq ($(PROCESSOR_TYPE), microblaze)
-# cd $(PROJ_ROOT) && $(MAKE) -f system.make download
-# cd $(PROJ_ROOT) && impact -batch etc/download.cmd
+PGM_TCL=$(wildcard $(PROJ_ROOT)/bsp/ps*_init.tcl)
 pgm:
-	cd $(PROJ_ROOT) && xmd -tcl xmd_init.tcl
-else
-pgm:
-	cd $(PROJ_ROOT) && xmd -tcl xmd_init.tcl
-endif
+	xsdb $(PROJ_ROOT)/xsdb_fpga_pgm.tcl $(PROJ_ROOT)/system.bit $(PGM_TCL)
 
 IP_ADDRESS=192.168.10.133
 # Download ELF and execute
@@ -129,13 +123,8 @@ ifeq ($(OS_TARGET),LINUX)
 run: $(ELF)
 	scp $(ELF) "root@$(IP_ADDRESS):."  && ssh root@$(IP_ADDRESS) ./$(ELF)
 else
-ifeq ($(PROCESSOR_TYPE), microblaze)
 run: $(ELF)
-	xmd -tcl $(MAKEFILE_DIR)/xmd_mb.tcl
-else
-run: $(ELF)
-	xmd -tcl $(MAKEFILE_DIR)/xmd_arm.tcl
-endif
+	xsdb $(MAKEFILE_DIR)/xsdb_arm.tcl $(PROCESSOR_TARGET) $(ELF)
 endif
 # Other Targets
 clean:
