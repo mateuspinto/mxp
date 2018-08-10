@@ -45,7 +45,6 @@ VBXCOPYRIGHT( test_fft_vector_large )
 #include "fft.h"
 #include "vbx.h"
 #include "vbx_port.h"
-#include "vbx_common.h"
 #include "vbx_vec_rev.h"
 
 typedef vbx_uword_t* vptr_uword;

@@ -70,7 +70,6 @@ VBXCOPYRIGHT( test_fft_vector )
 
 #include "vbx.h"
 #include "vbx_port.h"
-#include "vbx_common.h"
 
 #include "fft.h"
 

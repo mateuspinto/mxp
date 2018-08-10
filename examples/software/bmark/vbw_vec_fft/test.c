@@ -46,7 +46,6 @@ VBXCOPYRIGHT( test_fft5 )
 #include "vbx.h"
 #include "fft.h"
 #include "vbx_port.h"
-#include "vbx_common.h"
 
 // I/O control
 #define DEBUG 0
@@ -109,7 +108,7 @@ int main()
 	itw_i2= &twiddle[11*(max_sz/4)];
 
 	Sinewave = (short *)vbx_shared_malloc( 3*max_sz/4*sizeof(short) );
-	
+
 	if(     scalar == NULL || vector  == NULL || \
 		twiddle == NULL || Sinewave == NULL) {
  			VBX_EXIT(-1);
@@ -124,7 +123,7 @@ int main()
 				VBX_EXIT(-1);
 			}
 	}
-	
+
 	printf("Twiddle gen...\n");
 	/* gen twiddle wave */
 	for( i=0; i<=max_sz/4; i++ )
@@ -163,7 +162,7 @@ int main()
 		int diff,errors=0;
 		int ops = 5 * fft_sz * lg_fft; // 5 N logN
 		float seconds, mops, msps, cps, speed;
-		
+
 		if( sweep != SWEEP_START){
 			/* reduce full bflys */
 			for (i=0; i<fft_sz/2; i++){
@@ -192,7 +191,7 @@ int main()
 
 			scalar_fr[i] = in_r[i];
 			scalar_fi[i] = in_i[i];
-			
+
 			if( i & 0x01 ) {
 				vreal_fr[(fft_sz+i)>>1]  = in_r[i];
 				sreal_fr[(fft_sz+i)>>1]  = in_r[i];
@@ -238,8 +237,8 @@ int main()
 		vbx_time_r = time_stop - time_start;
 		seconds = (float)vbx_time_r/vbx_timestamp_freq();
 
-#if SPECTRUM 
-		
+#if SPECTRUM
+
 		printf("\nReal\tInput   Scalar  VecD&C  ScaReal VecReal\n");
 		fflush(stdout);
 		for (i=0; i<fft_sz; i++){
@@ -288,8 +287,8 @@ int main()
 		time_stop  = vbx_timestamp();
 		vbx_time_ri = time_stop - time_start;
 		seconds = (float)vbx_time_ri/vbx_timestamp_freq();
-		
-#if SPECTRUM 
+
+#if SPECTRUM
 		printf("\nInvReal\tInput   Scalar  VecD&C  ScaReal VecReal\n");
 		fflush(stdout);
 		for (i=0; i<fft_sz; i++){
@@ -375,8 +374,8 @@ int main()
 		printf( "%5.2f\t", mops );
 		printf( "%5.2f\t", cps );
 		printf( "%f\t", speed );
-		printf( "%5.2f\n", msps );	
-		
+		printf( "%5.2f\n", msps );
+
 		printf("VecReal\n");
 		seconds = (float)vbx_time_r/vbx_timestamp_freq();
 		mops = (float)ops / seconds / 1000000;
@@ -404,7 +403,7 @@ int main()
 		printf( "%5.2f\t", mops );
 		printf( "%5.2f\t", cps );
 		printf( "%f\t", speed );
-		printf( "%5.2f\n", msps );	
+		printf( "%5.2f\n", msps );
 	}
 #if DEBUG & ROUND
 	printf("%d\n",errors);

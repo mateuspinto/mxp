@@ -428,7 +428,9 @@ extern "C" {
 	                  int max_masked_waves,
 	                  int fxp_word_frac_bits,
 	                  int fxp_half_frac_bits,
-	                  int fxp_byte_frac_bits);
+	                  int fxp_byte_frac_bits,
+	                  short unpopulated_alu_lanes,
+	                  short unpopulated_multiplier_lanes);
 
 	void vbxsim_destroy();
 

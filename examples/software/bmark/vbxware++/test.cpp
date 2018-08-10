@@ -485,7 +485,7 @@ int test_mtx_motest()
 	vbw_mtx_motest_scalar_byte(scalar_result, scalar_x_input, scalar_x_input, &m);
 
 	time_stop = vbx_timestamp();
-	//test_print_matrix_uword( scalar_result,min(10,MOTEST_SEARCH_WIDTH),min(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
+	//test_print_matrix_uword( scalar_result,MIN(10,MOTEST_SEARCH_WIDTH),MIN(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
 
 	scalar_time = vbx_print_scalar_time(time_start, time_stop);
 
@@ -501,7 +501,7 @@ int test_mtx_motest()
 		vbw_mtx_motest_byte( vector_result, vector_x_input, vector_x_input, &m );
 		vbx_sync();
 		time_stop = vbx_timestamp();
-		//	test_print_matrix_uword( vector_result,min(10,MOTEST_SEARCH_WIDTH),min(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
+		//	test_print_matrix_uword( vector_result,MIN(10,MOTEST_SEARCH_WIDTH),MIN(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
 
 		vbx_print_vector_time(time_start, time_stop, scalar_time);
 
@@ -534,7 +534,7 @@ int test_mtx_motest()
 		time_stop = vbx_timestamp();
 
 		vbx_print_vector_time(time_start, time_stop, scalar_time);
-		//test_print_matrix_uword( vector_result,min(10,MOTEST_SEARCH_WIDTH),min(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
+		//test_print_matrix_uword( vector_result,MIN(10,MOTEST_SEARCH_WIDTH),MIN(10,MOTEST_SEARCH_HEIGHT),MOTEST_SEARCH_WIDTH);
 
 		errors = test_verify_array_uword( (vbx_uword_t*)scalar_result, (vbx_uword_t*)vector_result,
 		                                  MOTEST_SEARCH_HEIGHT* MOTEST_SEARCH_WIDTH );
@@ -632,10 +632,10 @@ int test_mtx_xp()
 
 	int TEST_LENGTH = MTX_HEIGHT*MTX_WIDTH;
 
-	// int PRINT_WIDTH = min( IMAGE_PITCH, MAX_PRINT_LENGTH );
-	// int PRINT_HEIGHT = min( IMAGE_HEIGHT, MAX_PRINT_LENGTH );
-	// int PRINT_RESULT_WIDTH = min( IMAGE_WIDTH-FILTER_WIDTH, MAX_PRINT_LENGTH );
-	// int PRINT_RESULT_HEIGHT = min( IMAGE_HEIGHT-FILTER_HEIGHT, MAX_PRINT_LENGTH );
+	// int PRINT_WIDTH = MIN( IMAGE_PITCH, MAX_PRINT_LENGTH );
+	// int PRINT_HEIGHT = MIN( IMAGE_HEIGHT, MAX_PRINT_LENGTH );
+	// int PRINT_RESULT_WIDTH = MIN( IMAGE_WIDTH-FILTER_WIDTH, MAX_PRINT_LENGTH );
+	// int PRINT_RESULT_HEIGHT = MIN( IMAGE_HEIGHT-FILTER_HEIGHT, MAX_PRINT_LENGTH );
 
 	vbx_timestamp_t time_start, time_stop;
 	double scalar_time;

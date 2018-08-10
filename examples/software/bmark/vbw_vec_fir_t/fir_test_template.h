@@ -8,7 +8,6 @@
 
 #include "vbx.h"
 #include "vbx_port.h"
-#include "vbx_common.h"
 #include "vbx_test.h"
 
 #include "scalar_vec_fir.h"
@@ -95,7 +94,7 @@ int TEST_NAME()
 	}
 
 	printf("\n\n**** " STRINGIFY(vbx_mm_t) " test ****\n");fflush(stdout);
-	
+
 	VBX_T(test_zero_array)( scalar_out, SAMP_SIZE );
 	VBX_T(test_zero_array)( vector_out, SAMP_SIZE );
 
@@ -108,23 +107,23 @@ int TEST_NAME()
 	VBX_T(test_zero_array)( sample+SAMP_SIZE, NTAPS );
 
 	printf("\nSamples:\n");fflush(stdout);
-	VBX_T(test_print_array)( scalar_sample, min(SAMP_SIZE,MAX_PRINT_LENGTH) );
+	VBX_T(test_print_array)( scalar_sample, MIN(SAMP_SIZE,MAX_PRINT_LENGTH) );
 	printf("\nCoefficients:\n");fflush(stdout);
-	VBX_T(test_print_array)( scalar_coeffs, min(NTAPS,MAX_PRINT_LENGTH) );
+	VBX_T(test_print_array)( scalar_coeffs, MIN(NTAPS,MAX_PRINT_LENGTH) );
 
 	scalar_time = vbx_mm_t_test_scalar( scalar_out, scalar_sample, scalar_coeffs);
-	VBX_T(test_print_array)( scalar_out,  min(SAMP_SIZE,MAX_PRINT_LENGTH) );
+	VBX_T(test_print_array)( scalar_out,  MIN(SAMP_SIZE,MAX_PRINT_LENGTH) );
 
 
 	#ifdef USE_TRANSPOSE
 	vbx_mm_t_test_vector_transpose( vector_out, sample, coeffs, scalar_time );
-	VBX_T(test_print_array)( vector_out,  min(SAMP_SIZE,MAX_PRINT_LENGTH) );
+	VBX_T(test_print_array)( vector_out,  MIN(SAMP_SIZE,MAX_PRINT_LENGTH) );
 	errors += VBX_T(test_verify_array)( scalar_out, vector_out, SAMP_SIZE-NTAPS );
 	#endif //USE_TRANSPOSE
 
 	#ifdef USE_2D
 	vbx_mm_t_test_vector( vector_out, sample, coeffs, scalar_time );
-	VBX_T(test_print_array)( vector_out,  min(SAMP_SIZE,MAX_PRINT_LENGTH) );
+	VBX_T(test_print_array)( vector_out,  MIN(SAMP_SIZE,MAX_PRINT_LENGTH) );
 	errors += VBX_T(test_verify_array)( scalar_out, vector_out, SAMP_SIZE-NTAPS );
 	#endif //USE_2D
 

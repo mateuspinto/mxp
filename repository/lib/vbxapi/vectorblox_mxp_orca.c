@@ -10,6 +10,8 @@ int VectorBlox_MXP_Initialize(const char* mxp_dev,const char* cma_dev)
 	//M_AXI_DATA_WIDTH is in bits, convert to bytes
 	the_mxp.dma_alignment_bytes = MEMORY_WIDTH_LANES*sizeof(vbx_word_t);
 	the_mxp.vector_lanes = VECTOR_LANES;
+	the_mxp.unpopulated_alu_lanes = UNPOPULATED_ALU_LANES;
+	the_mxp.unpopulated_multiplier_lanes = UNPOPULATED_MULTIPLIER_LANES;
 	the_mxp.scratchpad_alignment_bytes = the_mxp.vector_lanes * 4;
 
 	the_mxp.vcustom0_lanes = VCUSTOM0_LANES;

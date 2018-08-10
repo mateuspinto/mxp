@@ -62,7 +62,7 @@ endif
 endif
 CC := $(CROSS_COMPILER)gcc
 CXX := $(CROSS_COMPILER)gcc -xc++
-LD := $(CROSS_COMPILER)gcc
+LD := $(CROSS_COMPILER)g++
 AR := $(CROSS_COMPILER)ar
 SZ := $(CROSS_COMPILER)size
 
@@ -94,6 +94,9 @@ LD_FLAGS := -Wl,-T -Wl,$(LD_SCRIPT)
 ifeq ($(PROCESSOR_TYPE), microblaze)
 LIBS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 else
+ifneq ($(wildcard $(BSP_LIB_DIR)/libxilffs.a),)
+LIBS+=-lxilffs
+endif
 LIBS += -Wl,--start-group,-lxil,-lgcc,-lc,-lm,--end-group
 endif
 

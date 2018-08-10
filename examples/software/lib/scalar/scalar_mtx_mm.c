@@ -38,11 +38,10 @@
 /**@file*/
 //
 // Integer Matrix Multiply
-// Scalar NIOS version 
+// Scalar NIOS version
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include "vbx_common.h"
 
 #include "scalar_mtx_mm.h"
 // Scalar Matrix Multiply Routines
@@ -54,6 +53,7 @@
  * @param[out] out.
  * @param[in] N.
  */
+#define MIN(a,b) ((a)<(b)? (a):(b))
 void scalar_mtx_mm_byte( int8_t *out, int8_t *in1, int8_t *in2, const int32_t N )
 {
 	int32_t i,j,k;
@@ -233,9 +233,9 @@ void scalar_block_ijk_mm_word( int32_t *out, int32_t *in1, int32_t *in2, const i
 	for( I=0; I<N; I+=BS ) {
 		for( J=0; J<N; J+=BS ) {
 			for( K=0; K<N; K+=BS ) {
-				for( i=I; i<min(N,I+BS); i++ ) {
-					for( j=J; j<min(N,J+BS); j++ ) {
-						for( k=K; k<min(N,K+BS); k++ ) {
+				for( i=I; i<MIN(N,I+BS); i++ ) {
+					for( j=J; j<MIN(N,J+BS); j++ ) {
+						for( k=K; k<MIN(N,K+BS); k++ ) {
 							out[i*N+j] += in1[i*N+k] * in2[k*N+j];
 						}}}
 			}}}
@@ -260,14 +260,14 @@ void scalar_block_kij_mm_word( int32_t *out, int32_t *in1, int32_t *in2, const i
 			out[i*N+j] = 0;
 		}}
 
-	for( I=0; I<N; I+=BS ) {        
-		for( J=0; J<N; J+=BS ) {        
+	for( I=0; I<N; I+=BS ) {
+		for( J=0; J<N; J+=BS ) {
 			for( K=0; K<N; K+=BS ) {
 
-				for( k=K; k<min(N,K+BS); k++ ) {
-					for( i=I; i<min(N,I+BS); i++ ) {
+				for( k=K; k<MIN(N,K+BS); k++ ) {
+					for( i=I; i<MIN(N,I+BS); i++ ) {
 						a = in1[i*N+k];
-						for( j=J; j<min(N,J+BS); j++ ) {
+						for( j=J; j<MIN(N,J+BS); j++ ) {
 							out[i*N+j] += a * in2[k*N+j];
 						}}}
 			}}}
@@ -296,10 +296,10 @@ void scalar_block_kijkij_mm_word( int32_t *out, int32_t *in1, int32_t *in2, cons
 	for( K=0; K<N; K+=BS ) {
 		for( I=0; I<N; I+=BS ) {
 			for( J=0; J<N; J+=BS ) {
-				for( k=K; k<min(N,K+BS); k++ ) {
-					for( i=I; i<min(N,I+BS); i++ ) {
+				for( k=K; k<MIN(N,K+BS); k++ ) {
+					for( i=I; i<MIN(N,I+BS); i++ ) {
 						a = in1[i*N+k];
-						for( j=J; j<min(N,J+BS); j++ ) {
+						for( j=J; j<MIN(N,J+BS); j++ ) {
 							out[i*N+j] += a * in2[k*N+j];
 						}}}
 			}}}
@@ -321,4 +321,3 @@ void scalar_transpose_matrix( int32_t *out, int32_t *in, const int32_t N )
 		}
 	}
 }
-

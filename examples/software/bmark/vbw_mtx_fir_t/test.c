@@ -98,8 +98,8 @@ int main(void)
 	int TEST_LENGTH = TEST_ROWS*TEST_COLS;
 	int NTAP_LENGTH = NTAP_ROWS*NTAP_COLS;
 
-	int PRINT_COLS = min( TEST_COLS, MAX_PRINT_LENGTH );
-	int PRINT_ROWS = min( TEST_ROWS, MAX_PRINT_LENGTH );
+	int PRINT_COLS = MIN( TEST_COLS, MAX_PRINT_LENGTH );
+	int PRINT_ROWS = MIN( TEST_ROWS, MAX_PRINT_LENGTH );
 
 	double scalar_time, vector_time;
 	int errors=0;

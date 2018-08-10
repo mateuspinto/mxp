@@ -50,6 +50,7 @@ enum mxp_attr_t{
         S_AXI_BASEADDR,
         S_AXI_HIGHADDR,
         VECTOR_LANES,
+        UNPOPULATED_ALU_LANES,
         MAX_MASKED_WAVES,
         SCRATCHPAD_KB,
         M_AXI_DATA_WIDTH,
@@ -115,6 +116,8 @@ int VectorBlox_MXP_Initialize(const char* mxp_dev,const char* cma_dev)
 	//M_AXI_DATA_WIDTH is in bits, convert to bytes
 	the_mxp.dma_alignment_bytes = get_attr_from_file(mxp_dev,"C_M_AXI_DATA_WIDTH")/8;
 	the_mxp.vector_lanes = get_attr_from_file(mxp_dev,"VECTOR_LANES");
+	the_mxp.unpopulated_alu_lanes = get_attr_from_file(mxp_dev,"UNPOPULATED_ALU_LANES");
+	the_mxp.unpopulated_multiplier_lanes = get_attr_from_file(mxp_dev,"UNPOPULATED_MULTIPLIER_LANES");
 	the_mxp.scratchpad_alignment_bytes = the_mxp.vector_lanes * 4;
 
 	the_mxp.vcustom0_lanes = get_attr_from_file(mxp_dev, "VCI_0_LANES");

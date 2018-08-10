@@ -80,8 +80,6 @@ VBXCOPYRIGHT( test_motest )
 #include "vbx_test.h"
 #include "vbw_mtx_motest.h"
 #include "scalar_mtx_motest.h"
-
-#include "vbx_common.h"
 #include "vbw_exit_codes.h"
 
 
@@ -112,8 +110,8 @@ void print_matrix_input( input_type *image, int height, int width )
 {
 	int i,j;
 
-	const int MAX_I = min( 8, width  );
-	const int MAX_J = min( 8, height );
+	const int MAX_I = MIN( 8, width  );
+	const int MAX_J = MIN( 8, height );
 
 	for( j=0; j<MAX_J; j++ ) {
 		for( i=0; i<MAX_I; i++ ) {
@@ -129,8 +127,8 @@ void print_matrix_output( output_type *image, int height, int width )
 {
 	int i,j;
 
-	const int MAX_I = min( 8, width  );
-	const int MAX_J = min( 8, height );
+	const int MAX_I = MIN( 8, width  );
+	const int MAX_J = MIN( 8, height );
 
 	for( j=0; j<MAX_J; j++ ) {
 		for( i=0; i<MAX_I; i++ ) {
