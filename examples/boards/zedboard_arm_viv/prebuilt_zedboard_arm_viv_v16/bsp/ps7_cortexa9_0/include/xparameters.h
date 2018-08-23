@@ -27,7 +27,9 @@
 #define PLATFORM_ZYNQ
  
 /* Definitions for sleep timer configuration */
-#define XSLEEP_TIMER_IS_DEFAULT_TIMER
+#define XSLEEP_TTC_INSTANCE 0
+#define SLEEP_TIMER_BASEADDR XPAR_PS7_TTC_2_BASEADDR 
+#define SLEEP_TIMER_FREQUENCY XPAR_PS7_TTC_2_TTC_CLK_FREQ_HZ 
  
  
 /******************************************************************/
