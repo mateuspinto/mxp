@@ -40,15 +40,19 @@ CMAKE_FORCE_CXX_COMPILER(${TC_PATH}/${CROSS_COMPILE}g++ GNU )
 
 set(BSP_DIR ${TOOLCHAINFILE_DIR}/)
 
-link_libraries("-L${BSP_DIR}/ -lbsp")
+link_libraries("-L${BSP_DIR}/ -lhal_bsp")
 
 set(CMAKE_EXE_LINKER_FLAGS "-T ${BSP_DIR}/linker.x -msys-crt0='${BSP_DIR}obj/HAL/src/crt0.o' -msys-lib=hal_bsp -msys-lib=stdc++" CACHE STRING "")
 
+
+FILE(GLOB BSP_INCLUDES ${BSP_DIR}/*/inc)
+include_directories(${BSP_INCLUDES} ${BSP_DIR})
+add_definitions(-D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED)
+
 # Set the CMAKE C flags (which should also be used by the assembler!)
-include_directories("${BSP_DIR}/ps7_cortexa9_0/include")
 set(COMPILER_FLAGS "-mno-hw-div -mhw-mul -mno-hw-mulx -mgpopt=global")
-set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_FLAGS}")
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILE_FLAGS}")
+set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -std=gnu11 ${COMPILER_FLAGS}")
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 ${COMPILE_FLAGS}")
 
 set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "" )
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "" )
