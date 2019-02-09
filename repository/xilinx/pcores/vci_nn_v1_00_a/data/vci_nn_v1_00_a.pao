@@ -1,0 +1,20 @@
+###########################################################################
+#
+# Copyright (C) 2012-2018 VectorBlox Computing, Inc.
+#
+###########################################################################
+
+# lib proc_common_v3_00_a  all
+lib vci_nn_v1_00_a vci_nn_util_pkg.vhd vhdl
+lib vci_nn_v1_00_a vci_nn_pkg.vhd vhdl
+lib vci_nn_v1_00_a multiplier_pipelined.vhd vhdl
+lib vci_nn_v1_00_a conjoined_multiplier.vhd vhdl
+lib vci_nn_v1_00_a pump_up.vhd vhdl
+lib vci_nn_v1_00_a pump_down.vhd vhdl
+lib vci_nn_v1_00_a conjoiner.vhd vhdl
+lib vci_nn_v1_00_a accumulator_select_multipump.vhd vhdl
+lib vci_nn_v1_00_a lutram.vhd vhdl
+lib vci_nn_v1_00_a accumulator.vhd vhdl
+lib vci_nn_v1_00_a output_shift_register.vhd vhdl
+lib vci_nn_v1_00_a multipumper.vhd vhdl
+lib vci_nn_v1_00_a vci_nn.vhd vhdl
