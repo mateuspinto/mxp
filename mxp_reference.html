@@ -266,15 +266,15 @@ p {
 <h2 id="vbx_2d_3d_instructions"><span class="header-section-number">2.3</span> 2D and 3D Matrix Instructions</h2>
 <p>Vector instructions can operate on 1D vectors as well as 2D or 3D matrices. The 2D and 3D modes provide higher performance and increased code density.</p>
 <p>The <code>vbx_set_vl</code> function actually accepts up to three arguments:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl ,numRows=<span class="dv">1</span>,numMats=<span class="dv">1</span>);</code></pre>
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl , numRows=<span class="dv">1</span>, numMats=<span class="dv">1</span> );</code></pre>
 <p>When <code>numMats</code> or both <code>numMats</code> and <code>numRows</code> are not specified they default to 1.</p>
 <p>Before invoking a 2D matrix instruction, the programmer must set the current <em>2D matrix size and stride registers</em> using two calls:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl ,nRows);
-vbx_set_2D( numRows, incDest2, incSrcA2, incSrcB2 );</code></pre>
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl, numRows );
+vbx_set_2D( incDest2, incSrcA2, incSrcB2 );</code></pre>
 <p>Likewise, before invoking a 3D matrix instruction, the programmer must set the current <em>3D matrix size registers</em> using three calls:</p>
-<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl,numRows,numMats );
-vbx_set_2D( numRows, incDest2, incSrcA2, incSrcB2 );
-vbx_set_3D( numMats, incDest3, incSrcA3, incSrcB3 );</code></pre>
+<pre class="sourceCode c"><code class="sourceCode c">vbx_set_vl( vl, numRows, numMats );
+vbx_set_2D( incDest2, incSrcA2, incSrcB2 );
+vbx_set_3D( incDest3, incSrcA3, incSrcB3 );</code></pre>
 <p>These functions are further described in the section on <a href="#specifying_vector_and_matrix_sizes">vector length and matrix size</a>.</p>
 <p>For both 2D and 3D operations, the increment amounts for the sources and destination are specified in units of bytes, not elements. This differs from the <code>vbx_set_vl()</code> function which specifies the number of elements per row, the number of rows per matrix and the number of matrices.</p>
 <p>The MXP will always remember the latest vector length and matrix dimensions that were set. While this is convenient, it can also be problematic if called functions or third party libraries change the values as a side effect. To reduce such unpleasant side effects, libraries should always save and restore these registers.</p>
