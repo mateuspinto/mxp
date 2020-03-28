@@ -10,7 +10,7 @@ int main()
 #if VBX_SIMULATOR==1
 	//initialize with 4 lanes,and 64kb of sp memory
 	//word,half,byte fraction bits 16,15,4 respectively
-	vbxsim_init( 4, 64, 256,6,5, 4 );
+	vbxsim_init( 4, 64, 256,6,5, 4, 0, 0);
 #endif
 
 	//Allocate vectors in scratchpad
