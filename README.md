@@ -1,4 +1,5 @@
-VectorBlox MXP
+# VectorBlox MXP
+
 ================
 
 The VectorBlox MXP Matrix Processor is an FPGA-based soft processor
@@ -41,23 +42,25 @@ For further VectorBlox MXP documentation, refer to the following:
 
 - [VectorBlox MXP Programming  Reference](http://vectorblox.github.io/mxp/mxp_reference.html)
 
-### API Changes March 2018
+## API Changes March 2018
+
 There are several breaking changes to the API since between the 2017 and 2018
 releases. Below is an overview of the changes, please see the Programming Reference
 (link above) for more details on the current API.
 
-* Vector Shifts are srca >> srcb rather than srcb>> srca.
+- Vector Shifts are srca >> srcb rather than srcb>> srca.
 This leads to some issues with shifting by scalar values which can be resolved
 by mapping shifting by scalar values to VMUL, and VMULH for shifting left
 and right respectively.
 
-* All vector instructions are 3 dimensional, to do 1 or 2 dimensional instructions
+- All vector instructions are 3 dimensional, to do 1 or 2 dimensional instructions
 set nmats and/or nrows to 1. Because of this the `vbx_set_vl`,`vbx_set_2D`, and
 `vbx_set_3D` have changed. They now all accept 3 arguments.
 
-* Destination, source A and source B all have independant sizes and signedness.
+- Destination, source A and source B all have independant sizes and signedness.
 
-### Contact information
+## Contact information
+
 For further information please email us at
 [info@vectorblox.com](mailto:info@vectorblox.com) or visit
 <http://www.vectorblox.com>.
