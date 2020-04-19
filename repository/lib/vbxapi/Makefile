@@ -3,17 +3,17 @@ LIB= libvbxapi.a
 ifeq ($(SIMULATOR),true)
 TARGET = SIMULATOR
 TARGET_OPTS = -DVBX_SIMULATOR
-CROSS_COMPILE =
 endif
 ifeq ($(LINUX),true)
 TARGET = LINUX
 TARGET_OPTS = -DARM_XIL_LINUX
 ifeq ($(NATIVE),true)
-CROSS_COMPILE =
 else
 CROSS_COMPILE = arm-xilinx-linux-gnueabi-
 endif
 endif
+
+export CROSS_COMPILE
 
 ifeq ($(HPS),true)
 TARGET = HPS_STANDALONE
@@ -40,6 +40,12 @@ all: $(LIB)
 
 
 COMMON_FLAGS := -MP -MMD -c -g -O3 -Wall $(TARGET_OPTS)
+
+ifdef CROSS_COMPILE
+COMMON_FLAGS+= -static 
+endif
+
+
 C_FLAGS := $(COMMON_FLAGS)
 CXX_FLAGS := $(COMMON_FLAGS) -fno-rtti -fno-exceptions
 

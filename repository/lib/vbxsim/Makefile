@@ -2,7 +2,6 @@
 # List of include directories for -I compiler option (-I added when used).
 #ALT_INCLUDE_DIRS :=
 ALT_INCLUDE_DIRS := . ../vbxapi
-CROSS_COMPILE :=
 
 CC      := $(CROSS_COMPILE)gcc -xc
 CXX     := $(CROSS_COMPILE)gcc -xc++
@@ -19,6 +18,7 @@ OBJCOPY := $(CROSS_COMPILE)objcopy
 MKDIR 	:= mkdir -p
 ECHO	:= /bin/echo
 
+export CROSS_COMPILE
 
 .PHONY : all
 all : lib
@@ -53,6 +53,10 @@ LIB_INCLUDE_DIRS :=
 
 # Library file name
 LIB := lib$(LIB_NAME).a
+
+ifdef CROSS_COMPILE
+	LIB_CFLAGS_DEFINED_SYMBOLS+= -static 
+endif
 
 #------------------------------------------------------------------------------
 #                 VARIABLES DEPENDENT ON GENERATED CONTENT
